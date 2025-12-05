@@ -1,0 +1,125 @@
+/**
+ * Globale CSS-Datei für Planning Poker
+ *
+ * Importiert Tailwind CSS Direktiven und definiert
+ * benutzerdefinierte Utility-Klassen und Basis-Styles.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Basis-Styles für das Dokument
+ */
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-secondary-50 text-secondary-900 antialiased;
+  }
+
+  /**
+   * Fokus-Styles für Barrierefreiheit
+   */
+  :focus-visible {
+    @apply outline-2 outline-primary-500 outline-offset-2;
+  }
+}
+
+/**
+ * Wiederverwendbare Komponenten-Klassen
+ */
+@layer components {
+  /**
+   * Button-Styles
+   */
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2
+           font-medium rounded-lg transition-all duration-200
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary-600 text-white
+           hover:bg-primary-700
+           focus-visible:ring-primary-500;
+  }
+
+  .btn-secondary {
+    @apply btn bg-secondary-200 text-secondary-900
+           hover:bg-secondary-300
+           focus-visible:ring-secondary-500;
+  }
+
+  .btn-accent {
+    @apply btn bg-accent-600 text-white
+           hover:bg-accent-700
+           focus-visible:ring-accent-500;
+  }
+
+  /**
+   * Karten-Styles für Planning Poker
+   */
+  .poker-card {
+    @apply relative w-20 h-28 rounded-card
+           bg-white border-2 border-secondary-200
+           shadow-md cursor-pointer
+           transition-all duration-200
+           hover:shadow-lg hover:border-primary-400 hover:-translate-y-1;
+  }
+
+  .poker-card-selected {
+    @apply border-primary-500 bg-primary-50 shadow-lg ring-2 ring-primary-300;
+  }
+
+  .poker-card-revealed {
+    @apply cursor-default;
+  }
+
+  /**
+   * Input-Styles
+   */
+  .input {
+    @apply w-full px-4 py-2
+           border border-secondary-300 rounded-lg
+           bg-white text-secondary-900
+           placeholder:text-secondary-400
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
+           transition-all duration-200;
+  }
+
+  /**
+   * Card-Container Styles
+   */
+  .card-container {
+    @apply bg-white rounded-xl shadow-md p-6 border border-secondary-100;
+  }
+}
+
+/**
+ * Utility-Erweiterungen
+ */
+@layer utilities {
+  /**
+   * Text-Balance für bessere Lesbarkeit
+   */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /**
+   * Versteckt Scrollbar aber erlaubt Scrollen
+   */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
