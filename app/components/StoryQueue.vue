@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /**
- * StoryQueue Komponente
+ * StoryQueue Component
  *
- * Zeigt die Story-Queue an und ermöglicht dem Host das Verwalten.
+ * Displays the story queue and allows the host to manage it.
  */
 
 import type { IStory } from '~/types/poker'
@@ -11,13 +11,13 @@ import type { IStory } from '~/types/poker'
  * Props Definition
  */
 interface Props {
-  /** Liste der Storys */
+  /** List of stories */
   stories: IStory[]
-  /** Index der aktuellen Story */
+  /** Index of current story */
   currentIndex: number
-  /** Ist der Nutzer der Host? */
+  /** Is the user the host? */
   isHost: boolean
-  /** Session Status */
+  /** Session status */
   status: 'waiting' | 'voting' | 'revealed' | 'completed'
 }
 
@@ -27,35 +27,35 @@ const props = defineProps<Props>()
  * Events Definition
  */
 const emit = defineEmits<{
-  /** Story hinzufügen */
+  /** Add story */
   addStory: [title: string, description?: string]
-  /** Story entfernen */
+  /** Remove story */
   removeStory: [storyId: string]
-  /** Nächste Story starten */
+  /** Start next story */
   nextStory: []
-  /** Story bearbeiten */
+  /** Edit story */
   editStory: [story: IStory]
 }>()
 
 /**
- * Neue Story Input
+ * New story input
  */
 const newStoryTitle = ref('')
 const newStoryDescription = ref('')
 const showAddForm = ref(false)
 
 /**
- * Anzahl geschätzter Storys
+ * Number of estimated stories
  */
 const estimatedCount = computed(() => props.stories.filter(s => s.estimated).length)
 
 /**
- * Verbleibende Storys
+ * Remaining stories
  */
 const remainingCount = computed(() => props.stories.length - estimatedCount.value)
 
 /**
- * Gibt es eine nächste Story?
+ * Is there a next story?
  */
 const hasNextStory = computed(() => {
   if (props.currentIndex < 0) return props.stories.some(s => !s.estimated)
@@ -63,7 +63,7 @@ const hasNextStory = computed(() => {
 })
 
 /**
- * Story hinzufügen
+ * Add story
  */
 function handleAddStory(): void {
   if (!newStoryTitle.value.trim()) return
@@ -86,7 +86,7 @@ function handleAddStory(): void {
         </h3>
       </div>
       <div class="text-sm text-secondary-500">
-        {{ estimatedCount }}/{{ stories.length }} geschätzt
+        {{ estimatedCount }}/{{ stories.length }} estimated
       </div>
     </div>
 
@@ -137,7 +137,7 @@ function handleAddStory(): void {
             {{ story.title }}
           </div>
           <div v-if="story.estimated && story.estimatedValue" class="text-xs text-green-600">
-            Geschätzt: {{ story.estimatedValue }}
+            Estimated: {{ story.estimatedValue }}
           </div>
         </div>
 
@@ -146,7 +146,7 @@ function handleAddStory(): void {
           <button
             type="button"
             class="p-1 text-secondary-400 hover:text-secondary-600 transition-colors"
-            title="Bearbeiten"
+            title="Edit"
             @click="emit('editStory', story)"
           >
             <Icon name="heroicons:pencil" class="w-4 h-4" />
@@ -154,7 +154,7 @@ function handleAddStory(): void {
           <button
             type="button"
             class="p-1 text-secondary-400 hover:text-red-500 transition-colors"
-            title="Entfernen"
+            title="Remove"
             @click="emit('removeStory', story.id)"
           >
             <Icon name="heroicons:trash" class="w-4 h-4" />
@@ -163,10 +163,10 @@ function handleAddStory(): void {
       </div>
     </div>
 
-    <!-- Leere Queue -->
+    <!-- Empty queue -->
     <div v-else class="text-center py-6 text-secondary-500">
       <Icon name="heroicons:document-plus" class="w-8 h-8 mx-auto mb-2 opacity-50" />
-      <p class="text-sm">Noch keine Storys vorhanden</p>
+      <p class="text-sm">No stories yet</p>
     </div>
 
     <!-- Host Controls -->
@@ -178,13 +178,13 @@ function handleAddStory(): void {
             v-model="newStoryTitle"
             type="text"
             class="input text-sm"
-            placeholder="Story Titel..."
+            placeholder="Story title..."
             @keyup.enter="handleAddStory"
           >
           <textarea
             v-model="newStoryDescription"
             class="input text-sm min-h-[60px] resize-y"
-            placeholder="Beschreibung (Markdown)..."
+            placeholder="Description (Markdown)..."
           />
           <div class="flex gap-2">
             <button
@@ -194,14 +194,15 @@ function handleAddStory(): void {
               @click="handleAddStory"
             >
               <Icon name="heroicons:plus" class="w-4 h-4 mr-1" />
-              Hinzufügen
+              Add
             </button>
             <button
               type="button"
               class="btn-secondary text-sm py-1.5"
               @click="showAddForm = false"
             >
-              Abbrechen
+              Cancel
+            </button>
             </button>
           </div>
         </div>
@@ -215,7 +216,7 @@ function handleAddStory(): void {
           @click="showAddForm = true"
         >
           <Icon name="heroicons:plus" class="w-4 h-4 mr-1" />
-          Story hinzufügen
+          Add Story
         </button>
 
         <button
@@ -225,13 +226,13 @@ function handleAddStory(): void {
           @click="emit('nextStory')"
         >
           <Icon name="heroicons:forward" class="w-4 h-4 mr-1" />
-          {{ currentIndex < 0 ? 'Starten' : 'Nächste Story' }}
+          {{ currentIndex < 0 ? 'Start' : 'Next Story' }}
         </button>
       </div>
 
       <!-- Remaining Info -->
       <div v-if="remainingCount > 0" class="text-xs text-secondary-500 text-center">
-        Noch {{ remainingCount }} {{ remainingCount === 1 ? 'Story' : 'Storys' }} übrig
+        {{ remainingCount }} {{ remainingCount === 1 ? 'story' : 'stories' }} remaining
       </div>
     </div>
   </div>

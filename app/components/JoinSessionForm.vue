@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /**
- * JoinSessionForm Komponente
+ * JoinSessionForm Component
  *
- * Formular zum Beitreten einer bestehenden Planning Poker Session.
+ * Form for joining an existing Planning Poker session.
  */
 
 import { formatJoinCode, JOIN_CODE_LENGTH } from '~/types/poker';
@@ -11,9 +11,9 @@ import { formatJoinCode, JOIN_CODE_LENGTH } from '~/types/poker';
  * Props Definition
  */
 interface Props {
-  /** Fehler-Nachricht zum Anzeigen */
+  /** Error message to display */
   error?: string | null
-  /** Vorausgefüllter Join-Code (z.B. aus URL) */
+  /** Pre-filled join code (e.g. from URL) */
   initialCode?: string
 }
 
@@ -26,23 +26,23 @@ const props = withDefaults(defineProps<Props>(), {
  * Events Definition
  */
 const emit = defineEmits<{
-  /** Wird ausgelöst wenn einer Session beigetreten werden soll */
+  /** Emitted when joining a session */
   join: [joinCode: string, participantName: string, asObserver: boolean]
-  /** Wechsel zur Session-Erstellung */
+  /** Switch to session creation */
   switchToCreate: []
-  /** Fehler wurde geschlossen */
+  /** Error was dismissed */
   clearError: []
 }>()
 
 /**
- * Formular-Daten
+ * Form data
  */
 const joinCode = ref(props.initialCode)
 const participantName = ref('')
 const asObserver = ref(false)
 
 /**
- * Initialen Code übernehmen wenn er sich ändert
+ * Apply initial code when it changes
  */
 watch(() => props.initialCode, (newCode) => {
   if (newCode && !joinCode.value) {
@@ -51,7 +51,7 @@ watch(() => props.initialCode, (newCode) => {
 })
 
 /**
- * Join-Code formatieren (Großbuchstaben, nur erlaubte Zeichen)
+ * Format join code (uppercase, allowed characters only)
  */
 const formattedJoinCode = computed({
   get: () => joinCode.value,
@@ -61,7 +61,7 @@ const formattedJoinCode = computed({
 })
 
 /**
- * Validierung
+ * Validation
  */
 const isValid = computed(() =>
   joinCode.value.trim().length === JOIN_CODE_LENGTH &&
@@ -69,7 +69,7 @@ const isValid = computed(() =>
 )
 
 /**
- * Behandelt das Absenden des Formulars
+ * Handles form submission
  */
 function handleSubmit(): void {
   if (isValid.value) {
@@ -78,7 +78,7 @@ function handleSubmit(): void {
 }
 
 /**
- * Schließt die Fehlermeldung
+ * Closes the error message
  */
 function handleCloseError(): void {
   emit('clearError')
@@ -88,10 +88,10 @@ function handleCloseError(): void {
 <template>
   <form class="card-container max-w-md mx-auto" @submit.prevent="handleSubmit">
     <h2 class="text-xl font-bold text-secondary-800 mb-6 text-center">
-      Session beitreten
+      Join Session
     </h2>
 
-    <!-- Fehlermeldung -->
+    <!-- Error message -->
     <div
       v-if="props.error"
       class="mb-4 p-3 bg-error-50 border border-error-200 rounded-lg flex items-center justify-between"
@@ -109,7 +109,7 @@ function handleCloseError(): void {
     <div class="space-y-4">
       <div>
         <label for="join-code" class="block text-sm font-medium text-secondary-700 mb-1">
-          Join-Code
+          Join Code
         </label>
         <input
           id="join-code"
@@ -121,20 +121,20 @@ function handleCloseError(): void {
           required
         >
         <p class="mt-1 text-xs text-secondary-500">
-          6-stelliger Code vom Session-Host
+          6-character code from the session host
         </p>
       </div>
 
       <div>
         <label for="participant-name-join" class="block text-sm font-medium text-secondary-700 mb-1">
-          Dein Name
+          Your Name
         </label>
         <input
           id="participant-name-join"
           v-model="participantName"
           type="text"
           class="input"
-          placeholder="z.B. Max Mustermann"
+          placeholder="e.g. John Doe"
           required
         >
       </div>
@@ -147,7 +147,7 @@ function handleCloseError(): void {
           class="w-4 h-4 text-primary-600 rounded border-secondary-300 focus:ring-primary-500"
         >
         <label for="as-observer" class="text-sm text-secondary-700">
-          Als Beobachter beitreten (ohne Stimmrecht)
+          Join as observer (without voting rights)
         </label>
       </div>
 
@@ -157,12 +157,12 @@ function handleCloseError(): void {
         :disabled="!isValid"
       >
         <Icon name="heroicons:arrow-right-on-rectangle" class="w-5 h-5 mr-2" />
-        Beitreten
+        Join
       </button>
 
       <div class="text-center pt-4 border-t border-secondary-200">
         <p class="text-sm text-secondary-500 mb-2">
-          Noch keine Session?
+          No session yet?
         </p>
         <button
           type="button"
@@ -170,7 +170,7 @@ function handleCloseError(): void {
           @click="emit('switchToCreate')"
         >
           <Icon name="heroicons:plus" class="w-5 h-5 mr-2" />
-          Neue Session erstellen
+          Create New Session
         </button>
       </div>
     </div>

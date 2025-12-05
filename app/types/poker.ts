@@ -1,40 +1,40 @@
 /**
- * TypeScript Typdefinitionen für Planning Poker
+ * TypeScript Type Definitions for Planning Poker
  *
- * Zentrale Typen für die gesamte Anwendung.
- * Folgt dem Interface-First Ansatz für bessere Typsicherheit.
+ * Central types for the entire application.
+ * Follows the Interface-First approach for better type safety.
  */
 
 /**
- * Standard Poker-Kartenwerte
- * Fibonacci-basiert mit zusätzlichen Optionen
+ * Standard Poker Card Values
+ * Fibonacci-based with additional options
  */
 export const POKER_VALUES = ['0', '0.5', '1', '2', '3', '5', '8', '13', '21', '34', '55', '89', '?', '☕'] as const
 
 /**
- * Typ für einen Poker-Kartenwert
+ * Type for a poker card value
  */
 export type PokerValue = typeof POKER_VALUES[number]
 
 /**
- * Join-Code Konstanten
+ * Join-Code Constants
  */
 export const JOIN_CODE_LENGTH = 6
-export const JOIN_CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789' // Ohne verwechselbare Zeichen
+export const JOIN_CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789' // Without confusable characters
 
 /**
- * Prüft ob ein Wert ein gültiger PokerValue ist
+ * Checks if a value is a valid PokerValue
  *
- * @param value - Zu prüfender Wert
+ * @param value - Value to check
  */
 export function isValidPokerValue(value: unknown): value is PokerValue {
   return typeof value === 'string' && (POKER_VALUES as readonly string[]).includes(value)
 }
 
 /**
- * Prüft ob ein Join-Code gültig formatiert ist
+ * Checks if a join code is validly formatted
  *
- * @param code - Zu prüfender Code
+ * @param code - Code to check
  */
 export function isValidJoinCode(code: string): boolean {
   if (code.length !== JOIN_CODE_LENGTH) return false
@@ -42,9 +42,9 @@ export function isValidJoinCode(code: string): boolean {
 }
 
 /**
- * Formatiert einen Join-Code (Großbuchstaben, nur erlaubte Zeichen)
+ * Formats a join code (uppercase, only allowed characters)
  *
- * @param code - Eingegebener Code
+ * @param code - Entered code
  */
 export function formatJoinCode(code: string): string {
   return code
@@ -54,110 +54,110 @@ export function formatJoinCode(code: string): string {
 }
 
 /**
- * Repräsentiert eine zu schätzende Story
+ * Represents a story to be estimated
  */
 export interface IStory {
-  /** Eindeutige ID der Story */
+  /** Unique ID of the story */
   id: string
-  /** Titel der Story */
+  /** Title of the story */
   title: string
-  /** Beschreibung (Markdown) */
+  /** Description (Markdown) */
   description: string | null
-  /** Bereits geschätzt? */
+  /** Already estimated? */
   estimated: boolean
-  /** Geschätzter Wert (nach Abstimmung) */
+  /** Estimated value (after voting) */
   estimatedValue: PokerValue | null
 }
 
 /**
- * Repräsentiert einen Teilnehmer in einer Session
+ * Represents a participant in a session
  */
 export interface IParticipant {
-  /** Eindeutige ID des Teilnehmers */
+  /** Unique ID of the participant */
   id: string
-  /** Anzeigename */
+  /** Display name */
   name: string
-  /** Gewählter Kartenwert (null wenn noch nicht gewählt) */
+  /** Selected card value (null if not yet selected) */
   selectedValue: PokerValue | null
-  /** Ist der Teilnehmer ein Beobachter? */
+  /** Is the participant an observer? */
   isObserver: boolean
-  /** Zeitpunkt des Beitritts */
+  /** Time of joining */
   joinedAt: Date
 }
 
 /**
- * Status einer Planning Poker Session
+ * Status of a Planning Poker Session
  */
 export type SessionStatus = 'waiting' | 'voting' | 'revealed' | 'completed'
 
 /**
- * Repräsentiert eine Planning Poker Session
+ * Represents a Planning Poker Session
  */
 export interface ISession {
-  /** Eindeutige Session-ID */
+  /** Unique session ID */
   id: string
-  /** Name/Titel der Session */
+  /** Name/title of the session */
   name: string
-  /** Aktuelle Story/Task die geschätzt wird */
+  /** Current story/task being estimated */
   currentStory: string | null
-  /** Beschreibung der aktuellen Story (Markdown) */
+  /** Description of the current story (Markdown) */
   currentStoryDescription: string | null
-  /** Liste aller Teilnehmer */
+  /** List of all participants */
   participants: IParticipant[]
-  /** Aktueller Status der Session */
+  /** Current status of the session */
   status: SessionStatus
-  /** Sind die Karten aufgedeckt? */
+  /** Are the cards revealed? */
   cardsRevealed: boolean
-  /** Session-Ersteller ID */
+  /** Session creator ID */
   hostId: string
-  /** Erstellungszeitpunkt */
+  /** Creation time */
   createdAt: Date
-  /** Letztes Update */
+  /** Last update */
   updatedAt: Date
-  /** Index der aktuellen Story in der Queue */
+  /** Index of the current story in the queue */
   currentStoryIndex: number
-  /** Queue mit vorbereiteten Storys */
+  /** Queue with prepared stories */
   storyQueue: IStory[]
 }
 
 /**
- * Ergebnis einer Abstimmungsrunde
+ * Result of a voting round
  */
 export interface IVotingResult {
-  /** Story die geschätzt wurde */
+  /** Story that was estimated */
   story: string
-  /** Beschreibung der Story */
+  /** Description of the story */
   storyDescription: string | null
-  /** Alle Votes mit Teilnehmer-ID */
+  /** All votes with participant ID */
   votes: Map<string, PokerValue>
-  /** Durchschnittswert (nur numerische) */
+  /** Average value (numeric only) */
   average: number | null
-  /** Median-Wert (nur numerische) */
+  /** Median value (numeric only) */
   median: number | null
-  /** Häufigster Wert */
+  /** Most common value */
   mode: PokerValue | null
-  /** Konsens erreicht? */
+  /** Consensus reached? */
   hasConsensus: boolean
-  /** Zeitstempel */
+  /** Timestamp */
   timestamp: Date
 }
 
 /**
- * Konfiguration für eine Session
+ * Configuration for a session
  */
 export interface ISessionConfig {
-  /** Verfügbare Kartenwerte */
+  /** Available card values */
   cardValues: readonly PokerValue[]
-  /** Automatisch aufdecken wenn alle gewählt haben */
+  /** Automatically reveal when everyone has voted */
   autoReveal: boolean
-  /** Timer für Abstimmung (in Sekunden, 0 = kein Timer) */
+  /** Timer for voting (in seconds, 0 = no timer) */
   votingTimeout: number
-  /** Beobachter erlauben */
+  /** Allow observers */
   allowObservers: boolean
 }
 
 /**
- * Event-Typen für WebSocket-Kommunikation
+ * Event types for WebSocket communication
  */
 export type SessionEventType =
   | 'participant:join'
@@ -169,7 +169,7 @@ export type SessionEventType =
   | 'session:status:change'
 
 /**
- * Generisches Session-Event
+ * Generic session event
  */
 export interface ISessionEvent<T = unknown> {
   type: SessionEventType
@@ -179,7 +179,7 @@ export interface ISessionEvent<T = unknown> {
 }
 
 /**
- * Zustandsmanagement für die Session
+ * State management for the session
  */
 export interface ISessionState {
   session: ISession | null

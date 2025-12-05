@@ -1,20 +1,20 @@
 <script setup lang="ts">
 /**
- * SessionInfo Komponente
+ * SessionInfo Component
  *
- * Zeigt Session-Informationen inkl. Join-Code an.
- * Ermöglicht das Kopieren des Join-Codes.
+ * Displays session information including join code.
+ * Allows copying the join code.
  */
 
 /**
  * Props Definition
  */
 interface Props {
-  /** Name der Session */
+  /** Session name */
   sessionName: string
-  /** Join-Code zum Teilen */
+  /** Join code for sharing */
   joinCode: string | null
-  /** Anzahl der Teilnehmer */
+  /** Number of participants */
   participantCount: number
 }
 
@@ -24,17 +24,17 @@ const props = defineProps<Props>()
  * Events Definition
  */
 const emit = defineEmits<{
-  /** Session verlassen */
+  /** Leave session */
   leave: []
 }>()
 
 /**
- * Status für Kopier-Feedback
+ * Status for copy feedback
  */
 const copied = ref(false)
 
 /**
- * Kopiert den Join-Code in die Zwischenablage
+ * Copies the join code to clipboard
  */
 async function copyJoinCode(): Promise<void> {
   if (!props.joinCode) return
@@ -47,13 +47,13 @@ async function copyJoinCode(): Promise<void> {
     }, 2000)
   }
   catch {
-    // Fallback für ältere Browser
-    console.warn('Clipboard API nicht verfügbar')
+    // Fallback for older browsers
+    console.warn('Clipboard API not available')
   }
 }
 
 /**
- * Generiert einen Share-Link
+ * Generates a share link
  */
 const shareLink = computed(() => {
   if (!props.joinCode) return ''
@@ -65,7 +65,7 @@ const shareLink = computed(() => {
 })
 
 /**
- * Teilt die Session (Web Share API)
+ * Shares the session (Web Share API)
  */
 async function shareSession(): Promise<void> {
   if (!import.meta.client || !navigator.share) {
@@ -76,12 +76,12 @@ async function shareSession(): Promise<void> {
   try {
     await navigator.share({
       title: `Planning Poker: ${props.sessionName}`,
-      text: `Tritt meiner Planning Poker Session bei! Code: ${props.joinCode}`,
+      text: `Join my Planning Poker session! Code: ${props.joinCode}`,
       url: shareLink.value,
     })
   }
   catch {
-    // Benutzer hat abgebrochen
+    // User cancelled
   }
 }
 </script>
@@ -96,7 +96,7 @@ async function shareSession(): Promise<void> {
         <div class="flex items-center gap-2 mt-1">
           <span class="flex h-2 w-2 rounded-full bg-green-500"></span>
           <span class="text-sm text-secondary-500 font-medium">
-            {{ participantCount }} Teilnehmer online
+            {{ participantCount }} participants online
           </span>
         </div>
       </div>
@@ -104,14 +104,14 @@ async function shareSession(): Promise<void> {
       <button
         type="button"
         class="text-secondary-400 hover:text-error-600 transition-colors p-2 rounded-lg hover:bg-error-50"
-        title="Session verlassen"
+        title="Leave session"
         @click="emit('leave')"
       >
         <Icon name="heroicons:arrow-left-on-rectangle" class="w-5 h-5" />
       </button>
     </div>
 
-    <!-- Join-Code -->
+    <!-- Join Code -->
     <div v-if="joinCode" class="bg-secondary-50 rounded-xl p-4 border border-secondary-200">
       <p class="text-xs font-semibold text-secondary-500 uppercase tracking-wider mb-2">
         Join Code
@@ -126,7 +126,7 @@ async function shareSession(): Promise<void> {
             type="button"
             class="p-2 rounded-lg transition-all duration-200 flex items-center justify-center"
             :class="copied ? 'bg-green-100 text-green-700' : 'bg-white text-secondary-600 hover:text-primary-600 hover:bg-primary-50 shadow-sm border border-secondary-200'"
-            :title="copied ? 'Kopiert!' : 'Code kopieren'"
+            :title="copied ? 'Copied!' : 'Copy code'"
             @click="copyJoinCode"
           >
             <Icon
@@ -139,7 +139,7 @@ async function shareSession(): Promise<void> {
             v-if="shareLink"
             type="button"
             class="p-2 rounded-lg bg-white text-secondary-600 hover:text-primary-600 hover:bg-primary-50 shadow-sm border border-secondary-200 transition-all duration-200 flex items-center justify-center"
-            title="Link teilen"
+            title="Share link"
             @click="shareSession"
           >
             <Icon name="heroicons:share" class="w-5 h-5" />

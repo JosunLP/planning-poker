@@ -1,13 +1,13 @@
 <script setup lang="ts">
 /**
- * Alert Komponente
+ * Alert Component
  *
- * Wiederverwendbare Alert-Box für Benachrichtigungen.
- * Verwendet für Content-Integration.
+ * Reusable alert box for notifications.
+ * Used for content integration.
  */
 
 /**
- * Verfügbare Alert-Varianten
+ * Available alert variants
  */
 type AlertVariant = 'info' | 'success' | 'warning' | 'error'
 
@@ -15,7 +15,7 @@ type AlertVariant = 'info' | 'success' | 'warning' | 'error'
  * Props Definition
  */
 interface Props {
-  /** Farbe/Variante des Alerts */
+  /** Color/variant of the alert */
   color?: AlertVariant | string
 }
 
@@ -24,7 +24,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 /**
- * Mapping von Varianten zu Tailwind-Klassen
+ * Mapping of variants to Tailwind classes
  */
 const variantClasses: Record<AlertVariant, string> = {
   info: 'border-primary-500 bg-primary-50 text-primary-800',
@@ -34,19 +34,19 @@ const variantClasses: Record<AlertVariant, string> = {
 }
 
 /**
- * Berechnet CSS-Klassen basierend auf der Variante
+ * Computes CSS classes based on variant
  */
 const alertClasses = computed(() => {
   const variant = props.color as AlertVariant
   if (variantClasses[variant]) {
     return variantClasses[variant]
   }
-  // Fallback für benutzerdefinierte Farben
+  // Fallback for custom colors
   return 'bg-white'
 })
 
 /**
- * Inline-Style für benutzerdefinierte Farben
+ * Inline style for custom colors
  */
 const customStyle = computed(() => {
   const variant = props.color as AlertVariant

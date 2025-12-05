@@ -1,14 +1,14 @@
 /**
- * WebSocket Nachrichtentypen
+ * WebSocket Message Types
  *
- * Definiert alle Nachrichtentypen für die Echtzeit-Kommunikation
- * zwischen Client und Server.
+ * Defines all message types for real-time communication
+ * between client and server.
  */
 
 import type { IParticipant, ISession, PokerValue } from './poker'
 
 /**
- * Client-zu-Server Nachrichtentypen
+ * Client-to-Server Message Types
  */
 export type ClientMessageType =
   | 'session:create'
@@ -25,7 +25,7 @@ export type ClientMessageType =
   | 'ping'
 
 /**
- * Server-zu-Client Nachrichtentypen
+ * Server-to-Client Message Types
  */
 export type ServerMessageType =
   | 'session:created'
@@ -39,7 +39,7 @@ export type ServerMessageType =
   | 'pong'
 
 /**
- * Basis-Struktur für Client-Nachrichten
+ * Base structure for client messages
  */
 export interface ClientMessage<T extends ClientMessageType = ClientMessageType, P = unknown> {
   type: T
@@ -48,7 +48,7 @@ export interface ClientMessage<T extends ClientMessageType = ClientMessageType, 
 }
 
 /**
- * Basis-Struktur für Server-Nachrichten
+ * Base structure for server messages
  */
 export interface ServerMessage<T extends ServerMessageType = ServerMessageType, P = unknown> {
   type: T
@@ -158,7 +158,7 @@ export interface ParticipantLeftPayload {
 export interface ParticipantVotedPayload {
   participantId: string
   sessionId: string
-  /** Nur sichtbar wenn revealed oder für eigene Votes */
+  /** Only visible when revealed or for own votes */
   value?: PokerValue
 }
 
@@ -167,7 +167,7 @@ export interface ParticipantVotedPayload {
 // ============================================
 
 /**
- * Prüft ob eine Nachricht vom Client kommt
+ * Checks if a message comes from the client
  */
 export function isClientMessage(msg: unknown): msg is ClientMessage {
   return (
@@ -180,7 +180,7 @@ export function isClientMessage(msg: unknown): msg is ClientMessage {
 }
 
 /**
- * Prüft ob eine Nachricht vom Server kommt
+ * Checks if a message comes from the server
  */
 export function isServerMessage(msg: unknown): msg is ServerMessage {
   return (

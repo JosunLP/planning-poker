@@ -1,25 +1,25 @@
 <script setup lang="ts">
 /**
- * Counter Komponente
+ * Counter Component
  *
- * Einfache Demo-Komponente für Content-Integration.
- * Zeigt einen Zähler mit Increment/Decrement-Buttons.
+ * Simple demo component for content integration.
+ * Shows a counter with increment/decrement buttons.
  */
 
 /**
- * Reaktiver Zählerwert
+ * Reactive counter value
  */
 const count = ref(0)
 
 /**
- * Erhöht den Zähler um 1
+ * Increases the counter by 1
  */
 function increment(): void {
   count.value++
 }
 
 /**
- * Verringert den Zähler um 1
+ * Decreases the counter by 1
  */
 function decrement(): void {
   count.value--
@@ -30,7 +30,7 @@ function decrement(): void {
   <div class="inline-flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-secondary-200">
     <button
       class="w-10 h-10 rounded-lg bg-secondary-100 hover:bg-secondary-200 text-secondary-700 font-bold transition-colors"
-      aria-label="Verringern"
+      aria-label="Decrease"
       @click="decrement"
     >
       −
@@ -42,7 +42,7 @@ function decrement(): void {
 
     <button
       class="w-10 h-10 rounded-lg bg-primary-100 hover:bg-primary-200 text-primary-700 font-bold transition-colors"
-      aria-label="Erhöhen"
+      aria-label="Increase"
       @click="increment"
     >
       +

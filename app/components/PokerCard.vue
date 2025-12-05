@@ -1,9 +1,9 @@
 <script setup lang="ts">
 /**
- * PokerCard Komponente
+ * PokerCard Component
  *
- * Stellt eine einzelne Poker-Karte dar.
- * Unterstützt Auswahl, Aufdecken und Animationen.
+ * Represents a single poker card.
+ * Supports selection, revealing and animations.
  */
 
 import type { PokerValue } from '~/types'
@@ -12,15 +12,15 @@ import type { PokerValue } from '~/types'
  * Props Definition
  */
 interface Props {
-  /** Wert der Karte */
+  /** Value of the card */
   value: PokerValue
-  /** Ist die Karte ausgewählt? */
+  /** Is the card selected? */
   selected?: boolean
-  /** Ist die Karte aufgedeckt? */
+  /** Is the card revealed? */
   revealed?: boolean
-  /** Ist die Karte deaktiviert? */
+  /** Is the card disabled? */
   disabled?: boolean
-  /** Kleine Kartengröße */
+  /** Small card size */
   small?: boolean
 }
 
@@ -35,12 +35,12 @@ const props = withDefaults(defineProps<Props>(), {
  * Events Definition
  */
 const emit = defineEmits<{
-  /** Wird ausgelöst wenn die Karte angeklickt wird */
+  /** Emitted when the card is clicked */
   select: [value: PokerValue]
 }>()
 
 /**
- * Dynamische CSS-Klassen für die Karte
+ * Dynamic CSS classes for the card
  */
 const cardClasses = computed(() => [
   props.small ? 'w-14 h-20' : 'w-20 h-28',
@@ -55,7 +55,7 @@ const cardClasses = computed(() => [
 ])
 
 /**
- * Behandelt den Klick auf die Karte
+ * Handles click on the card
  */
 function handleClick(): void {
   if (!props.disabled && !props.revealed) {
@@ -71,7 +71,7 @@ function handleClick(): void {
     :class="cardClasses"
     :disabled="disabled"
     :aria-pressed="selected"
-    :aria-label="`Karte mit Wert ${value}`"
+    :aria-label="`Card with value ${value}`"
     @click="handleClick"
   >
     <!-- Card Pattern/Decoration -->

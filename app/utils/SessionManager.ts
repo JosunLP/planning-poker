@@ -1,8 +1,8 @@
 /**
- * SessionManager Klasse
+ * SessionManager Class
  *
- * Singleton-Klasse zur Verwaltung aller aktiven Sessions.
- * Kümmert sich um Session-Lifecycle, Cleanup und Zugriff.
+ * Singleton class for managing all active sessions.
+ * Handles session lifecycle, cleanup, and access.
  */
 
 import type { ISession, ISessionConfig } from '~/types'
@@ -11,25 +11,25 @@ import { Participant } from './Participant'
 import { Session } from './Session'
 
 /**
- * Konfiguration für Session-Cleanup
+ * Configuration for session cleanup
  */
 interface CleanupConfig {
-  /** Intervall für Cleanup-Prüfung in ms */
+  /** Interval for cleanup check in ms */
   checkInterval: number
-  /** Maximale Inaktivität bevor Session gelöscht wird (ms) */
+  /** Maximum inactivity before session is deleted (ms) */
   maxInactivity: number
-  /** Session löschen wenn leer */
+  /** Delete session when empty */
   deleteWhenEmpty: boolean
 }
 
 const DEFAULT_CLEANUP_CONFIG: CleanupConfig = {
-  checkInterval: 60_000, // Jede Minute prüfen
-  maxInactivity: 30 * 60_000, // 30 Minuten Inaktivität
+  checkInterval: 60_000, // Check every minute
+  maxInactivity: 30 * 60_000, // 30 minutes of inactivity
   deleteWhenEmpty: true,
 }
 
 /**
- * SessionManager verwaltet alle aktiven Sessions
+ * SessionManager manages all active sessions
  *
  * @example
  * ```ts
@@ -50,7 +50,7 @@ export class SessionManager {
   }
 
   /**
-   * Gibt die Singleton-Instanz zurück
+   * Returns the singleton instance
    */
   public static getInstance(config?: Partial<CleanupConfig>): SessionManager {
     if (!SessionManager.instance) {
@@ -60,7 +60,7 @@ export class SessionManager {
   }
 
   /**
-   * Setzt die Instanz zurück (für Tests)
+   * Resets the instance (for tests)
    */
   public static resetInstance(): void {
     if (SessionManager.instance) {
@@ -70,12 +70,12 @@ export class SessionManager {
   }
 
   /**
-   * Erstellt eine neue Session
+   * Creates a new session
    *
-   * @param name - Name der Session
-   * @param hostName - Name des Hosts
-   * @param config - Optionale Session-Konfiguration
-   * @returns Objekt mit Session, Host-Teilnehmer und Join-Code
+   * @param name - Name of the session
+   * @param hostName - Name of the host
+   * @param config - Optional session configuration
+   * @returns Object with session, host participant, and join code
    */
   public createSession(
     name: string,
@@ -86,21 +86,21 @@ export class SessionManager {
     const session = new Session(name, host.id, config)
     session.addParticipant(host)
 
-    // Session speichern
+    // Save session
     this.sessions.set(session.id, session)
 
-    // Join-Code generieren
+    // Generate join code
     const joinCode = this.generateJoinCode()
     this.joinCodes.set(joinCode, session.id)
 
-    // Cleanup starten falls noch nicht aktiv
+    // Start cleanup if not already active
     this.startCleanup()
 
     return { session, host, joinCode }
   }
 
   /**
-   * Generiert einen kurzen, lesbaren Join-Code
+   * Generates a short, readable join code
    */
   private generateJoinCode(): string {
     let code = ''
@@ -108,7 +108,7 @@ export class SessionManager {
       code += JOIN_CODE_CHARS.charAt(Math.floor(Math.random() * JOIN_CODE_CHARS.length))
     }
 
-    // Sicherstellen, dass Code einzigartig ist
+    // Ensure code is unique
     if (this.joinCodes.has(code)) {
       return this.generateJoinCode()
     }
@@ -117,9 +117,9 @@ export class SessionManager {
   }
 
   /**
-   * Findet eine Session anhand des Join-Codes
+   * Finds a session by join code
    *
-   * @param joinCode - Der 6-stellige Join-Code
+   * @param joinCode - The 6-character join code
    */
   public getSessionByJoinCode(joinCode: string): Session | null {
     const normalizedCode = joinCode.toUpperCase().trim()
@@ -133,14 +133,14 @@ export class SessionManager {
   }
 
   /**
-   * Findet eine Session anhand der ID
+   * Finds a session by ID
    */
   public getSessionById(sessionId: string): Session | null {
     return this.sessions.get(sessionId) ?? null
   }
 
   /**
-   * Gibt den Join-Code für eine Session zurück
+   * Returns the join code for a session
    */
   public getJoinCode(sessionId: string): string | null {
     for (const [code, id] of this.joinCodes.entries()) {
@@ -152,12 +152,12 @@ export class SessionManager {
   }
 
   /**
-   * Tritt einer Session bei
+   * Joins a session
    *
-   * @param joinCode - Der Join-Code der Session
-   * @param participantName - Name des beitretenden Teilnehmers
-   * @param asObserver - Als Beobachter beitreten
-   * @returns Session und Teilnehmer oder null wenn nicht gefunden
+   * @param joinCode - The join code of the session
+   * @param participantName - Name of the joining participant
+   * @param asObserver - Join as observer
+   * @returns Session and participant or null if not found
    */
   public joinSession(
     joinCode: string,
@@ -181,11 +181,11 @@ export class SessionManager {
   }
 
   /**
-   * Entfernt einen Teilnehmer aus einer Session
-   * Löscht die Session wenn sie danach leer ist
+   * Removes a participant from a session
+   * Deletes the session if it becomes empty afterwards
    *
-   * @param sessionId - ID der Session
-   * @param participantId - ID des Teilnehmers
+   * @param sessionId - ID of the session
+   * @param participantId - ID of the participant
    */
   public leaveSession(sessionId: string, participantId: string): boolean {
     const session = this.sessions.get(sessionId)
@@ -204,7 +204,7 @@ export class SessionManager {
   }
 
   /**
-   * Löscht eine Session wenn sie leer ist
+   * Deletes a session if it is empty
    */
   private cleanupIfEmpty(sessionId: string): void {
     const session = this.sessions.get(sessionId)
@@ -215,7 +215,7 @@ export class SessionManager {
   }
 
   /**
-   * Löscht eine Session komplett
+   * Deletes a session completely
    */
   public deleteSession(sessionId: string): boolean {
     const session = this.sessions.get(sessionId)
@@ -224,7 +224,7 @@ export class SessionManager {
       return false
     }
 
-    // Join-Code entfernen
+    // Remove join code
     for (const [code, id] of this.joinCodes.entries()) {
       if (id === sessionId) {
         this.joinCodes.delete(code)
@@ -232,10 +232,10 @@ export class SessionManager {
       }
     }
 
-    // Session entfernen
+    // Remove session
     this.sessions.delete(sessionId)
 
-    // Cleanup stoppen wenn keine Sessions mehr
+    // Stop cleanup if no more sessions
     if (this.sessions.size === 0) {
       this.stopCleanup()
     }
@@ -244,11 +244,11 @@ export class SessionManager {
   }
 
   /**
-   * Startet den automatischen Cleanup-Prozess
+   * Starts the automatic cleanup process
    */
   public startCleanup(): void {
     if (this.cleanupIntervalId !== null) {
-      return // Bereits aktiv
+      return // Already active
     }
 
     this.cleanupIntervalId = setInterval(() => {
@@ -257,7 +257,7 @@ export class SessionManager {
   }
 
   /**
-   * Stoppt den automatischen Cleanup-Prozess
+   * Stops the automatic cleanup process
    */
   public stopCleanup(): void {
     if (this.cleanupIntervalId !== null) {
@@ -267,20 +267,20 @@ export class SessionManager {
   }
 
   /**
-   * Führt den Cleanup durch
-   * Entfernt leere und inaktive Sessions
+   * Performs the cleanup
+   * Removes empty and inactive sessions
    */
   private performCleanup(): void {
     const now = Date.now()
 
     for (const [sessionId, session] of this.sessions.entries()) {
-      // Leere Sessions löschen
+      // Delete empty sessions
       if (this.cleanupConfig.deleteWhenEmpty && session.participants.length === 0) {
         this.deleteSession(sessionId)
         continue
       }
 
-      // Inaktive Sessions löschen
+      // Delete inactive sessions
       const lastActivity = session.updatedAt.getTime()
       if (now - lastActivity > this.cleanupConfig.maxInactivity) {
         this.deleteSession(sessionId)
@@ -289,21 +289,21 @@ export class SessionManager {
   }
 
   /**
-   * Gibt alle aktiven Sessions zurück
+   * Returns all active sessions
    */
   public getAllSessions(): Session[] {
     return Array.from(this.sessions.values())
   }
 
   /**
-   * Gibt die Anzahl aktiver Sessions zurück
+   * Returns the number of active sessions
    */
   public getSessionCount(): number {
     return this.sessions.size
   }
 
   /**
-   * Serialisiert alle Sessions
+   * Serializes all sessions
    */
   public toJSON(): { sessions: ISession[]; joinCodes: Record<string, string> } {
     const sessions = Array.from(this.sessions.values()).map(s => s.toJSON())

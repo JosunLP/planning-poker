@@ -1,15 +1,15 @@
 <script setup lang="ts">
 /**
- * Index Seite
+ * Index Page
  *
- * Startseite der Planning Poker Anwendung.
- * Ermöglicht das Erstellen einer neuen Session oder zeigt die aktive Session.
+ * Homepage of the Planning Poker application.
+ * Enables creating a new session or displays the active session.
  */
 
 import { marked } from 'marked'
 
 /**
- * Session Composable für Zustandsverwaltung
+ * Session composable for state management
  */
 const {
   session,
@@ -47,22 +47,22 @@ const parsedDescription = computed(() => {
 const showStoryPreview = ref(false)
 
 /**
- * Route für Join-Code aus URL
+ * Route for Join-Code from URL
  */
 const route = useRoute()
 
 /**
- * Aktueller Modus: 'create' oder 'join'
+ * Current mode: 'create' or 'join'
  */
 const mode = ref<'create' | 'join'>('create')
 
 /**
- * Join-Code aus URL (für Vorausfüllen)
+ * Join-Code from URL (for pre-filling)
  */
 const initialJoinCode = ref('')
 
 /**
- * Join-Code aus URL Parameter
+ * Join-Code from URL parameter
  */
 onMounted(() => {
   const urlJoinCode = route.query.join as string
@@ -73,29 +73,29 @@ onMounted(() => {
 })
 
 /**
- * SEO Meta-Daten
+ * SEO Meta Data
  */
 useSeoMeta({
-  title: 'Planning Poker - Agile Schätzungen leicht gemacht',
-  description: 'Kostenloses Planning Poker Tool für agile Teams. Schätze User Stories gemeinsam mit deinem Team.',
+  title: 'Planning Poker - Agile Estimation Made Easy',
+  description: 'Free Planning Poker tool for agile teams. Estimate user stories together with your team.',
 })
 
 /**
- * Behandelt das Erstellen einer neuen Session
+ * Handles creating a new session
  */
 function handleCreateSession(sessionName: string, participantName: string): void {
   createSession(sessionName, participantName)
 }
 
 /**
- * Behandelt das Beitreten einer Session
+ * Handles joining a session
  */
 function handleJoinSession(code: string, participantName: string, asObserver: boolean): void {
   joinSession(code, participantName, asObserver)
 }
 
 /**
- * Wechselt den Modus
+ * Switches the mode
  */
 function switchMode(newMode: 'create' | 'join'): void {
   mode.value = newMode
@@ -134,9 +134,9 @@ function switchMode(newMode: 'create' | 'join'): void {
                 }"
               />
               <span class="hidden sm:inline">
-                {{ connectionStatus === 'connected' ? 'Verbunden' :
-                   connectionStatus === 'connecting' ? 'Verbinde...' :
-                   connectionStatus === 'error' ? 'Fehler' : 'Offline' }}
+                {{ connectionStatus === 'connected' ? 'Connected' :
+                   connectionStatus === 'connecting' ? 'Connecting...' :
+                   connectionStatus === 'error' ? 'Error' : 'Offline' }}
               </span>
             </div>
           </div>
@@ -150,14 +150,14 @@ function switchMode(newMode: 'create' | 'join'): void {
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
-      <!-- Keine Session aktiv - Formular anzeigen -->
+      <!-- No session active - display form -->
       <div v-if="!session" class="py-12">
         <div class="text-center mb-8">
           <h2 class="text-3xl font-bold text-secondary-800 mb-2">
-            Willkommen bei Planning Poker
+            Welcome to Planning Poker
           </h2>
           <p class="text-secondary-600">
-            Starte eine neue Session oder tritt einer bestehenden bei.
+            Start a new session or join an existing one.
           </p>
         </div>
 
@@ -173,7 +173,7 @@ function switchMode(newMode: 'create' | 'join'): void {
               @click="switchMode('create')"
             >
               <Icon name="heroicons:plus" class="w-4 h-4 inline mr-1" />
-              Neue Session
+              New Session
             </button>
             <button
               type="button"
@@ -184,7 +184,7 @@ function switchMode(newMode: 'create' | 'join'): void {
               @click="switchMode('join')"
             >
               <Icon name="heroicons:arrow-right-on-rectangle" class="w-4 h-4 inline mr-1" />
-              Beitreten
+              Join
             </button>
           </div>
         </div>
@@ -210,9 +210,9 @@ function switchMode(newMode: 'create' | 'join'): void {
             <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Icon name="heroicons:users" class="w-6 h-6 text-primary-600" />
             </div>
-            <h3 class="font-semibold text-secondary-800 mb-2">Team-Schätzungen</h3>
+            <h3 class="font-semibold text-secondary-800 mb-2">Team Estimation</h3>
             <p class="text-sm text-secondary-600">
-              Schätze gemeinsam mit deinem Team in Echtzeit.
+              Estimate together with your team in real-time.
             </p>
           </div>
 
@@ -220,9 +220,9 @@ function switchMode(newMode: 'create' | 'join'): void {
             <div class="w-12 h-12 bg-accent-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Icon name="heroicons:chart-bar" class="w-6 h-6 text-accent-600" />
             </div>
-            <h3 class="font-semibold text-secondary-800 mb-2">Statistiken</h3>
+            <h3 class="font-semibold text-secondary-800 mb-2">Statistics</h3>
             <p class="text-sm text-secondary-600">
-              Sieh Durchschnitt, Median und Verteilung der Votes.
+              See average, median and vote distribution.
             </p>
           </div>
 
@@ -230,19 +230,19 @@ function switchMode(newMode: 'create' | 'join'): void {
             <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Icon name="heroicons:bolt" class="w-6 h-6 text-green-600" />
             </div>
-            <h3 class="font-semibold text-secondary-800 mb-2">Schnell & Einfach</h3>
+            <h3 class="font-semibold text-secondary-800 mb-2">Quick & Easy</h3>
             <p class="text-sm text-secondary-600">
-              Keine Registrierung nötig. Sofort loslegen!
+              No registration required. Get started immediately!
             </p>
           </div>
         </div>
       </div>
 
-      <!-- Session aktiv -->
+      <!-- Session active -->
       <div v-else class="grid lg:grid-cols-12 gap-6">
-        <!-- Linke Spalte: Session-Info, Teilnehmer & Steuerung -->
+        <!-- Left column: Session info, participants & controls -->
         <div class="lg:col-span-3 space-y-6">
-          <!-- Session Info mit Join-Code -->
+          <!-- Session Info with Join-Code -->
           <SessionInfo
             :session-name="session.name"
             :join-code="joinCode"
@@ -268,7 +268,7 @@ function switchMode(newMode: 'create' | 'join'): void {
             @next-story="nextStory"
           />
 
-          <!-- Story Queue (nur Host) -->
+          <!-- Story Queue (host only) -->
           <StoryQueue
             v-if="isHost"
             :stories="session.storyQueue"
@@ -281,14 +281,14 @@ function switchMode(newMode: 'create' | 'join'): void {
           />
         </div>
 
-        <!-- Mittlere Spalte: Hauptbereich -->
-                <!-- Mittlere Spalte: Hauptbereich -->
+        <!-- Middle column: Main area -->
+                <!-- Middle column: Main area -->
         <div class="lg:col-span-6">
           <Transition name="slide-up" mode="out-in">
-            <!-- Aktuelle Story -->
+            <!-- Current Story -->
             <div v-if="session.currentStory" class="card-container mb-6">
               <div class="flex items-center justify-between mb-1">
-                <div class="text-xs text-secondary-500">Aktuelle Story</div>
+                <div class="text-xs text-secondary-500">Current Story</div>
                 <button
                   v-if="session.currentStoryDescription"
                   type="button"
@@ -296,7 +296,7 @@ function switchMode(newMode: 'create' | 'join'): void {
                   @click="showStoryPreview = true"
                 >
                   <Icon name="heroicons:eye" class="w-3 h-3" />
-                  Details anzeigen
+                  Show details
                 </button>
               </div>
               <h2 class="text-xl font-bold text-secondary-800 mb-2">
@@ -310,17 +310,17 @@ function switchMode(newMode: 'create' | 'join'): void {
               />
             </div>
 
-            <!-- Warte-Status -->
+            <!-- Waiting Status -->
             <div v-else class="card-container mb-6 text-center py-8">
               <Icon name="heroicons:clock" class="w-12 h-12 text-secondary-300 mx-auto mb-4" />
               <p class="text-secondary-500">
-                Warte auf den Host, um die nächste Runde zu starten...
+                Waiting for the host to start the next round...
               </p>
             </div>
           </Transition>
 
           <Transition name="slide-up" mode="out-in">
-            <!-- Kartenauswahl -->
+            <!-- Card selection -->
             <div
               v-if="session.status === 'voting' && !currentParticipant?.isObserver"
               class="card-container"
@@ -332,20 +332,20 @@ function switchMode(newMode: 'create' | 'join'): void {
               />
             </div>
 
-            <!-- Beobachter-Hinweis -->
+            <!-- Observer hint -->
             <div
               v-else-if="currentParticipant?.isObserver"
               class="card-container text-center py-8"
             >
               <Icon name="heroicons:eye" class="w-12 h-12 text-secondary-300 mx-auto mb-4" />
               <p class="text-secondary-500">
-                Du bist als Beobachter dabei und kannst nicht abstimmen.
+                You are participating as an observer and cannot vote.
               </p>
             </div>
           </Transition>
         </div>
 
-        <!-- Rechte Spalte: Ergebnisse -->
+        <!-- Right column: Results -->
         <div class="lg:col-span-3">
           <Transition name="slide-up" mode="out-in">
             <div v-if="session.cardsRevealed">
@@ -359,7 +359,7 @@ function switchMode(newMode: 'create' | 'join'): void {
             <div v-else class="card-container text-center py-8">
               <Icon name="heroicons:eye-slash" class="w-12 h-12 text-secondary-300 mx-auto mb-4" />
               <p class="text-secondary-500">
-                Die Ergebnisse werden angezeigt, sobald die Karten aufgedeckt sind.
+                Results will be shown once the cards are revealed.
               </p>
             </div>
           </Transition>
@@ -370,9 +370,9 @@ function switchMode(newMode: 'create' | 'join'): void {
     <!-- Footer -->
     <footer class="mt-auto py-6 text-center text-sm text-secondary-500">
       <p>
-        Planning Poker - Entwickelt mit
+        Planning Poker - Built with
         <Icon name="heroicons:heart-solid" class="w-4 h-4 inline text-error-500" />
-        und Nuxt 3
+        and Nuxt 3
       </p>
     </footer>
 

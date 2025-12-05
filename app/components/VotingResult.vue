@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /**
- * VotingResult Komponente
+ * VotingResult Component
  *
- * Zeigt die Ergebnisse einer Abstimmungsrunde an.
+ * Displays the results of a voting round.
  */
 
 import { marked } from 'marked';
@@ -12,11 +12,11 @@ import type { IParticipant, PokerValue } from '~/types';
  * Props Definition
  */
 interface Props {
-  /** Liste der Teilnehmer mit ihren Votes */
+  /** List of participants with their votes */
   participants: IParticipant[]
-  /** Story die geschätzt wurde */
+  /** Story that was estimated */
   story?: string | null
-  /** Beschreibung der Story */
+  /** Story description */
   description?: string | null
 }
 
@@ -31,14 +31,14 @@ const parsedDescription = computed(() => {
 })
 
 /**
- * Nur Teilnehmer die abgestimmt haben (keine Beobachter)
+ * Only participants who voted (no observers)
  */
 const voters = computed(() =>
   props.participants.filter(p => !p.isObserver && p.selectedValue !== null)
 )
 
 /**
- * Berechnet den Durchschnitt der numerischen Votes
+ * Calculates the average of numeric votes
  */
 const average = computed(() => {
   const numericVotes = voters.value
@@ -52,7 +52,7 @@ const average = computed(() => {
 })
 
 /**
- * Berechnet den Median der numerischen Votes
+ * Calculates the median of numeric votes
  */
 const median = computed(() => {
   const numericVotes = voters.value
@@ -74,7 +74,7 @@ const median = computed(() => {
 })
 
 /**
- * Gruppiert Votes nach Wert für die Anzeige
+ * Groups votes by value for display
  */
 const voteDistribution = computed(() => {
   const distribution = new Map<PokerValue, number>()
@@ -89,7 +89,7 @@ const voteDistribution = computed(() => {
 })
 
 /**
- * Prüft ob Konsens besteht (alle gleich)
+ * Checks if there is consensus (all votes equal)
  */
 const hasConsensus = computed(() => {
   if (voters.value.length < 2) return false
@@ -107,13 +107,13 @@ const hasConsensus = computed(() => {
         <Icon name="heroicons:chart-pie" class="w-5 h-5" />
       </div>
       <h3 class="text-lg font-bold text-secondary-900">
-        Ergebnis
+        Result
       </h3>
     </div>
 
     <!-- Story Info -->
     <div v-if="story" class="mb-6 p-4 bg-white border border-secondary-200 rounded-xl shadow-sm">
-      <div class="text-xs text-secondary-500 mb-1">Abstimmung für</div>
+      <div class="text-xs text-secondary-500 mb-1">Voting for</div>
       <h3 class="text-lg font-bold text-secondary-800 mb-2">{{ story }}</h3>
       <!-- eslint-disable-next-line vue/no-v-html -->
       <div
@@ -123,24 +123,24 @@ const hasConsensus = computed(() => {
       />
     </div>
 
-    <!-- Konsens-Anzeige -->
+    <!-- Consensus display -->
     <div
       v-if="hasConsensus"
       class="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl text-center shadow-sm"
     >
       <div class="text-3xl mb-2">🎉</div>
       <span class="text-green-800 font-bold text-lg">
-        Konsens erreicht!
+        Consensus reached!
       </span>
     </div>
 
-    <!-- Statistiken -->
+    <!-- Statistics -->
     <div class="grid grid-cols-3 gap-3 mb-6">
       <div class="text-center p-3 bg-primary-50 rounded-xl border border-primary-100">
         <div class="text-2xl font-bold text-primary-600 mb-0.5">
           {{ average ?? '-' }}
         </div>
-        <div class="text-[10px] font-medium text-primary-500 uppercase tracking-wider">Durchschnitt</div>
+        <div class="text-[10px] font-medium text-primary-500 uppercase tracking-wider">Average</div>
       </div>
 
       <div class="text-center p-3 bg-accent-50 rounded-xl border border-accent-100">
@@ -154,13 +154,13 @@ const hasConsensus = computed(() => {
         <div class="text-2xl font-bold text-secondary-700 mb-0.5">
           {{ voters.length }}
         </div>
-        <div class="text-[10px] font-medium text-secondary-500 uppercase tracking-wider">Stimmen</div>
+        <div class="text-[10px] font-medium text-secondary-500 uppercase tracking-wider">Votes</div>
       </div>
     </div>
 
-    <!-- Vote-Verteilung -->
+    <!-- Vote distribution -->
     <div class="space-y-2">
-      <h4 class="text-sm font-medium text-secondary-600">Verteilung</h4>
+      <h4 class="text-sm font-medium text-secondary-600">Distribution</h4>
 
       <div
         v-for="[value, count] in voteDistribution"

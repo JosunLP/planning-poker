@@ -1,23 +1,23 @@
 <script setup lang="ts">
 /**
- * SessionControls Komponente
+ * SessionControls Component
  *
- * Steuerelemente für den Host der Session.
+ * Control elements for the session host.
  */
 
 /**
  * Props Definition
  */
 interface Props {
-  /** Ist der Nutzer der Host? */
+  /** Is the user the host? */
   isHost: boolean
-  /** Aktueller Session-Status */
+  /** Current session status */
   status: 'waiting' | 'voting' | 'revealed' | 'completed'
-  /** Sind alle Votes abgegeben? */
+  /** Are all votes in? */
   allVotesIn: boolean
-  /** Aktuelle Story */
+  /** Current story */
   currentStory?: string | null
-  /** Gibt es eine Story-Queue? */
+  /** Is there a story queue? */
   hasStoryQueue?: boolean
 }
 
@@ -30,24 +30,24 @@ const props = withDefaults(defineProps<Props>(), {
  * Events Definition
  */
 const emit = defineEmits<{
-  /** Startet eine neue Abstimmungsrunde */
+  /** Starts a new voting round */
   startVoting: [story: string, description?: string]
-  /** Deckt die Karten auf */
+  /** Reveals the cards */
   reveal: []
-  /** Setzt die Runde zurück */
+  /** Resets the round */
   reset: []
-  /** Nächste Story aus Queue */
+  /** Next story from queue */
   nextStory: []
 }>()
 
 /**
- * Story-Input Wert
+ * Story input value
  */
 const storyInput = ref('')
 const descriptionInput = ref('')
 
 /**
- * Startet die Abstimmung
+ * Starts the voting
  */
 function handleStartVoting(): void {
   if (storyInput.value.trim()) {
@@ -65,11 +65,11 @@ function handleStartVoting(): void {
         <Icon name="heroicons:adjustments-horizontal" class="w-5 h-5" />
       </div>
       <h3 class="text-lg font-bold text-secondary-900">
-        Steuerung
+        Controls
       </h3>
     </div>
 
-    <!-- Neue Runde starten (nur wenn keine Story-Queue) -->
+    <!-- Start new round (only when no story queue) -->
     <div v-if="(props.status === 'waiting' || props.status === 'revealed') && !props.hasStoryQueue" class="space-y-3">
       <div>
         <label for="story-input" class="block text-sm font-medium text-secondary-700 mb-1">
@@ -80,20 +80,20 @@ function handleStartVoting(): void {
           v-model="storyInput"
           type="text"
           class="input"
-          placeholder="z.B. User Story #123"
+          placeholder="e.g. User Story #123"
           @keyup.enter="handleStartVoting"
         >
       </div>
 
       <div>
         <label for="story-desc" class="block text-sm font-medium text-secondary-700 mb-1">
-          Beschreibung (Markdown)
+          Description (Markdown)
         </label>
         <textarea
           id="story-desc"
           v-model="descriptionInput"
           class="input min-h-[100px] resize-y"
-          placeholder="Details zur Story..."
+          placeholder="Story details..."
         />
       </div>
 
@@ -104,22 +104,22 @@ function handleStartVoting(): void {
         @click="handleStartVoting"
       >
         <Icon name="heroicons:play" class="w-5 h-5 mr-2" />
-        Neue Runde starten
+        Start New Round
       </button>
     </div>
 
-    <!-- Warten auf Start (mit Story-Queue) -->
+    <!-- Waiting for start (with story queue) -->
     <div v-else-if="props.status === 'waiting' && props.hasStoryQueue" class="text-center py-4">
       <Icon name="heroicons:queue-list" class="w-8 h-8 text-secondary-300 mx-auto mb-2" />
       <p class="text-sm text-secondary-500">
-        Nutze die Story Queue um die nächste Runde zu starten.
+        Use the Story Queue to start the next round.
       </p>
     </div>
 
-    <!-- Aktive Abstimmung -->
+    <!-- Active voting -->
     <div v-else-if="props.status === 'voting'" class="space-y-3">
       <div class="p-3 bg-primary-50 rounded-lg">
-        <div class="text-xs text-primary-600 mb-1">Aktuelle Story</div>
+        <div class="text-xs text-primary-600 mb-1">Current Story</div>
         <div class="font-medium text-primary-800">{{ props.currentStory }}</div>
       </div>
 
@@ -130,8 +130,8 @@ function handleStartVoting(): void {
         @click="emit('reveal')"
       >
         <Icon name="heroicons:eye" class="w-5 h-5 mr-2" />
-        Karten aufdecken
-        <span v-if="props.allVotesIn" class="ml-2 text-xs">(Alle haben gewählt!)</span>
+        Reveal Cards
+        <span v-if="props.allVotesIn" class="ml-2 text-xs">(Everyone has voted!)</span>
       </button>
 
       <button
@@ -140,14 +140,14 @@ function handleStartVoting(): void {
         @click="emit('reset')"
       >
         <Icon name="heroicons:arrow-path" class="w-5 h-5 mr-2" />
-        Zurücksetzen
+        Reset
       </button>
     </div>
 
-    <!-- Ergebnis angezeigt (mit Story Queue) -->
+    <!-- Results shown (with story queue) -->
     <div v-else-if="props.status === 'revealed' && props.hasStoryQueue" class="space-y-3">
       <div class="p-3 bg-green-50 rounded-lg border border-green-200">
-        <div class="text-xs text-green-600 mb-1">Abstimmung abgeschlossen</div>
+        <div class="text-xs text-green-600 mb-1">Voting completed</div>
         <div class="font-medium text-green-800">{{ props.currentStory }}</div>
       </div>
 
@@ -157,7 +157,7 @@ function handleStartVoting(): void {
         @click="emit('nextStory')"
       >
         <Icon name="heroicons:forward" class="w-5 h-5 mr-2" />
-        Nächste Story
+        Next Story
       </button>
 
       <button
@@ -166,7 +166,7 @@ function handleStartVoting(): void {
         @click="emit('reset')"
       >
         <Icon name="heroicons:arrow-path" class="w-5 h-5 mr-2" />
-        Erneut abstimmen
+        Vote Again
       </button>
     </div>
   </div>

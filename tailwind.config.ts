@@ -1,10 +1,10 @@
 import type { Config } from 'tailwindcss'
 
 /**
- * Tailwind CSS Konfiguration für Planning Poker
+ * Tailwind CSS Configuration for Planning Poker
  *
- * Definiert die Design-Tokens und Farbpalette für das Projekt.
- * Nutzt semantische Farbnamen für bessere Wartbarkeit.
+ * Defines the design tokens and color palette for the project.
+ * Uses semantic color names for better maintainability.
  */
 export default <Config>{
   content: [
@@ -19,8 +19,8 @@ export default <Config>{
   theme: {
     extend: {
       /**
-       * Farbpalette für Planning Poker
-       * Semantische Farben für konsistentes Design
+       * Color palette for Planning Poker
+       * Semantic colors for consistent design
        */
       colors: {
         primary: {
@@ -86,7 +86,7 @@ export default <Config>{
       },
 
       /**
-       * Schriftfamilien
+       * Font families
        */
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -94,7 +94,7 @@ export default <Config>{
       },
 
       /**
-       * Animationen für Karten-Effekte
+       * Animations for card effects
        */
       animation: {
         'flip': 'flip 0.6s ease-in-out',
@@ -120,7 +120,7 @@ export default <Config>{
       },
 
       /**
-       * Spacing für Karten-Layout
+       * Spacing for card layout
        */
       spacing: {
         '18': '4.5rem',
@@ -128,7 +128,7 @@ export default <Config>{
       },
 
       /**
-       * Border-Radius für Karten
+       * Border radius for cards
        */
       borderRadius: {
         'card': '0.75rem',

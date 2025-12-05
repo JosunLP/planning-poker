@@ -1,60 +1,60 @@
 /**
  * useWebSocket Composable
  *
- * Verwaltet die WebSocket-Verbindung zum Server.
- * Bietet reaktive Verbindungsstatusinformationen und Message-Handling.
+ * Manages the WebSocket connection to the server.
+ * Provides reactive connection status information and message handling.
  */
 
 import type { Ref } from 'vue'
 import type { ClientMessage, ServerMessage, ServerMessageType } from '~/types/websocket'
 
 /**
- * WebSocket Verbindungsstatus
+ * WebSocket connection status
  */
 export type ConnectionStatus = 'disconnected' | 'connecting' | 'connected' | 'error'
 
 /**
- * Event-Handler Typ
+ * Event handler type
  */
 type MessageHandler<T = unknown> = (payload: T) => void
 
 /**
- * WebSocket Composable Optionen
+ * WebSocket composable options
  */
 interface UseWebSocketOptions {
-  /** Automatisch verbinden beim Mount */
+  /** Automatically connect on mount */
   autoConnect?: boolean
-  /** Automatisch neu verbinden bei Verbindungsverlust */
+  /** Automatically reconnect on connection loss */
   autoReconnect?: boolean
-  /** Maximale Anzahl Reconnect-Versuche */
+  /** Maximum number of reconnect attempts */
   maxReconnectAttempts?: number
-  /** Delay zwischen Reconnects in ms */
+  /** Delay between reconnects in ms */
   reconnectDelay?: number
 }
 
 /**
- * WebSocket Composable Return Type
+ * WebSocket composable return type
  */
 interface UseWebSocketReturn {
-  /** Aktueller Verbindungsstatus */
+  /** Current connection status */
   status: Ref<ConnectionStatus>
-  /** Verbindung herstellen */
+  /** Establish connection */
   connect: () => void
-  /** Verbindung trennen */
+  /** Disconnect */
   disconnect: () => void
-  /** Nachricht senden */
+  /** Send message */
   send: <T>(type: ClientMessage['type'], payload: T) => void
-  /** Event-Handler registrieren */
+  /** Register event handler */
   on: <T>(type: ServerMessageType, handler: MessageHandler<T>) => () => void
-  /** Einmaliger Event-Handler */
+  /** One-time event handler */
   once: <T>(type: ServerMessageType, handler: MessageHandler<T>) => void
 }
 
 /**
  * useWebSocket Composable
  *
- * @param options - Konfigurationsoptionen
- * @returns WebSocket-Management-Funktionen
+ * @param options - Configuration options
+ * @returns WebSocket management functions
  *
  * @example
  * ```ts
@@ -75,26 +75,26 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
     reconnectDelay = 1000,
   } = options
 
-  /** WebSocket-Instanz */
+  /** WebSocket instance */
   let ws: WebSocket | null = null
 
-  /** Reconnect-Versuche */
+  /** Reconnect attempts */
   let reconnectAttempts = 0
 
-  /** Reconnect Timer */
+  /** Reconnect timer */
   let reconnectTimer: ReturnType<typeof setTimeout> | null = null
 
-  /** Ping-Interval */
+  /** Ping interval */
   let pingInterval: ReturnType<typeof setInterval> | null = null
 
-  /** Verbindungsstatus */
+  /** Connection status */
   const status = ref<ConnectionStatus>('disconnected')
 
-  /** Event-Handler Map */
+  /** Event handler map */
   const handlers = new Map<ServerMessageType, Set<MessageHandler>>()
 
   /**
-   * WebSocket-URL generieren
+   * Generate WebSocket URL
    */
   function getWebSocketUrl(): string {
     if (!import.meta.client) return ''
@@ -104,7 +104,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
   }
 
   /**
-   * Event-Handler aufrufen
+   * Call event handlers
    */
   function emitEvent(type: ServerMessageType, payload: unknown): void {
     const typeHandlers = handlers.get(type)
@@ -114,7 +114,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
   }
 
   /**
-   * Verbindung herstellen
+   * Establish connection
    */
   function connect(): void {
     if (!import.meta.client) return
@@ -130,7 +130,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
         reconnectAttempts = 0
         console.log('[WebSocket] Connected')
 
-        // Ping-Interval starten
+        // Start ping interval
         pingInterval = setInterval(() => {
           if (ws?.readyState === WebSocket.OPEN) {
             send('ping', {})
@@ -177,7 +177,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
   }
 
   /**
-   * Aufräumen
+   * Cleanup
    */
   function cleanup(): void {
     if (pingInterval) {
@@ -187,7 +187,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
   }
 
   /**
-   * Verbindung trennen
+   * Disconnect
    */
   function disconnect(): void {
     if (reconnectTimer) {
@@ -196,7 +196,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
     }
 
     cleanup()
-    reconnectAttempts = maxReconnectAttempts // Verhindert Auto-Reconnect
+    reconnectAttempts = maxReconnectAttempts // Prevents auto-reconnect
 
     if (ws) {
       ws.close()
@@ -207,7 +207,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
   }
 
   /**
-   * Nachricht senden
+   * Send message
    */
   function send<T>(type: ClientMessage['type'], payload: T): void {
     if (ws?.readyState !== WebSocket.OPEN) {
@@ -225,7 +225,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
   }
 
   /**
-   * Event-Handler registrieren
+   * Register event handler
    */
   function on<T>(type: ServerMessageType, handler: MessageHandler<T>): () => void {
     if (!handlers.has(type)) {
@@ -234,14 +234,14 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
 
     handlers.get(type)!.add(handler as MessageHandler)
 
-    // Unsubscribe-Funktion zurückgeben
+    // Return unsubscribe function
     return () => {
       handlers.get(type)?.delete(handler as MessageHandler)
     }
   }
 
   /**
-   * Einmaliger Event-Handler
+   * One-time event handler
    */
   function once<T>(type: ServerMessageType, handler: MessageHandler<T>): void {
     const wrappedHandler: MessageHandler<T> = (payload) => {
@@ -252,7 +252,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
     on(type, wrappedHandler)
   }
 
-  // Auto-Connect beim Mount
+  // Auto-connect on mount
   if (import.meta.client && autoConnect) {
     onMounted(() => {
       connect()

@@ -1,8 +1,8 @@
 /**
- * WebSocket Route für Planning Poker
+ * WebSocket Route for Planning Poker
  *
- * Handhabt alle Echtzeit-Kommunikation zwischen Clients und Server.
- * Verwendet crossws für WebSocket-Unterstützung in Nitro.
+ * Handles all real-time communication between clients and server.
+ * Uses crossws for WebSocket support in Nitro.
  */
 
 import type { Peer } from 'crossws'
@@ -21,7 +21,7 @@ import type {
 import { sessionStore } from '../utils/sessionStore'
 
 /**
- * Sendet eine Nachricht an einen Peer
+ * Sends a message to a peer
  */
 function sendMessage<T>(peer: Peer, type: string, payload: T): void {
   const message: ServerMessage = {
@@ -33,7 +33,7 @@ function sendMessage<T>(peer: Peer, type: string, payload: T): void {
 }
 
 /**
- * Sendet eine Nachricht an alle Peers in einer Session
+ * Sends a message to all peers in a session
  */
 function broadcastToSession(sessionId: string, type: string, payload: unknown, excludePeer?: Peer): void {
   const connections = sessionStore.getSessionConnections(sessionId)
@@ -54,7 +54,7 @@ function broadcastToSession(sessionId: string, type: string, payload: unknown, e
 }
 
 /**
- * Behandelt eingehende WebSocket-Nachrichten
+ * Handles incoming WebSocket messages
  */
 function handleMessage(peer: Peer, data: string): void {
   try {
@@ -116,14 +116,14 @@ function handleMessage(peer: Peer, data: string): void {
   catch (error) {
     console.error('[WebSocket] Error parsing message:', error)
     sendMessage(peer, 'session:error', {
-      message: 'Ungültige Nachricht',
+      message: 'Invalid message',
       code: 'INVALID_MESSAGE',
     })
   }
 }
 
 /**
- * Erstellt eine neue Session
+ * Creates a new session
  */
 function handleCreateSession(peer: Peer, payload: CreateSessionPayload): void {
   const result = sessionStore.createSession(payload.sessionName, payload.participantName, peer)
@@ -136,7 +136,7 @@ function handleCreateSession(peer: Peer, payload: CreateSessionPayload): void {
 }
 
 /**
- * Tritt einer Session bei
+ * Joins a session
  */
 function handleJoinSession(peer: Peer, payload: JoinSessionPayload): void {
   const result = sessionStore.joinSession(
@@ -148,20 +148,20 @@ function handleJoinSession(peer: Peer, payload: JoinSessionPayload): void {
 
   if (!result) {
     sendMessage(peer, 'session:error', {
-      message: 'Session nicht gefunden. Bitte prüfe den Join-Code.',
+      message: 'Session not found. Please check the join code.',
       code: 'SESSION_NOT_FOUND',
     })
     return
   }
 
-  // Dem beitretenden Peer bestätigen
+  // Confirm to the joining peer
   sendMessage(peer, 'session:joined', {
     session: result.session,
     joinCode: result.joinCode,
     participant: result.participant,
   })
 
-  // Alle anderen Teilnehmer informieren
+  // Notify all other participants
   broadcastToSession(result.session.id, 'participant:joined', {
     participant: result.participant,
     sessionId: result.session.id,
@@ -169,7 +169,7 @@ function handleJoinSession(peer: Peer, payload: JoinSessionPayload): void {
 }
 
 /**
- * Verlässt eine Session
+ * Leaves a session
  */
 function handleLeaveSession(peer: Peer): void {
   const result = sessionStore.leaveSession(peer)
@@ -181,14 +181,14 @@ function handleLeaveSession(peer: Peer): void {
 
   sendMessage(peer, 'session:left', { success: true })
 
-  // Andere Teilnehmer informieren
+  // Notify other participants
   if (result.session) {
     broadcastToSession(result.sessionId, 'participant:left', {
       participantId: result.participantId,
       sessionId: result.sessionId,
     })
 
-    // Aktualisierte Session an alle senden
+    // Send updated session to everyone
     broadcastToSession(result.sessionId, 'session:updated', {
       session: result.session,
     })
@@ -196,23 +196,23 @@ function handleLeaveSession(peer: Peer): void {
 }
 
 /**
- * Wählt einen Vote-Wert
+ * Selects a vote value
  */
 function handleSelectVote(peer: Peer, payload: SelectVotePayload): void {
   const result = sessionStore.selectVote(peer, payload.value)
 
   if (!result) {
     sendMessage(peer, 'session:error', {
-      message: 'Vote konnte nicht gespeichert werden.',
+      message: 'Vote could not be saved.',
       code: 'VOTE_FAILED',
     })
     return
   }
 
-  // Allen (inkl. Absender) die aktualisierte Session senden
+  // Send updated session to everyone (including sender)
   const sessionId = sessionStore.getSessionIdForPeer(peer)
   if (sessionId) {
-    // Wenn Karten nicht aufgedeckt, nur signalisieren dass jemand gewählt hat
+    // If cards are not revealed, only signal that someone has voted
     if (!result.session.cardsRevealed) {
       broadcastToSession(sessionId, 'participant:voted', {
         participantId: result.participantId,
@@ -220,7 +220,7 @@ function handleSelectVote(peer: Peer, payload: SelectVotePayload): void {
       })
     }
 
-    // Aktualisierte Session an alle senden
+    // Send updated session to everyone
     broadcastToSession(sessionId, 'session:updated', {
       session: result.session,
     })
@@ -228,74 +228,74 @@ function handleSelectVote(peer: Peer, payload: SelectVotePayload): void {
 }
 
 /**
- * Deckt die Karten auf
+ * Reveals the cards
  */
 function handleRevealVotes(peer: Peer): void {
   const session = sessionStore.revealCards(peer)
 
   if (!session) {
     sendMessage(peer, 'session:error', {
-      message: 'Nur der Host kann die Karten aufdecken.',
+      message: 'Only the host can reveal the cards.',
       code: 'NOT_AUTHORIZED',
     })
     return
   }
 
-  // Aktualisierte Session an alle senden
+  // Send updated session to everyone
   broadcastToSession(session.id, 'session:updated', {
     session,
   })
 }
 
 /**
- * Setzt die Abstimmung zurück
+ * Resets the voting
  */
 function handleResetVoting(peer: Peer): void {
   const session = sessionStore.resetVoting(peer)
 
   if (!session) {
     sendMessage(peer, 'session:error', {
-      message: 'Nur der Host kann die Abstimmung zurücksetzen.',
+      message: 'Only the host can reset the voting.',
       code: 'NOT_AUTHORIZED',
     })
     return
   }
 
-  // Aktualisierte Session an alle senden
+  // Send updated session to everyone
   broadcastToSession(session.id, 'session:updated', {
     session,
   })
 }
 
 /**
- * Startet eine neue Voting-Runde
+ * Starts a new voting round
  */
 function handleStartVoting(peer: Peer, payload: StartVotingPayload): void {
   const session = sessionStore.startVoting(peer, payload.story, payload.description)
 
   if (!session) {
     sendMessage(peer, 'session:error', {
-      message: 'Nur der Host kann die Abstimmung starten.',
+      message: 'Only the host can start voting.',
       code: 'NOT_AUTHORIZED',
     })
     return
   }
 
-  // Aktualisierte Session an alle senden
+  // Send updated session to everyone
   broadcastToSession(session.id, 'session:updated', {
     session,
   })
 }
 
 /**
- * Fügt eine Story zur Queue hinzu
+ * Adds a story to the queue
  */
 function handleAddStory(peer: Peer, payload: AddStoryPayload): void {
   const session = sessionStore.addStory(peer, payload.title, payload.description)
 
   if (!session) {
     sendMessage(peer, 'session:error', {
-      message: 'Nur der Host kann Storys hinzufügen.',
+      message: 'Only the host can add stories.',
       code: 'NOT_AUTHORIZED',
     })
     return
@@ -305,14 +305,14 @@ function handleAddStory(peer: Peer, payload: AddStoryPayload): void {
 }
 
 /**
- * Entfernt eine Story aus der Queue
+ * Removes a story from the queue
  */
 function handleRemoveStory(peer: Peer, payload: RemoveStoryPayload): void {
   const session = sessionStore.removeStory(peer, payload.storyId)
 
   if (!session) {
     sendMessage(peer, 'session:error', {
-      message: 'Nur der Host kann Storys entfernen.',
+      message: 'Only the host can remove stories.',
       code: 'NOT_AUTHORIZED',
     })
     return
@@ -322,14 +322,14 @@ function handleRemoveStory(peer: Peer, payload: RemoveStoryPayload): void {
 }
 
 /**
- * Aktualisiert eine Story
+ * Updates a story
  */
 function handleUpdateStory(peer: Peer, payload: UpdateStoryPayload): void {
   const session = sessionStore.updateStory(peer, payload.storyId, payload.title, payload.description)
 
   if (!session) {
     sendMessage(peer, 'session:error', {
-      message: 'Nur der Host kann Storys bearbeiten.',
+      message: 'Only the host can edit stories.',
       code: 'NOT_AUTHORIZED',
     })
     return
@@ -339,14 +339,14 @@ function handleUpdateStory(peer: Peer, payload: UpdateStoryPayload): void {
 }
 
 /**
- * Startet die nächste Story
+ * Starts the next story
  */
 function handleNextStory(peer: Peer, _payload: NextStoryPayload): void {
   const session = sessionStore.nextStory(peer)
 
   if (!session) {
     sendMessage(peer, 'session:error', {
-      message: 'Keine weiteren Storys vorhanden oder nicht autorisiert.',
+      message: 'No more stories available or not authorized.',
       code: 'NOT_AUTHORIZED',
     })
     return
@@ -370,7 +370,7 @@ export default defineWebSocketHandler({
 
   close(peer) {
     console.log(`[WebSocket] Client disconnected: ${peer.id}`)
-    // Automatisch aus Session entfernen
+    // Automatically remove from session
     handleLeaveSession(peer)
   },
 

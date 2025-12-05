@@ -1,8 +1,8 @@
 /**
- * Server-seitiger Session Store
+ * Server-side Session Store
  *
- * Verwaltet alle aktiven Planning Poker Sessions.
- * Singleton-Pattern für konsistenten Zustand.
+ * Manages all active Planning Poker sessions.
+ * Singleton pattern for consistent state.
  */
 
 import type { Peer } from 'crossws'
@@ -10,7 +10,7 @@ import type { IParticipant, ISession, IStory, PokerValue } from '../../app/types
 import { JOIN_CODE_CHARS, JOIN_CODE_LENGTH } from '../../app/types/poker'
 
 /**
- * Session mit zugehörigen WebSocket-Verbindungen
+ * Session with associated WebSocket connections
  */
 interface ManagedSession {
   session: ISession
@@ -20,14 +20,14 @@ interface ManagedSession {
 }
 
 /**
- * Generiert eine eindeutige ID
+ * Generates a unique ID
  */
 function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
 }
 
 /**
- * Generiert einen Join-Code basierend auf den definierten Konstanten
+ * Generates a join code based on defined constants
  */
 function generateJoinCode(): string {
   let code = ''
@@ -38,8 +38,8 @@ function generateJoinCode(): string {
 }
 
 /**
- * SessionStore Klasse
- * Verwaltet alle Sessions server-seitig
+ * SessionStore Class
+ * Manages all sessions server-side
  */
 class SessionStore {
   private static instance: SessionStore
@@ -51,12 +51,12 @@ class SessionStore {
   private cleanupInterval: ReturnType<typeof setInterval> | null = null
 
   private constructor() {
-    // Cleanup alle 30 Sekunden
+    // Cleanup every 30 seconds
     this.cleanupInterval = setInterval(() => this.cleanup(), 30000)
   }
 
   /**
-   * Singleton-Instanz abrufen
+   * Get singleton instance
    */
   static getInstance(): SessionStore {
     if (!SessionStore.instance) {
@@ -66,7 +66,7 @@ class SessionStore {
   }
 
   /**
-   * Erstellt eine neue Session
+   * Creates a new session
    */
   createSession(name: string, hostName: string, peer: Peer): { session: ISession; joinCode: string; participant: IParticipant } {
     const sessionId = generateId()
@@ -112,7 +112,7 @@ class SessionStore {
   }
 
   /**
-   * Generiert einen eindeutigen Join-Code
+   * Generates a unique join code
    */
   private generateUniqueJoinCode(): string {
     let code = generateJoinCode()
@@ -123,7 +123,7 @@ class SessionStore {
   }
 
   /**
-   * Tritt einer Session bei
+   * Joins a session
    */
   joinSession(
     joinCode: string,
@@ -158,7 +158,7 @@ class SessionStore {
   }
 
   /**
-   * Verlässt eine Session
+   * Leaves a session
    */
   leaveSession(peer: Peer): { sessionId: string; participantId: string; session: ISession | null } | null {
     const participantId = this.peerToParticipant.get(peer)
@@ -170,7 +170,7 @@ class SessionStore {
     const managed = this.sessions.get(sessionId)
     if (!managed) return null
 
-    // Teilnehmer entfernen
+    // Remove participant
     managed.session.participants = managed.session.participants.filter(p => p.id !== participantId)
     managed.session.updatedAt = new Date()
     managed.connections.delete(participantId)
@@ -179,14 +179,14 @@ class SessionStore {
     this.participantToSession.delete(participantId)
     this.peerToParticipant.delete(peer)
 
-    // Session löschen wenn leer
+    // Delete session if empty
     if (managed.session.participants.length === 0) {
       this.sessions.delete(sessionId)
       this.joinCodeIndex.delete(managed.joinCode)
       return { sessionId, participantId, session: null }
     }
 
-    // Neuen Host wählen wenn Host gegangen ist
+    // Choose new host if host has left
     if (managed.session.hostId === participantId && managed.session.participants.length > 0) {
       const newHost = managed.session.participants[0]
       if (newHost) {
@@ -198,7 +198,7 @@ class SessionStore {
   }
 
   /**
-   * Wählt einen Kartenwert
+   * Selects a card value
    */
   selectVote(peer: Peer, value: PokerValue): { session: ISession; participantId: string } | null {
     const participantId = this.peerToParticipant.get(peer)
@@ -221,7 +221,7 @@ class SessionStore {
   }
 
   /**
-   * Deckt alle Karten auf
+   * Reveals all cards
    */
   revealCards(peer: Peer): ISession | null {
     const participantId = this.peerToParticipant.get(peer)
@@ -233,7 +233,7 @@ class SessionStore {
     const managed = this.sessions.get(sessionId)
     if (!managed) return null
 
-    // Nur Host darf aufdecken
+    // Only host can reveal
     if (managed.session.hostId !== participantId) return null
 
     managed.session.cardsRevealed = true
@@ -245,7 +245,7 @@ class SessionStore {
   }
 
   /**
-   * Setzt die Abstimmung zurück
+   * Resets the voting
    */
   resetVoting(peer: Peer): ISession | null {
     const participantId = this.peerToParticipant.get(peer)
@@ -257,7 +257,7 @@ class SessionStore {
     const managed = this.sessions.get(sessionId)
     if (!managed) return null
 
-    // Nur Host darf zurücksetzen
+    // Only host can reset
     if (managed.session.hostId !== participantId) return null
 
     managed.session.cardsRevealed = false
@@ -274,7 +274,7 @@ class SessionStore {
   }
 
   /**
-   * Startet eine neue Abstimmungsrunde
+   * Starts a new voting round
    */
   startVoting(peer: Peer, story: string, description?: string): ISession | null {
     const participantId = this.peerToParticipant.get(peer)
@@ -286,7 +286,7 @@ class SessionStore {
     const managed = this.sessions.get(sessionId)
     if (!managed) return null
 
-    // Nur Host darf starten
+    // Only host can start
     if (managed.session.hostId !== participantId) return null
 
     managed.session.currentStory = story
@@ -303,7 +303,7 @@ class SessionStore {
   }
 
   /**
-   * Fügt eine Story zur Queue hinzu
+   * Adds a story to the queue
    */
   addStory(peer: Peer, title: string, description?: string): ISession | null {
     const participantId = this.peerToParticipant.get(peer)
@@ -333,7 +333,7 @@ class SessionStore {
   }
 
   /**
-   * Entfernt eine Story aus der Queue
+   * Removes a story from the queue
    */
   removeStory(peer: Peer, storyId: string): ISession | null {
     const participantId = this.peerToParticipant.get(peer)
@@ -369,7 +369,7 @@ class SessionStore {
   }
 
   /**
-   * Aktualisiert eine Story
+   * Updates a story
    */
   updateStory(peer: Peer, storyId: string, title: string, description?: string): ISession | null {
     const participantId = this.peerToParticipant.get(peer)
@@ -402,7 +402,7 @@ class SessionStore {
   }
 
   /**
-   * Startet die nächste Story in der Queue
+   * Starts the next story in the queue
    */
   nextStory(peer: Peer): ISession | null {
     const participantId = this.peerToParticipant.get(peer)
@@ -474,7 +474,7 @@ class SessionStore {
   }
 
   /**
-   * Holt alle Verbindungen einer Session
+   * Gets all connections of a session
    */
   getSessionConnections(sessionId: string): Map<string, Peer> | null {
     const managed = this.sessions.get(sessionId)
@@ -482,7 +482,7 @@ class SessionStore {
   }
 
   /**
-   * Holt Session-ID für einen Peer
+   * Gets session ID for a peer
    */
   getSessionIdForPeer(peer: Peer): string | null {
     const participantId = this.peerToParticipant.get(peer)
@@ -491,15 +491,15 @@ class SessionStore {
   }
 
   /**
-   * Bereinigt inaktive Sessions
+   * Cleans up inactive sessions
    */
   private cleanup(): void {
     const now = Date.now()
-    const maxInactivity = 60 * 60 * 1000 // 1 Stunde
+    const maxInactivity = 60 * 60 * 1000 // 1 hour
 
     for (const [sessionId, managed] of this.sessions.entries()) {
       if (now - managed.lastActivity > maxInactivity) {
-        // Session löschen
+        // Delete session
         this.joinCodeIndex.delete(managed.joinCode)
         for (const participantId of managed.connections.keys()) {
           this.participantToSession.delete(participantId)
@@ -511,7 +511,7 @@ class SessionStore {
   }
 
   /**
-   * Stoppt den Cleanup-Interval
+   * Stops the cleanup interval
    */
   destroy(): void {
     if (this.cleanupInterval) {
@@ -521,5 +521,5 @@ class SessionStore {
   }
 }
 
-// Export der Singleton-Instanz
+// Export of the singleton instance
 export const sessionStore = SessionStore.getInstance()

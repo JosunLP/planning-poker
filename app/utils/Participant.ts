@@ -1,14 +1,14 @@
 /**
- * Participant Klasse
+ * Participant Class
  *
- * Repräsentiert einen Teilnehmer in einer Planning Poker Session.
- * Kapselt die Logik für Teilnehmer-Aktionen.
+ * Represents a participant in a Planning Poker session.
+ * Encapsulates the logic for participant actions.
  */
 
 import type { IParticipant, PokerValue } from '~/types'
 
 /**
- * Klasse zur Verwaltung eines Session-Teilnehmers
+ * Class for managing a session participant
  *
  * @example
  * ```ts
@@ -24,11 +24,11 @@ export class Participant implements IParticipant {
   public readonly joinedAt: Date
 
   /**
-   * Erstellt einen neuen Teilnehmer
+   * Creates a new participant
    *
-   * @param name - Anzeigename des Teilnehmers
-   * @param isObserver - Optional: Als Beobachter beitreten
-   * @param id - Optional: Eigene ID (sonst automatisch generiert)
+   * @param name - Display name of the participant
+   * @param isObserver - Optional: Join as an observer
+   * @param id - Optional: Custom ID (otherwise auto-generated)
    */
   constructor(name: string, isObserver = false, id?: string) {
     this.id = id ?? crypto.randomUUID()
@@ -39,10 +39,10 @@ export class Participant implements IParticipant {
   }
 
   /**
-   * Wählt eine Karte aus
+   * Selects a card
    *
-   * @param value - Der Kartenwert
-   * @returns true wenn erfolgreich, false wenn Beobachter
+   * @param value - The card value
+   * @returns true if successful, false if observer
    */
   public selectCard(value: PokerValue): boolean {
     if (this.isObserver) {
@@ -53,21 +53,21 @@ export class Participant implements IParticipant {
   }
 
   /**
-   * Setzt die Kartenauswahl zurück
+   * Resets the card selection
    */
   public resetSelection(): void {
     this.selectedValue = null
   }
 
   /**
-   * Prüft ob der Teilnehmer bereits gewählt hat
+   * Checks if the participant has already voted
    */
   public hasVoted(): boolean {
     return this.selectedValue !== null
   }
 
   /**
-   * Wechselt zwischen Teilnehmer und Beobachter
+   * Toggles between participant and observer mode
    */
   public toggleObserverMode(): void {
     this.isObserver = !this.isObserver
@@ -77,7 +77,7 @@ export class Participant implements IParticipant {
   }
 
   /**
-   * Serialisiert den Teilnehmer für API/Storage
+   * Serializes the participant for API/Storage
    */
   public toJSON(): IParticipant {
     return {
@@ -90,9 +90,9 @@ export class Participant implements IParticipant {
   }
 
   /**
-   * Erstellt einen Teilnehmer aus JSON-Daten
+   * Creates a participant from JSON data
    *
-   * @param data - Serialisierte Teilnehmerdaten
+   * @param data - Serialized participant data
    */
   public static fromJSON(data: IParticipant): Participant {
     const participant = new Participant(data.name, data.isObserver, data.id)

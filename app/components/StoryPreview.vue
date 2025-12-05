@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /**
- * StoryPreview Komponente
+ * StoryPreview Component
  *
- * Modal zur Anzeige der Story-Details während der Abstimmung.
+ * Modal for displaying story details during voting.
  */
 
 import DOMPurify from 'dompurify'
@@ -12,11 +12,11 @@ import { marked } from 'marked'
  * Props Definition
  */
 interface Props {
-  /** Story Titel */
+  /** Story title */
   title: string
-  /** Story Beschreibung (Markdown) */
+  /** Story description (Markdown) */
   description: string | null
-  /** Modal sichtbar? */
+  /** Modal visible? */
   visible: boolean
 }
 
@@ -30,7 +30,7 @@ const emit = defineEmits<{
 }>()
 
 /**
- * Geparste und sanitisierte Beschreibung
+ * Parsed and sanitized description
  */
 const parsedDescription = computed(() => {
   if (!props.description) return ''
@@ -39,7 +39,7 @@ const parsedDescription = computed(() => {
 })
 
 /**
- * Schließen bei Escape
+ * Close on Escape
  */
 function handleKeydown(e: KeyboardEvent): void {
   if (e.key === 'Escape') {
@@ -103,7 +103,7 @@ onUnmounted(() => {
             />
             <!-- eslint-enable vue/no-v-html -->
             <p v-else class="text-secondary-500 italic">
-              Keine Beschreibung vorhanden.
+              No description available.
             </p>
           </div>
 
@@ -114,7 +114,7 @@ onUnmounted(() => {
               class="btn-primary w-full"
               @click="emit('close')"
             >
-              Schließen
+              Close
             </button>
           </div>
         </div>

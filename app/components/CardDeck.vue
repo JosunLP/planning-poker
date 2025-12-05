@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /**
- * CardDeck Komponente
+ * CardDeck Component
  *
- * Zeigt alle verfügbaren Poker-Karten zum Auswählen an.
+ * Displays all available poker cards for selection.
  */
 
 import type { PokerValue } from '~/types'
@@ -12,11 +12,11 @@ import { POKER_VALUES } from '~/types'
  * Props Definition
  */
 interface Props {
-  /** Aktuell ausgewählter Wert */
+  /** Currently selected value */
   selectedValue?: PokerValue | null
-  /** Verfügbare Kartenwerte */
+  /** Available card values */
   values?: readonly PokerValue[]
-  /** Sind die Karten deaktiviert? */
+  /** Are the cards disabled? */
   disabled?: boolean
 }
 
@@ -30,12 +30,12 @@ const props = withDefaults(defineProps<Props>(), {
  * Events Definition
  */
 const emit = defineEmits<{
-  /** Wird ausgelöst wenn eine Karte ausgewählt wird */
+  /** Emitted when a card is selected */
   select: [value: PokerValue]
 }>()
 
 /**
- * Behandelt die Kartenauswahl
+ * Handles card selection
  */
 function handleSelect(value: PokerValue): void {
   emit('select', value)
@@ -45,7 +45,7 @@ function handleSelect(value: PokerValue): void {
 <template>
   <div class="card-deck">
     <h3 class="text-sm font-medium text-secondary-600 mb-3">
-      Wähle deine Schätzung
+      Choose your estimate
     </h3>
 
     <div class="flex flex-wrap gap-2 justify-center">

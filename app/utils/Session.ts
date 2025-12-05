@@ -1,8 +1,8 @@
 /**
- * Session Klasse
+ * Session Class
  *
- * Verwaltet eine Planning Poker Session mit allen Teilnehmern.
- * Enthält die Kernlogik für das Abstimmungsmanagement.
+ * Manages a Planning Poker session with all participants.
+ * Contains the core logic for voting management.
  */
 
 import type { ISession, ISessionConfig, IStory, IVotingResult, PokerValue, SessionStatus } from '~/types'
@@ -10,7 +10,7 @@ import { POKER_VALUES } from '~/types'
 import { Participant } from './Participant'
 
 /**
- * Standard-Konfiguration für eine Session
+ * Default configuration for a session
  */
 const DEFAULT_CONFIG: ISessionConfig = {
   cardValues: POKER_VALUES,
@@ -20,7 +20,7 @@ const DEFAULT_CONFIG: ISessionConfig = {
 }
 
 /**
- * Klasse zur Verwaltung einer Planning Poker Session
+ * Class for managing a Planning Poker session
  *
  * @example
  * ```ts
@@ -47,11 +47,11 @@ export class Session implements ISession {
   private votingHistory: IVotingResult[]
 
   /**
-   * Erstellt eine neue Session
+   * Creates a new session
    *
-   * @param name - Name der Session
-   * @param hostId - ID des Session-Erstellers
-   * @param config - Optional: Benutzerdefinierte Konfiguration
+   * @param name - Name of the session
+   * @param hostId - ID of the session creator
+   * @param config - Optional: Custom configuration
    */
   constructor(name: string, hostId: string, config?: Partial<ISessionConfig>) {
     this.id = crypto.randomUUID()
@@ -71,10 +71,10 @@ export class Session implements ISession {
   }
 
   /**
-   * Fügt einen Teilnehmer zur Session hinzu
+   * Adds a participant to the session
    *
-   * @param participant - Der neue Teilnehmer
-   * @returns true wenn erfolgreich hinzugefügt
+   * @param participant - The new participant
+   * @returns true if successfully added
    */
   public addParticipant(participant: Participant): boolean {
     if (this.getParticipantById(participant.id)) {
@@ -91,9 +91,9 @@ export class Session implements ISession {
   }
 
   /**
-   * Entfernt einen Teilnehmer aus der Session
+   * Removes a participant from the session
    *
-   * @param participantId - ID des zu entfernenden Teilnehmers
+   * @param participantId - ID of the participant to remove
    */
   public removeParticipant(participantId: string): boolean {
     const index = this.participants.findIndex(p => p.id === participantId)
@@ -107,17 +107,17 @@ export class Session implements ISession {
   }
 
   /**
-   * Sucht einen Teilnehmer nach ID
+   * Finds a participant by ID
    */
   public getParticipantById(id: string): Participant | undefined {
     return this.participants.find(p => p.id === id)
   }
 
   /**
-   * Startet eine neue Abstimmungsrunde
+   * Starts a new voting round
    *
-   * @param story - Die zu schätzende Story
-   * @param description - Optional: Beschreibung der Story
+   * @param story - The story to estimate
+   * @param description - Optional: Description of the story
    */
   public startVoting(story: string, description?: string): void {
     this.currentStory = story.trim()
@@ -125,13 +125,13 @@ export class Session implements ISession {
     this.status = 'voting'
     this.cardsRevealed = false
 
-    // Alle Votes zurücksetzen
+    // Reset all votes
     this.participants.forEach(p => p.resetSelection())
     this.touch()
   }
 
   /**
-   * Deckt alle Karten auf
+   * Reveals all cards
    */
   public revealCards(): IVotingResult | null {
     if (this.status !== 'voting' || !this.currentStory) {
@@ -149,7 +149,7 @@ export class Session implements ISession {
   }
 
   /**
-   * Setzt die Runde zurück für neue Abstimmung
+   * Resets the round for a new vote
    */
   public resetVoting(): void {
     this.cardsRevealed = false
@@ -159,7 +159,7 @@ export class Session implements ISession {
   }
 
   /**
-   * Prüft ob alle Teilnehmer gewählt haben
+   * Checks if all participants have voted
    */
   public allVotesIn(): boolean {
     const voters = this.getVoters()
@@ -167,21 +167,21 @@ export class Session implements ISession {
   }
 
   /**
-   * Gibt alle stimmberechtigten Teilnehmer zurück
+   * Returns all voting participants
    */
   public getVoters(): Participant[] {
     return this.participants.filter(p => !p.isObserver)
   }
 
   /**
-   * Gibt alle Beobachter zurück
+   * Returns all observers
    */
   public getObservers(): Participant[] {
     return this.participants.filter(p => p.isObserver)
   }
 
   /**
-   * Berechnet die Statistiken der aktuellen Abstimmung
+   * Calculates the statistics of the current vote
    */
   private calculateResult(): IVotingResult {
     const votes = new Map<string, PokerValue>()
@@ -191,7 +191,7 @@ export class Session implements ISession {
       if (p.selectedValue !== null) {
         votes.set(p.id, p.selectedValue)
 
-        // Nur numerische Werte für Statistiken
+        // Only numeric values for statistics
         const numValue = Number.parseFloat(p.selectedValue)
         if (!Number.isNaN(numValue)) {
           numericValues.push(numValue)
@@ -199,18 +199,18 @@ export class Session implements ISession {
       }
     })
 
-    // Durchschnitt berechnen
+    // Calculate average
     const average = numericValues.length > 0
       ? numericValues.reduce((a, b) => a + b, 0) / numericValues.length
       : null
 
-    // Median berechnen
+    // Calculate median
     const median = this.calculateMedian(numericValues)
 
-    // Modus (häufigster Wert) berechnen
+    // Calculate mode (most frequent value)
     const mode = this.calculateMode([...votes.values()])
 
-    // Konsens prüfen (alle gleich)
+    // Check consensus (all same)
     const uniqueVotes = new Set(votes.values())
     const hasConsensus = uniqueVotes.size === 1 && votes.size > 1
 
@@ -227,7 +227,7 @@ export class Session implements ISession {
   }
 
   /**
-   * Berechnet den Median einer Zahlenliste
+   * Calculates the median of a number list
    */
   private calculateMedian(values: number[]): number | null {
     if (values.length === 0) return null
@@ -246,7 +246,7 @@ export class Session implements ISession {
   }
 
   /**
-   * Berechnet den Modus (häufigster Wert)
+   * Calculates the mode (most frequent value)
    */
   private calculateMode(values: PokerValue[]): PokerValue | null {
     if (values.length === 0) return null
@@ -269,28 +269,28 @@ export class Session implements ISession {
   }
 
   /**
-   * Aktualisiert den Zeitstempel
+   * Updates the timestamp
    */
   private touch(): void {
     this.updatedAt = new Date()
   }
 
   /**
-   * Gibt die verfügbaren Kartenwerte zurück
+   * Returns the available card values
    */
   public getCardValues(): readonly PokerValue[] {
     return this.config.cardValues
   }
 
   /**
-   * Gibt den Abstimmungsverlauf zurück
+   * Returns the voting history
    */
   public getVotingHistory(): readonly IVotingResult[] {
     return this.votingHistory
   }
 
   /**
-   * Serialisiert die Session für API/Storage
+   * Serializes the session for API/Storage
    */
   public toJSON(): ISession {
     return {
@@ -310,7 +310,7 @@ export class Session implements ISession {
   }
 
   /**
-   * Erstellt eine Session aus JSON-Daten
+   * Creates a session from JSON data
    */
   public static fromJSON(data: ISession, config?: Partial<ISessionConfig>): Session {
     const session = new Session(data.name, data.hostId, config)

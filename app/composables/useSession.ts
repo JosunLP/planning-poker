@@ -1,8 +1,8 @@
 /**
  * useSession Composable
  *
- * Verwaltet den Zustand einer Planning Poker Session mit Echtzeit-Synchronisation.
- * Nutzt WebSocket für Multi-User-Kommunikation.
+ * Manages the state of a Planning Poker session with real-time synchronization.
+ * Uses WebSocket for multi-user communication.
  */
 
 import type { ISessionState, PokerValue } from '~/types'
@@ -17,14 +17,14 @@ import type {
 } from '~/types/websocket'
 
 /**
- * Erweiterter State mit Join-Code und Verbindungsstatus
+ * Extended state with join code and connection status
  */
 interface ExtendedSessionState extends ISessionState {
   joinCode: string | null
 }
 
 /**
- * Composable für Session-Management mit WebSocket
+ * Composable for session management with WebSocket
  *
  * @example
  * ```ts
@@ -41,7 +41,7 @@ export function useSession() {
   })
 
   /**
-   * Reaktiver Zustand der Session
+   * Reactive session state
    */
   const state = useState<ExtendedSessionState>('session', () => ({
     session: null,
@@ -53,14 +53,14 @@ export function useSession() {
   }))
 
   /**
-   * Warte auf Verbindung falls noch nicht verbunden
+   * Wait for connection if not yet connected
    */
   async function ensureConnected(): Promise<boolean> {
     if (connectionStatus.value === 'connected') return true
 
     connect()
 
-    // Warte max 5 Sekunden auf Verbindung
+    // Wait max 5 seconds for connection
     return new Promise((resolve) => {
       const timeout = setTimeout(() => resolve(false), 5000)
       const unwatch = watch(connectionStatus, (status) => {
@@ -78,10 +78,10 @@ export function useSession() {
   }
 
   /**
-   * WebSocket Event Handler registrieren
+   * Register WebSocket event handlers
    */
   if (import.meta.client) {
-    // Session erstellt
+    // Session created
     on<SessionCreatedPayload>('session:created', (payload) => {
       state.value = {
         session: payload.session,
@@ -93,7 +93,7 @@ export function useSession() {
       }
     })
 
-    // Session beigetreten
+    // Session joined
     on<SessionJoinedPayload>('session:joined', (payload) => {
       state.value = {
         session: payload.session,
@@ -105,11 +105,11 @@ export function useSession() {
       }
     })
 
-    // Session aktualisiert
+    // Session updated
     on<SessionUpdatedPayload>('session:updated', (payload) => {
       if (!state.value.currentParticipant) return
 
-      // Aktuellen Teilnehmer aus der aktualisierten Liste holen
+      // Get current participant from updated list
       const updatedParticipant = payload.session.participants.find(
         p => p.id === state.value.currentParticipant?.id
       )
@@ -122,11 +122,11 @@ export function useSession() {
       }
     })
 
-    // Teilnehmer beigetreten (andere)
+    // Participant joined (others)
     on<ParticipantJoinedPayload>('participant:joined', (payload) => {
       if (!state.value.session) return
 
-      // Prüfen ob Teilnehmer bereits existiert
+      // Check if participant already exists
       const exists = state.value.session.participants.some(p => p.id === payload.participant.id)
       if (exists) return
 
@@ -139,7 +139,7 @@ export function useSession() {
       }
     })
 
-    // Teilnehmer verlassen
+    // Participant left
     on<ParticipantLeftPayload>('participant:left', (payload) => {
       if (!state.value.session) return
 
@@ -154,7 +154,7 @@ export function useSession() {
       }
     })
 
-    // Session verlassen bestätigt
+    // Session left confirmed
     on<SessionLeftPayload>('session:left', (_payload) => {
       state.value = {
         session: null,
@@ -166,7 +166,7 @@ export function useSession() {
       }
     })
 
-    // Fehler
+    // Error
     on<SessionErrorPayload>('session:error', (payload) => {
       state.value = {
         ...state.value,
@@ -180,41 +180,41 @@ export function useSession() {
   // ============================================
 
   /**
-   * Join-Code der aktuellen Session
+   * Join code of the current session
    */
   const joinCode = computed(() => state.value.joinCode)
 
   /**
-   * Aktuelle Session
+   * Current session
    */
   const session = computed(() => state.value.session)
 
   /**
-   * Aktueller Teilnehmer
+   * Current participant
    */
   const currentParticipant = computed(() => state.value.currentParticipant)
 
   /**
-   * Ist der aktuelle Nutzer der Host?
+   * Is the current user the host?
    */
   const isHost = computed(() => state.value.isHost)
 
   /**
-   * Alle Teilnehmer die abstimmen können
+   * All participants who can vote
    */
   const voters = computed(() =>
     state.value.session?.participants.filter(p => !p.isObserver) ?? []
   )
 
   /**
-   * Alle Beobachter
+   * All observers
    */
   const observers = computed(() =>
     state.value.session?.participants.filter(p => p.isObserver) ?? []
   )
 
   /**
-   * Haben alle Teilnehmer gewählt?
+   * Have all participants voted?
    */
   const allVotesIn = computed(() => {
     if (!voters.value.length) return false
@@ -222,14 +222,14 @@ export function useSession() {
   })
 
   /**
-   * Anzahl der abgegebenen Stimmen
+   * Number of votes cast
    */
   const votesCount = computed(() =>
     voters.value.filter(p => p.selectedValue !== null).length
   )
 
   /**
-   * Fehler-State
+   * Error state
    */
   const error = computed(() => state.value.error)
 
@@ -238,27 +238,27 @@ export function useSession() {
   // ============================================
 
   /**
-   * Erstellt eine neue Session
+   * Creates a new session
    *
-   * @param sessionName - Name der Session
-   * @param participantName - Name des Hosts
+   * @param sessionName - Name of the session
+   * @param participantName - Name of the host
    */
   async function createSession(sessionName: string, participantName: string): Promise<void> {
-    // Validierung
+    // Validation
     if (!sessionName.trim() || !participantName.trim()) {
       state.value = {
         ...state.value,
-        error: 'Bitte fülle alle Felder aus.',
+        error: 'Please fill in all fields.',
       }
       return
     }
 
-    // Sicherstellen dass WebSocket verbunden ist
+    // Ensure WebSocket is connected
     const connected = await ensureConnected()
     if (!connected) {
       state.value = {
         ...state.value,
-        error: 'Verbindung zum Server konnte nicht hergestellt werden.',
+        error: 'Could not connect to the server.',
       }
       return
     }
@@ -270,19 +270,19 @@ export function useSession() {
   }
 
   /**
-   * Tritt einer bestehenden Session bei
+   * Joins an existing session
    *
-   * @param code - Join-Code der Session
-   * @param participantName - Name des Teilnehmers
-   * @param asObserver - Als Beobachter beitreten
+   * @param code - Join code of the session
+   * @param participantName - Name of the participant
+   * @param asObserver - Join as observer
    */
   async function joinSession(code: string, participantName: string, asObserver = false): Promise<void> {
-    // Validierung
+    // Validation
     const normalizedCode = code.toUpperCase().trim()
     if (normalizedCode.length !== 6) {
       state.value = {
         ...state.value,
-        error: 'Der Join-Code muss 6 Zeichen lang sein.',
+        error: 'The join code must be 6 characters long.',
       }
       return
     }
@@ -290,17 +290,17 @@ export function useSession() {
     if (!participantName.trim()) {
       state.value = {
         ...state.value,
-        error: 'Bitte gib deinen Namen ein.',
+        error: 'Please enter your name.',
       }
       return
     }
 
-    // Sicherstellen dass WebSocket verbunden ist
+    // Ensure WebSocket is connected
     const connected = await ensureConnected()
     if (!connected) {
       state.value = {
         ...state.value,
-        error: 'Verbindung zum Server konnte nicht hergestellt werden.',
+        error: 'Could not connect to the server.',
       }
       return
     }
@@ -313,9 +313,9 @@ export function useSession() {
   }
 
   /**
-   * Wählt eine Karte aus
+   * Selects a card
    *
-   * @param value - Der Kartenwert
+   * @param value - The card value
    */
   function selectCard(value: PokerValue): void {
     if (!state.value.session || !state.value.currentParticipant) return
@@ -328,7 +328,7 @@ export function useSession() {
   }
 
   /**
-   * Deckt alle Karten auf (nur Host)
+   * Reveals all cards (host only)
    */
   function revealCards(): void {
     if (!state.value.session || !state.value.isHost) return
@@ -339,10 +339,10 @@ export function useSession() {
   }
 
   /**
-   * Startet eine neue Abstimmungsrunde (nur Host)
+   * Starts a new voting round (host only)
    *
-   * @param story - Die zu schätzende Story
-   * @param description - Optionale Beschreibung
+   * @param story - The story to estimate
+   * @param description - Optional description
    */
   function startVoting(story: string, description?: string): void {
     if (!state.value.session || !state.value.isHost) return
@@ -355,7 +355,7 @@ export function useSession() {
   }
 
   /**
-   * Fügt eine Story zur Queue hinzu (nur Host)
+   * Adds a story to the queue (host only)
    */
   function addStory(title: string, description?: string): void {
     if (!state.value.session || !state.value.isHost) return
@@ -368,7 +368,7 @@ export function useSession() {
   }
 
   /**
-   * Entfernt eine Story aus der Queue (nur Host)
+   * Removes a story from the queue (host only)
    */
   function removeStory(storyId: string): void {
     if (!state.value.session || !state.value.isHost) return
@@ -380,7 +380,7 @@ export function useSession() {
   }
 
   /**
-   * Aktualisiert eine Story (nur Host)
+   * Updates a story (host only)
    */
   function updateStory(storyId: string, title: string, description?: string): void {
     if (!state.value.session || !state.value.isHost) return
@@ -394,7 +394,7 @@ export function useSession() {
   }
 
   /**
-   * Startet die nächste Story (nur Host)
+   * Starts the next story (host only)
    */
   function nextStory(): void {
     if (!state.value.session || !state.value.isHost) return
@@ -405,7 +405,7 @@ export function useSession() {
   }
 
   /**
-   * Setzt die aktuelle Runde zurück (nur Host)
+   * Resets the current round (host only)
    */
   function resetVoting(): void {
     if (!state.value.session || !state.value.isHost) return
@@ -416,7 +416,7 @@ export function useSession() {
   }
 
   /**
-   * Verlässt die aktuelle Session
+   * Leaves the current session
    */
   function leaveSession(): void {
     if (!state.value.session) return
@@ -427,7 +427,7 @@ export function useSession() {
   }
 
   /**
-   * Fehler zurücksetzen
+   * Reset error
    */
   function clearError(): void {
     state.value = {

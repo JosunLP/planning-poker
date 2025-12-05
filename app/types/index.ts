@@ -1,7 +1,7 @@
 /**
- * Index-Datei für Typdefinitionen
+ * Index file for type definitions
  *
- * Exportiert alle Typen für einfachen Import.
+ * Exports all types for easy import.
  */
 
 export * from './poker'

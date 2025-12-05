@@ -1,43 +1,43 @@
 # Planning Poker 🃏
 
-Ein modernes Planning Poker Tool für agile Teams, entwickelt mit Nuxt 3, TypeScript und Tailwind CSS.
+A modern Planning Poker tool for agile teams, built with Nuxt 3, TypeScript and Tailwind CSS.
 
 ## ✨ Features
 
-- **Echtzeit-Schätzungen**: Schätze User Stories gemeinsam mit deinem Team
-- **Fibonacci-Skala**: Standard Poker-Werte (0, 0.5, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, ?, ☕)
-- **Statistiken**: Durchschnitt, Median und Vote-Verteilung
-- **Konsens-Erkennung**: Automatische Erkennung wenn alle gleich abstimmen
-- **Beobachter-Modus**: Teilnehmen ohne abzustimmen
-- **Responsives Design**: Optimiert für Desktop und Mobile
+- **Real-time Estimation**: Estimate user stories together with your team
+- **Fibonacci Scale**: Standard poker values (0, 0.5, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, ?, ☕)
+- **Statistics**: Average, median and vote distribution
+- **Consensus Detection**: Automatic detection when everyone votes the same
+- **Observer Mode**: Participate without voting
+- **Responsive Design**: Optimized for desktop and mobile
 
-## 🛠️ Technologie-Stack
+## 🛠️ Technology Stack
 
-- **Framework**: [Nuxt 3](https://nuxt.com/) (v4 Kompatibilität)
-- **Sprache**: TypeScript
+- **Framework**: [Nuxt 3](https://nuxt.com/) (v4 compatibility)
+- **Language**: TypeScript
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **Package Manager**: [Bun](https://bun.sh/)
 - **Icons**: [@nuxt/icon](https://icones.js.org/)
 - **Fonts**: [@nuxt/fonts](https://fonts.nuxtjs.org/)
 
-## 📁 Projektstruktur
+## 📁 Project Structure
 
 ```text
 planning-poker/
 ├── app/
-│   ├── assets/css/        # Globale Styles
-│   ├── components/        # Vue-Komponenten
-│   ├── composables/       # Wiederverwendbare Logik
-│   ├── pages/             # Routen/Seiten
-│   ├── types/             # TypeScript Typen
-│   └── utils/             # Utility-Klassen
-├── public/                # Statische Assets
-├── nuxt.config.ts         # Nuxt Konfiguration
-├── tailwind.config.ts     # Tailwind Konfiguration
+│   ├── assets/css/        # Global styles
+│   ├── components/        # Vue components
+│   ├── composables/       # Reusable logic
+│   ├── pages/             # Routes/pages
+│   ├── types/             # TypeScript types
+│   └── utils/             # Utility classes
+├── public/                # Static assets
+├── nuxt.config.ts         # Nuxt configuration
+├── tailwind.config.ts     # Tailwind configuration
 └── package.json
 ```
 
-## 🚀 Schnellstart
+## 🚀 Quick Start
 
 ### Installation
 
@@ -45,31 +45,31 @@ planning-poker/
 bun install
 ```
 
-### Entwicklung
+### Development
 
 ```bash
-# Entwicklungsserver starten (http://localhost:3000)
+# Start development server (http://localhost:3000)
 bun run dev
 ```
 
-### Produktion
+### Production
 
 ```bash
-# Für Produktion bauen
+# Build for production
 bun run build
 
-# Produktions-Build testen
+# Test production build
 bun run preview
 ```
 
-## 📖 Architektur
+## 📖 Architecture
 
-Das Projekt folgt DRY und OOP-Prinzipien:
+The project follows DRY and OOP principles:
 
-- **Composables**: Wiederverwendbare Logik in `composables/`
-- **Utility-Klassen**: `Participant` und `Session` Klassen
-- **Typen**: Zentrale TypeScript-Definitionen in `types/`
+- **Composables**: Reusable logic in `composables/`
+- **Utility Classes**: `Participant` and `Session` classes
+- **Types**: Central TypeScript definitions in `types/`
 
-## 📄 Lizenz
+## 📄 License
 
 MIT License
