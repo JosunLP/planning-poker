@@ -1,0 +1,137 @@
+{
+  "app": {
+    "name": "Planning Poker",
+    "tagline": "Stime agili semplificate",
+    "footer": "Creato con {heart} e Nuxt 3"
+  },
+  "connection": {
+    "connected": "Connesso",
+    "connecting": "Connessione...",
+    "disconnected": "Offline",
+    "error": "Errore"
+  },
+  "home": {
+    "welcome": "Benvenuto in Planning Poker",
+    "subtitle": "Avvia una nuova sessione o unisciti a una esistente.",
+    "newSession": "Nuova sessione",
+    "join": "Unisciti"
+  },
+  "session": {
+    "create": {
+      "title": "Crea nuova sessione",
+      "sessionName": "Nome della sessione",
+      "sessionNamePlaceholder": "es. Pianificazione sprint 42",
+      "yourName": "Il tuo nome",
+      "yourNamePlaceholder": "es. Marco",
+      "button": "Crea sessione"
+    },
+    "join": {
+      "title": "Partecipa alla sessione",
+      "joinCode": "Codice di accesso",
+      "joinCodePlaceholder": "es. ABC123",
+      "yourName": "Il tuo nome",
+      "yourNamePlaceholder": "es. Marco",
+      "asObserver": "Partecipa come osservatore",
+      "observerHint": "Gli osservatori possono guardare ma non votare",
+      "button": "Partecipa alla sessione",
+      "noCode": "Nessun codice?",
+      "createOwn": "Crea la tua sessione"
+    },
+    "info": {
+      "sessionLabel": "Sessione:",
+      "shareCode": "Condividi codice",
+      "copiedToClipboard": "Copiato!",
+      "participantsOnline": "{count} partecipante online | {count} partecipanti online",
+      "leave": "Lascia"
+    },
+    "currentStory": "Storia attuale",
+    "showDetails": "Mostra dettagli",
+    "waitingForHost": "In attesa che l'host avvii il prossimo turno..."
+  },
+  "participants": {
+    "title": "Partecipanti",
+    "you": "Tu",
+    "host": "Host",
+    "observer": "Osservatore",
+    "voted": "Ha votato",
+    "notVoted": "Non ha votato"
+  },
+  "controls": {
+    "title": "Controlli dell'host",
+    "startVoting": "Avvia votazione",
+    "storyTitle": "Titolo della storia",
+    "storyTitlePlaceholder": "es. Come utente, voglio...",
+    "description": "Descrizione",
+    "descriptionPlaceholder": "Aggiungi descrizione o criteri di accettazione...",
+    "revealCards": "Scopri le carte",
+    "allVotesIn": "Tutti i voti sono arrivati!",
+    "votingInProgress": "Votazione in corso",
+    "votingComplete": "Votazione completata",
+    "waitingForVotes": "In attesa dei voti... ({count}/{total})",
+    "resetVoting": "Reimposta votazione",
+    "nextStory": "Prossima storia",
+    "hostOnly": "Solo l'host può controllare la sessione"
+  },
+  "cards": {
+    "chooseEstimate": "Scegli la tua stima",
+    "selectedCard": "Carta selezionata: {value}"
+  },
+  "results": {
+    "title": "Risultati",
+    "average": "Media",
+    "median": "Mediana",
+    "votes": "Voti",
+    "consensus": "Consenso!",
+    "allAgreed": "Tutti i partecipanti hanno concordato su {value}",
+    "hiddenUntilReveal": "I risultati verranno mostrati quando le carte saranno scoperte."
+  },
+  "storyQueue": {
+    "title": "Coda delle storie",
+    "addStory": "Aggiungi storia",
+    "addToQueue": "Aggiungi alla coda",
+    "storyTitlePlaceholder": "Titolo della storia",
+    "descriptionPlaceholder": "Descrizione (opzionale, supporto Markdown)",
+    "markdownSupported": "Markdown è supportato",
+    "optional": "opzionale",
+    "remaining": "{count} storia rimanente | {count} storie rimanenti",
+    "estimated": "Stimata",
+    "notEstimated": "Non stimata",
+    "edit": "Modifica",
+    "remove": "Rimuovi",
+    "save": "Salva",
+    "cancel": "Annulla"
+  },
+  "storyPreview": {
+    "close": "Chiudi",
+    "noDescription": "Nessuna descrizione disponibile."
+  },
+  "observer": {
+    "hint": "Stai partecipando come osservatore e non puoi votare."
+  },
+  "features": {
+    "teamEstimation": {
+      "title": "Stima di squadra",
+      "description": "Stima in tempo reale con il tuo team."
+    },
+    "statistics": {
+      "title": "Statistiche",
+      "description": "Visualizza media, mediana e distribuzione dei voti."
+    },
+    "quickEasy": {
+      "title": "Veloce e semplice",
+      "description": "Nessuna registrazione richiesta. Inizia subito!"
+    }
+  },
+  "errors": {
+    "fillAllFields": "Per favore compila tutti i campi.",
+    "invalidJoinCode": "Il codice di accesso deve avere 6 caratteri.",
+    "connectionFailed": "Connessione al server fallita. Riprova.",
+    "sessionNotFound": "Sessione non trovata. Controlla il codice.",
+    "notAuthorized": "Non sei autorizzato a eseguire questa azione.",
+    "voteFailed": "Impossibile salvare il voto.",
+    "invalidMessage": "Messaggio non valido"
+  },
+  "alert": {
+    "close": "Chiudi"
+  }
+}

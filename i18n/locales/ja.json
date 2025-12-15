@@ -1,0 +1,137 @@
+{
+  "app": {
+    "name": "Planning Poker",
+    "tagline": "アジャイル見積もりをシンプルに",
+    "footer": "{heart} と Nuxt 3 で作成"
+  },
+  "connection": {
+    "connected": "接続済み",
+    "connecting": "接続中...",
+    "disconnected": "オフライン",
+    "error": "エラー"
+  },
+  "home": {
+    "welcome": "Planning Poker へようこそ",
+    "subtitle": "新しいセッションを開始するか、既存のセッションに参加してください。",
+    "newSession": "新規セッション",
+    "join": "参加"
+  },
+  "session": {
+    "create": {
+      "title": "新しいセッションを作成",
+      "sessionName": "セッション名",
+      "sessionNamePlaceholder": "例: スプリント42 計画",
+      "yourName": "あなたの名前",
+      "yourNamePlaceholder": "例: 太郎",
+      "button": "セッションを作成"
+    },
+    "join": {
+      "title": "セッションに参加",
+      "joinCode": "参加コード",
+      "joinCodePlaceholder": "例: ABC123",
+      "yourName": "あなたの名前",
+      "yourNamePlaceholder": "例: 太郎",
+      "asObserver": "オブザーバーとして参加",
+      "observerHint": "オブザーバーは閲覧できますが投票できません",
+      "button": "セッションに参加",
+      "noCode": "コードがありませんか？",
+      "createOwn": "自分のセッションを作成"
+    },
+    "info": {
+      "sessionLabel": "セッション:",
+      "shareCode": "コードを共有",
+      "copiedToClipboard": "コピーしました！",
+      "participantsOnline": "オンライン参加者 {count} 人",
+      "leave": "退出"
+    },
+    "currentStory": "現在のストーリー",
+    "showDetails": "詳細を表示",
+    "waitingForHost": "ホストが次のラウンドを開始するのを待っています..."
+  },
+  "participants": {
+    "title": "参加者",
+    "you": "あなた",
+    "host": "ホスト",
+    "observer": "オブザーバー",
+    "voted": "投票済み",
+    "notVoted": "未投票"
+  },
+  "controls": {
+    "title": "ホストコントロール",
+    "startVoting": "投票を開始",
+    "storyTitle": "ストーリータイトル",
+    "storyTitlePlaceholder": "例: ユーザーとして、私は...",
+    "description": "説明",
+    "descriptionPlaceholder": "説明や受け入れ基準を追加...",
+    "revealCards": "カードを公開",
+    "allVotesIn": "すべての投票が揃いました！",
+    "votingInProgress": "投票進行中",
+    "votingComplete": "投票完了",
+    "waitingForVotes": "投票を待っています... ({count}/{total})",
+    "resetVoting": "投票をリセット",
+    "nextStory": "次のストーリー",
+    "hostOnly": "セッションを操作できるのはホストのみです"
+  },
+  "cards": {
+    "chooseEstimate": "見積もりを選択",
+    "selectedCard": "選択したカード: {value}"
+  },
+  "results": {
+    "title": "結果",
+    "average": "平均",
+    "median": "中央値",
+    "votes": "票",
+    "consensus": "合意！",
+    "allAgreed": "全員が {value} に合意しました",
+    "hiddenUntilReveal": "カードが公開されると結果が表示されます。"
+  },
+  "storyQueue": {
+    "title": "ストーリーキュー",
+    "addStory": "ストーリーを追加",
+    "addToQueue": "キューに追加",
+    "storyTitlePlaceholder": "ストーリータイトル",
+    "descriptionPlaceholder": "説明（任意、Markdown 対応）",
+    "markdownSupported": "Markdown に対応",
+    "optional": "任意",
+    "remaining": "残り {count} 件のストーリー",
+    "estimated": "見積もり済み",
+    "notEstimated": "未見積もり",
+    "edit": "編集",
+    "remove": "削除",
+    "save": "保存",
+    "cancel": "キャンセル"
+  },
+  "storyPreview": {
+    "close": "閉じる",
+    "noDescription": "説明はありません。"
+  },
+  "observer": {
+    "hint": "オブザーバーとして参加しているため、投票はできません。"
+  },
+  "features": {
+    "teamEstimation": {
+      "title": "チーム見積もり",
+      "description": "チームとリアルタイムで見積もり。"
+    },
+    "statistics": {
+      "title": "統計",
+      "description": "平均、中央値、投票分布を確認。"
+    },
+    "quickEasy": {
+      "title": "簡単・迅速",
+      "description": "登録不要ですぐに開始！"
+    }
+  },
+  "errors": {
+    "fillAllFields": "すべての項目を入力してください。",
+    "invalidJoinCode": "参加コードは6文字である必要があります。",
+    "connectionFailed": "サーバーに接続できませんでした。再試行してください。",
+    "sessionNotFound": "セッションが見つかりません。コードを確認してください。",
+    "notAuthorized": "この操作を行う権限がありません。",
+    "voteFailed": "投票を保存できませんでした。",
+    "invalidMessage": "無効なメッセージ"
+  },
+  "alert": {
+    "close": "閉じる"
+  }
+}

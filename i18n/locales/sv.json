@@ -1,0 +1,137 @@
+{
+  "app": {
+    "name": "Planning Poker",
+    "tagline": "Agil estimering enklare",
+    "footer": "Byggt med {heart} och Nuxt 3"
+  },
+  "connection": {
+    "connected": "Ansluten",
+    "connecting": "Ansluter...",
+    "disconnected": "Offline",
+    "error": "Fel"
+  },
+  "home": {
+    "welcome": "Välkommen till Planning Poker",
+    "subtitle": "Starta en ny session eller gå med i en befintlig.",
+    "newSession": "Ny session",
+    "join": "Gå med"
+  },
+  "session": {
+    "create": {
+      "title": "Skapa ny session",
+      "sessionName": "Sessionsnamn",
+      "sessionNamePlaceholder": "t.ex. Sprint 42-planering",
+      "yourName": "Ditt namn",
+      "yourNamePlaceholder": "t.ex. Anna",
+      "button": "Skapa session"
+    },
+    "join": {
+      "title": "Gå med i session",
+      "joinCode": "Inbjudningskod",
+      "joinCodePlaceholder": "t.ex. ABC123",
+      "yourName": "Ditt namn",
+      "yourNamePlaceholder": "t.ex. Anna",
+      "asObserver": "Gå med som observatör",
+      "observerHint": "Observatörer kan titta men inte rösta",
+      "button": "Gå med i session",
+      "noCode": "Ingen kod?",
+      "createOwn": "Skapa din egen session"
+    },
+    "info": {
+      "sessionLabel": "Session:",
+      "shareCode": "Dela kod",
+      "copiedToClipboard": "Kopierat!",
+      "participantsOnline": "{count} deltagare online",
+      "leave": "Lämna"
+    },
+    "currentStory": "Aktuell story",
+    "showDetails": "Visa detaljer",
+    "waitingForHost": "Väntar på att värden startar nästa runda..."
+  },
+  "participants": {
+    "title": "Deltagare",
+    "you": "Du",
+    "host": "Värd",
+    "observer": "Observatör",
+    "voted": "Röstat",
+    "notVoted": "Inte röstat"
+  },
+  "controls": {
+    "title": "Värdkontroller",
+    "startVoting": "Starta omröstning",
+    "storyTitle": "Storytitel",
+    "storyTitlePlaceholder": "t.ex. Som användare vill jag...",
+    "description": "Beskrivning",
+    "descriptionPlaceholder": "Lägg till beskrivning eller acceptanskriterier...",
+    "revealCards": "Visa kort",
+    "allVotesIn": "Alla röster är inne!",
+    "votingInProgress": "Omröstning pågår",
+    "votingComplete": "Omröstning klar",
+    "waitingForVotes": "Väntar på röster... ({count}/{total})",
+    "resetVoting": "Återställ omröstning",
+    "nextStory": "Nästa story",
+    "hostOnly": "Endast värden kan styra sessionen"
+  },
+  "cards": {
+    "chooseEstimate": "Välj din uppskattning",
+    "selectedCard": "Valt kort: {value}"
+  },
+  "results": {
+    "title": "Resultat",
+    "average": "Genomsnitt",
+    "median": "Median",
+    "votes": "Röster",
+    "consensus": "Konsensus!",
+    "allAgreed": "Alla deltagare var överens om {value}",
+    "hiddenUntilReveal": "Resultat visas när korten avslöjas."
+  },
+  "storyQueue": {
+    "title": "Story-kö",
+    "addStory": "Lägg till story",
+    "addToQueue": "Lägg till i kön",
+    "storyTitlePlaceholder": "Titel på story",
+    "descriptionPlaceholder": "Beskrivning (valfritt, Markdown stöds)",
+    "markdownSupported": "Markdown stöds",
+    "optional": "valfritt",
+    "remaining": "{count} story kvar | {count} stories kvar",
+    "estimated": "Uppskattad",
+    "notEstimated": "Inte uppskattad",
+    "edit": "Redigera",
+    "remove": "Ta bort",
+    "save": "Spara",
+    "cancel": "Avbryt"
+  },
+  "storyPreview": {
+    "close": "Stäng",
+    "noDescription": "Ingen beskrivning tillgänglig."
+  },
+  "observer": {
+    "hint": "Du deltar som observatör och kan inte rösta."
+  },
+  "features": {
+    "teamEstimation": {
+      "title": "Teamuppskattning",
+      "description": "Uppskatta i realtid med ditt team."
+    },
+    "statistics": {
+      "title": "Statistik",
+      "description": "Se medelvärde, median och röstfördelning."
+    },
+    "quickEasy": {
+      "title": "Snabbt och enkelt",
+      "description": "Ingen registrering krävs. Kom igång direkt!"
+    }
+  },
+  "errors": {
+    "fillAllFields": "Fyll i alla fält.",
+    "invalidJoinCode": "Inbjudningskoden måste vara 6 tecken.",
+    "connectionFailed": "Kunde inte ansluta till servern. Försök igen.",
+    "sessionNotFound": "Session hittades inte. Kontrollera koden.",
+    "notAuthorized": "Du har inte behörighet att utföra denna åtgärd.",
+    "voteFailed": "Röstningen kunde inte sparas.",
+    "invalidMessage": "Ogiltigt meddelande"
+  },
+  "alert": {
+    "close": "Stäng"
+  }
+}

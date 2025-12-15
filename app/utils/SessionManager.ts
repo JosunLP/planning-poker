@@ -5,8 +5,8 @@
  * Handles session lifecycle, cleanup, and access.
  */
 
-import type { ISession, ISessionConfig } from '~/types'
-import { JOIN_CODE_CHARS, JOIN_CODE_LENGTH } from '~/types'
+import type { ISession, ISessionConfig } from '../types'
+import { JOIN_CODE_CHARS, JOIN_CODE_LENGTH } from '../types'
 import { Participant } from './Participant'
 import { Session } from './Session'
 

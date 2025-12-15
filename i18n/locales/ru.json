@@ -1,0 +1,137 @@
+{
+  "app": {
+    "name": "Planning Poker",
+    "tagline": "Простые оценки по Agile",
+    "footer": "Сделано с {heart} и Nuxt 3"
+  },
+  "connection": {
+    "connected": "Подключено",
+    "connecting": "Подключение...",
+    "disconnected": "Офлайн",
+    "error": "Ошибка"
+  },
+  "home": {
+    "welcome": "Добро пожаловать в Planning Poker",
+    "subtitle": "Начните новую сессию или присоединитесь к существующей.",
+    "newSession": "Новая сессия",
+    "join": "Присоединиться"
+  },
+  "session": {
+    "create": {
+      "title": "Создать новую сессию",
+      "sessionName": "Название сессии",
+      "sessionNamePlaceholder": "например, Планирование спринта 42",
+      "yourName": "Ваше имя",
+      "yourNamePlaceholder": "например, Иван",
+      "button": "Создать сессию"
+    },
+    "join": {
+      "title": "Присоединиться к сессии",
+      "joinCode": "Код для входа",
+      "joinCodePlaceholder": "например, ABC123",
+      "yourName": "Ваше имя",
+      "yourNamePlaceholder": "например, Иван",
+      "asObserver": "Присоединиться как наблюдатель",
+      "observerHint": "Наблюдатели могут смотреть, но не голосовать",
+      "button": "Войти в сессию",
+      "noCode": "Нет кода?",
+      "createOwn": "Создайте свою сессию"
+    },
+    "info": {
+      "sessionLabel": "Сессия:",
+      "shareCode": "Поделиться кодом",
+      "copiedToClipboard": "Скопировано!",
+      "participantsOnline": "{count} участник онлайн | {count} участников онлайн",
+      "leave": "Выйти"
+    },
+    "currentStory": "Текущая история",
+    "showDetails": "Показать детали",
+    "waitingForHost": "Ожидание, пока ведущий начнет следующий раунд..."
+  },
+  "participants": {
+    "title": "Участники",
+    "you": "Вы",
+    "host": "Ведущий",
+    "observer": "Наблюдатель",
+    "voted": "Проголосовал",
+    "notVoted": "Не голосовал"
+  },
+  "controls": {
+    "title": "Панель ведущего",
+    "startVoting": "Начать голосование",
+    "storyTitle": "Название истории",
+    "storyTitlePlaceholder": "например, Как пользователь, я хочу...",
+    "description": "Описание",
+    "descriptionPlaceholder": "Добавьте описание или критерии приемки...",
+    "revealCards": "Показать карты",
+    "allVotesIn": "Все голоса получены!",
+    "votingInProgress": "Голосование идет",
+    "votingComplete": "Голосование завершено",
+    "waitingForVotes": "Ожидание голосов... ({count}/{total})",
+    "resetVoting": "Сбросить голосование",
+    "nextStory": "Следующая история",
+    "hostOnly": "Только ведущий может управлять сессией"
+  },
+  "cards": {
+    "chooseEstimate": "Выберите вашу оценку",
+    "selectedCard": "Выбранная карта: {value}"
+  },
+  "results": {
+    "title": "Результаты",
+    "average": "Среднее",
+    "median": "Медиана",
+    "votes": "Голоса",
+    "consensus": "Консенсус!",
+    "allAgreed": "Все участники согласились на {value}",
+    "hiddenUntilReveal": "Результаты будут показаны после открытия карт."
+  },
+  "storyQueue": {
+    "title": "Очередь историй",
+    "addStory": "Добавить историю",
+    "addToQueue": "Добавить в очередь",
+    "storyTitlePlaceholder": "Название истории",
+    "descriptionPlaceholder": "Описание (необязательно, поддерживается Markdown)",
+    "markdownSupported": "Поддерживается Markdown",
+    "optional": "необязательно",
+    "remaining": "Осталась {count} история | Осталось {count} историй",
+    "estimated": "Оценена",
+    "notEstimated": "Не оценена",
+    "edit": "Редактировать",
+    "remove": "Удалить",
+    "save": "Сохранить",
+    "cancel": "Отмена"
+  },
+  "storyPreview": {
+    "close": "Закрыть",
+    "noDescription": "Описание отсутствует."
+  },
+  "observer": {
+    "hint": "Вы участвуете как наблюдатель и не можете голосовать."
+  },
+  "features": {
+    "teamEstimation": {
+      "title": "Оценка в команде",
+      "description": "Оценивайте вместе с командой в реальном времени."
+    },
+    "statistics": {
+      "title": "Статистика",
+      "description": "Смотрите среднее, медиану и распределение голосов."
+    },
+    "quickEasy": {
+      "title": "Быстро и просто",
+      "description": "Без регистрации. Начните прямо сейчас!"
+    }
+  },
+  "errors": {
+    "fillAllFields": "Пожалуйста, заполните все поля.",
+    "invalidJoinCode": "Код для входа должен состоять из 6 символов.",
+    "connectionFailed": "Не удалось подключиться к серверу. Попробуйте снова.",
+    "sessionNotFound": "Сессия не найдена. Проверьте код.",
+    "notAuthorized": "У вас нет прав для этого действия.",
+    "voteFailed": "Не удалось сохранить голос.",
+    "invalidMessage": "Некорректное сообщение"
+  },
+  "alert": {
+    "close": "Закрыть"
+  }
+}

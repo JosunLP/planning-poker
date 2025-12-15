@@ -5,8 +5,8 @@
  * Contains the core logic for voting management.
  */
 
-import type { ISession, ISessionConfig, IStory, IVotingResult, PokerValue, SessionStatus } from '~/types'
-import { POKER_VALUES } from '~/types'
+import type { ISession, ISessionConfig, IStory, IVotingResult, PokerValue, SessionStatus } from '../types'
+import { POKER_VALUES } from '../types'
 import { Participant } from './Participant'
 
 /**

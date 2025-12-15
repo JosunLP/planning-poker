@@ -1,0 +1,137 @@
+{
+  "app": {
+    "name": "Planning Poker",
+    "tagline": "让敏捷估算更简单",
+    "footer": "由 {heart} 与 Nuxt 3 驱动"
+  },
+  "connection": {
+    "connected": "已连接",
+    "connecting": "连接中...",
+    "disconnected": "离线",
+    "error": "错误"
+  },
+  "home": {
+    "welcome": "欢迎使用 Planning Poker",
+    "subtitle": "创建新会话或加入现有会话。",
+    "newSession": "新建会话",
+    "join": "加入"
+  },
+  "session": {
+    "create": {
+      "title": "创建新会话",
+      "sessionName": "会话名称",
+      "sessionNamePlaceholder": "例如：Sprint 42 规划",
+      "yourName": "你的名字",
+      "yourNamePlaceholder": "例如：小明",
+      "button": "创建会话"
+    },
+    "join": {
+      "title": "加入会话",
+      "joinCode": "加入代码",
+      "joinCodePlaceholder": "例如：ABC123",
+      "yourName": "你的名字",
+      "yourNamePlaceholder": "例如：小明",
+      "asObserver": "以观察者身份加入",
+      "observerHint": "观察者可以观看但不能投票",
+      "button": "加入会话",
+      "noCode": "没有代码？",
+      "createOwn": "创建你自己的会话"
+    },
+    "info": {
+      "sessionLabel": "会话：",
+      "shareCode": "分享代码",
+      "copiedToClipboard": "已复制！",
+      "participantsOnline": "{count} 名参与者在线",
+      "leave": "离开"
+    },
+    "currentStory": "当前故事",
+    "showDetails": "显示详情",
+    "waitingForHost": "等待主持人开始下一轮..."
+  },
+  "participants": {
+    "title": "参与者",
+    "you": "你",
+    "host": "主持人",
+    "observer": "观察者",
+    "voted": "已投票",
+    "notVoted": "未投票"
+  },
+  "controls": {
+    "title": "主持人控制",
+    "startVoting": "开始投票",
+    "storyTitle": "故事标题",
+    "storyTitlePlaceholder": "例如：作为用户，我想...",
+    "description": "描述",
+    "descriptionPlaceholder": "添加描述或验收标准...",
+    "revealCards": "揭示卡牌",
+    "allVotesIn": "所有投票已收齐！",
+    "votingInProgress": "投票进行中",
+    "votingComplete": "投票完成",
+    "waitingForVotes": "等待投票... ({count}/{total})",
+    "resetVoting": "重置投票",
+    "nextStory": "下一个故事",
+    "hostOnly": "只有主持人可以控制会话"
+  },
+  "cards": {
+    "chooseEstimate": "选择你的估算",
+    "selectedCard": "已选卡牌：{value}"
+  },
+  "results": {
+    "title": "结果",
+    "average": "平均值",
+    "median": "中位数",
+    "votes": "票数",
+    "consensus": "达成共识！",
+    "allAgreed": "所有参与者都同意 {value}",
+    "hiddenUntilReveal": "卡牌揭示后将显示结果。"
+  },
+  "storyQueue": {
+    "title": "故事队列",
+    "addStory": "添加故事",
+    "addToQueue": "加入队列",
+    "storyTitlePlaceholder": "故事标题",
+    "descriptionPlaceholder": "描述（可选，支持 Markdown）",
+    "markdownSupported": "支持 Markdown",
+    "optional": "可选",
+    "remaining": "剩余 {count} 个故事",
+    "estimated": "已估算",
+    "notEstimated": "未估算",
+    "edit": "编辑",
+    "remove": "移除",
+    "save": "保存",
+    "cancel": "取消"
+  },
+  "storyPreview": {
+    "close": "关闭",
+    "noDescription": "暂无描述。"
+  },
+  "observer": {
+    "hint": "你以观察者身份参与，无法投票。"
+  },
+  "features": {
+    "teamEstimation": {
+      "title": "团队估算",
+      "description": "与团队实时协作估算。"
+    },
+    "statistics": {
+      "title": "统计",
+      "description": "查看平均值、中位数和投票分布。"
+    },
+    "quickEasy": {
+      "title": "快捷易用",
+      "description": "无需注册，立即开始！"
+    }
+  },
+  "errors": {
+    "fillAllFields": "请填写所有字段。",
+    "invalidJoinCode": "加入代码必须为 6 个字符。",
+    "connectionFailed": "无法连接服务器，请重试。",
+    "sessionNotFound": "未找到会话，请检查代码。",
+    "notAuthorized": "你无权执行此操作。",
+    "voteFailed": "无法保存投票。",
+    "invalidMessage": "无效的消息"
+  },
+  "alert": {
+    "close": "关闭"
+  }
+}
