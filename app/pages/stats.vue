@@ -401,7 +401,7 @@ useSeoMeta({
       <p>
         {{ t('app.name') }} -
         <Icon name="heroicons:heart-solid" class="w-4 h-4 inline text-error-500" />
-        Nuxt 3
+        Nuxt 4
       </p>
     </footer>
 
