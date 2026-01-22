@@ -81,19 +81,6 @@ function handleClearStats(): void {
 }
 
 /**
- * Format date for display
- */
-function _formatDate(date: Date): string {
-  return new Date(date).toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
-
-/**
  * Format relative time
  */
 function formatRelativeTime(date: Date): string {
@@ -145,7 +132,7 @@ useSeoMeta({
             >
               <Icon name="heroicons:arrow-left" class="w-4 h-4" />
               <span class="hidden xs:inline">{{ t('stats.backToSession') }}</span>
-              <span class="xs:hidden">{{ t('nav.back') || 'Zurück' }}</span>
+              <span class="xs:hidden">{{ t('nav.back') }}</span>
             </NuxtLink>
           </div>
         </div>

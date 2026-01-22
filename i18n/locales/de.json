@@ -4,6 +4,9 @@
     "tagline": "Agile Schätzungen leicht gemacht",
     "footer": "Entwickelt mit {heart} und Nuxt 4"
   },
+  "nav": {
+    "back": "Zurück"
+  },
   "connection": {
     "connected": "Verbunden",
     "connecting": "Verbinde...",

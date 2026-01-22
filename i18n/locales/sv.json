@@ -4,6 +4,9 @@
     "tagline": "Agil estimering enklare",
     "footer": "Byggt med {heart} och Nuxt 4"
   },
+  "nav": {
+    "back": "Tillbaka"
+  },
   "connection": {
     "connected": "Ansluten",
     "connecting": "Ansluter...",

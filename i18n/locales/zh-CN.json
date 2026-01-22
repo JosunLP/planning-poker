@@ -4,6 +4,9 @@
     "tagline": "让敏捷估算更简单",
     "footer": "由 {heart} 与 Nuxt 4 驱动"
   },
+  "nav": {
+    "back": "返回"
+  },
   "connection": {
     "connected": "已连接",
     "connecting": "连接中...",

@@ -4,6 +4,9 @@
     "tagline": "Stime agili semplificate",
     "footer": "Creato con {heart} e Nuxt 4"
   },
+  "nav": {
+    "back": "Indietro"
+  },
   "connection": {
     "connected": "Connesso",
     "connecting": "Connessione...",

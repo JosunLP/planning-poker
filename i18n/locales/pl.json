@@ -4,6 +4,9 @@
     "tagline": "Uproszczone estymacje agile",
     "footer": "Stworzone z {heart} i Nuxt 4"
   },
+  "nav": {
+    "back": "Wstecz"
+  },
   "connection": {
     "connected": "Połączono",
     "connecting": "Łączenie...",

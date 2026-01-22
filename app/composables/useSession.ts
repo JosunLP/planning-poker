@@ -7,13 +7,13 @@
 
 import type { ISession, ISessionState, PokerValue } from '~/types'
 import type {
-    ParticipantJoinedPayload,
-    ParticipantLeftPayload,
-    SessionCreatedPayload,
-    SessionErrorPayload,
-    SessionJoinedPayload,
-    SessionLeftPayload,
-    SessionUpdatedPayload,
+  ParticipantJoinedPayload,
+  ParticipantLeftPayload,
+  SessionCreatedPayload,
+  SessionErrorPayload,
+  SessionJoinedPayload,
+  SessionLeftPayload,
+  SessionUpdatedPayload,
 } from '~/types/websocket'
 
 /**
@@ -416,7 +416,7 @@ export function useSession() {
    * Starts the next story (host only)
    * Also triggers story points sync if configured
    */
-  async function nextStory(): Promise<void> {
+  function nextStory(): void {
     if (!state.value.session || !state.value.isHost) return
 
     send('story:next', {

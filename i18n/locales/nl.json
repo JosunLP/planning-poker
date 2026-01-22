@@ -4,6 +4,9 @@
     "tagline": "Agile schatten eenvoudig",
     "footer": "Gemaakt met {heart} en Nuxt 4"
   },
+  "nav": {
+    "back": "Terug"
+  },
   "connection": {
     "connected": "Verbonden",
     "connecting": "Verbinding maken...",

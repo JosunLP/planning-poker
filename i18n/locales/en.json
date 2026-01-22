@@ -4,6 +4,9 @@
     "tagline": "Agile Estimation Made Easy",
     "footer": "Built with {heart} and Nuxt 4"
   },
+  "nav": {
+    "back": "Back"
+  },
   "connection": {
     "connected": "Connected",
     "connecting": "Connecting...",

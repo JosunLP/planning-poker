@@ -4,6 +4,9 @@
     "tagline": "アジャイル見積もりをシンプルに",
     "footer": "{heart} と Nuxt 4 で作成"
   },
+  "nav": {
+    "back": "戻る"
+  },
   "connection": {
     "connected": "接続済み",
     "connecting": "接続中...",

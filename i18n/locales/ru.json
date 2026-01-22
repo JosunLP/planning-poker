@@ -4,6 +4,9 @@
     "tagline": "Простые оценки по Agile",
     "footer": "Сделано с {heart} и Nuxt 4"
   },
+  "nav": {
+    "back": "Назад"
+  },
   "connection": {
     "connected": "Подключено",
     "connecting": "Подключение...",

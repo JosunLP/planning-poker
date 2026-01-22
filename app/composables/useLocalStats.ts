@@ -5,7 +5,7 @@
  * Uses LocalStorage for persistence across browser sessions.
  */
 
-import type { IParticipant, ISession, PokerValue } from '~/types'
+import type { IParticipant, ISession } from '~/types'
 import type {
   ICardFrequency,
   ILocalStatsStorage,
@@ -16,7 +16,7 @@ import type {
   ITimeSeriesPoint,
 } from '~/types/stats'
 import { DEFAULT_STATS_STORAGE, STATS_STORAGE_KEY } from '~/types/stats'
-import { createStoryStats as createStoryStatsCore } from '~/utils/statsCalculations'
+import { aggregateCardFrequency, calculateConsensusDistribution, calculateQuickStats, createStoryStats as createStoryStatsCore } from '~/utils/statsCalculations'
 
 /**
  * Composable for managing local statistics
@@ -130,33 +130,7 @@ export function useLocalStats() {
 
     const allStories = sessions.flatMap(s => s?.history ?? [])
 
-    if (allStories.length === 0) {
-      return {
-        totalStories: 0,
-        totalPoints: 0,
-        averagePoints: 0,
-        consensusRate: 0,
-        averageVotersPerStory: 0,
-      }
-    }
-
-    const numericEstimates = allStories
-      .map(s => s.finalEstimate)
-      .filter((v): v is PokerValue => v !== null)
-      .map(v => Number.parseFloat(v))
-      .filter(v => !Number.isNaN(v))
-
-    const totalPoints = numericEstimates.reduce((a, b) => a + b, 0)
-    const consensusCount = allStories.filter(s => s.hasConsensus).length
-    const totalVoters = allStories.reduce((sum, s) => sum + s.voterCount, 0)
-
-    return {
-      totalStories: allStories.length,
-      totalPoints,
-      averagePoints: numericEstimates.length > 0 ? totalPoints / numericEstimates.length : 0,
-      consensusRate: (consensusCount / allStories.length) * 100,
-      averageVotersPerStory: totalVoters / allStories.length,
-    }
+    return calculateQuickStats(allStories)
   }
 
   /**
@@ -202,25 +176,9 @@ export function useLocalStats() {
       ? [storage.value.sessions[sessionId]].filter(Boolean)
       : Object.values(storage.value.sessions)
 
-    const frequency = new Map<PokerValue, number>()
-    let total = 0
+    const allStories = sessions.flatMap(s => s?.history ?? [])
 
-    sessions.forEach((session) => {
-      session?.history.forEach((story) => {
-        story.distribution.forEach((dist) => {
-          frequency.set(dist.value, (frequency.get(dist.value) || 0) + dist.count)
-          total += dist.count
-        })
-      })
-    })
-
-    return Array.from(frequency.entries())
-      .map(([value, count]) => ({
-        value,
-        count,
-        percentage: total > 0 ? (count / total) * 100 : 0,
-      }))
-      .sort((a, b) => b.count - a.count)
+    return aggregateCardFrequency(allStories)
   }
 
   /**
@@ -265,10 +223,8 @@ export function useLocalStats() {
       : Object.values(storage.value.sessions)
 
     const allStories = sessions.flatMap(s => s?.history ?? [])
-    const consensus = allStories.filter(s => s.hasConsensus).length
-    const noConsensus = allStories.length - consensus
 
-    return { consensus, noConsensus }
+    return calculateConsensusDistribution(allStories)
   }
 
   /**

@@ -4,6 +4,9 @@
     "tagline": "Estimación ágil simplificada",
     "footer": "Creado con {heart} y Nuxt 4"
   },
+  "nav": {
+    "back": "Volver"
+  },
   "connection": {
     "connected": "Conectado",
     "connecting": "Conectando...",
