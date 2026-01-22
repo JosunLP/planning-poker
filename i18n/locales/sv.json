@@ -133,5 +133,175 @@
   },
   "alert": {
     "close": "Stäng"
+  },
+  "storyExamples": {
+    "title": "Exempelstories",
+    "subtitle": "Referensexempel för story point-estimering",
+    "selectPoints": "Välj Story Points",
+    "selectPrompt": "Välj ett story point-värde till vänster för att se exempel.",
+    "points": "Story Points",
+    "riskLabel": "Risk",
+    "hint": "Dessa exempel är vägledande. Anpassa dem efter teamets konventioner och domän.",
+    "close": "Stäng",
+    "openButton": "Visa exempel",
+    "tabs": {
+      "examples": "Exempel",
+      "matrix": "Matris"
+    },
+    "matrix": {
+      "title": "Risk‑ och komplexitetsmatris",
+      "subtitle": "Härled story points från risk‑till‑komplexitet",
+      "axis": {
+        "risk": "Risk",
+        "complexity": "Komplexitet"
+      },
+      "levels": {
+        "veryLow": "Mycket låg",
+        "low": "Låg",
+        "medium": "Medel",
+        "high": "Hög"
+      },
+      "cells": {
+        "lowLow": "0",
+        "lowMedium": "1–2",
+        "lowHigh": "3–5",
+        "mediumLow": "2–3",
+        "mediumMedium": "5–8",
+        "mediumHigh": "8–13",
+        "highLow": "13",
+        "highMedium": "21–40",
+        "highHigh": "100"
+      },
+      "hint": "Ju högre risk och komplexitet, desto högre poäng. Vid hög osäkerhet, välj ?."
+    },
+    "efforts": {
+      "minimal": "Minimal",
+      "verySmall": "Mycket liten",
+      "small": "Liten",
+      "halfDay": "Halvdag",
+      "oneToTwoDays": "1–2 dagar",
+      "twoToThreeDays": "2–3 dagar",
+      "threeToFiveDays": "3–5 dagar",
+      "oneWeek": "1 vecka",
+      "oneToTwoWeeks": "1–2 veckor",
+      "epic": "Episk",
+      "unknown": "Okänd",
+      "break": "Paus"
+    },
+    "risks": {
+      "none": "Ingen risk",
+      "low": "Låg",
+      "moderate": "Måttlig",
+      "elevated": "Förhöjd",
+      "high": "Hög",
+      "veryHigh": "Mycket hög",
+      "unknown": "Okänd"
+    },
+    "examples": {
+      "0": {
+        "example1": {
+          "title": "Aktivera feature flag",
+          "description": "Aktivera en redan implementerad funktion genom att sätta en flagga i konfigurationen."
+        },
+        "example2": {
+          "title": "Rätta stavfel",
+          "description": "Rätta ett stavfel i en statisk text eller etikett."
+        }
+      },
+      "1": {
+        "example1": {
+          "title": "Byta ikon",
+          "description": "Byt ut en standardikon mot en ny ikon i en komponent."
+        },
+        "example2": {
+          "title": "Lägga till tooltip",
+          "description": "Lägg till en enkel tooltip till ett befintligt UI-element."
+        }
+      },
+      "2": {
+        "example1": {
+          "title": "Nytt formulärfält",
+          "description": "Lägg till ett extra valfritt inmatningsfält med validering i ett formulär."
+        },
+        "example2": {
+          "title": "Enkel stiljustering",
+          "description": "Justera färger eller spacing i en komponent enligt stilguide."
+        }
+      },
+      "3": {
+        "example1": {
+          "title": "Filtrera lista",
+          "description": "Implementera en filterfunktion för en befintlig lista."
+        },
+        "example2": {
+          "title": "Lägg till sortering",
+          "description": "Utöka en tabell med sorteringsfunktion för en kolumn."
+        }
+      },
+      "5": {
+        "example1": {
+          "title": "CSV-export",
+          "description": "Exportera en datalista som CSV med rubrik och formatering."
+        },
+        "example2": {
+          "title": "Implementera paginering",
+          "description": "Serverside-paginering för en artikel­lista med navigering."
+        }
+      },
+      "8": {
+        "example1": {
+          "title": "E-postnotifiering",
+          "description": "Implementera automatiskt e-postutskick vid specifika händelser."
+        },
+        "example2": {
+          "title": "Filuppladdning",
+          "description": "Filuppladdning med förhandsgranskning, validering och felhantering."
+        }
+      },
+      "13": {
+        "example1": {
+          "title": "Flerstegs­wizard",
+          "description": "En 3–4 stegs wizard med validering, tillbaka­navigering och mellanlagring."
+        },
+        "example2": {
+          "title": "Anpassningsbar dashboard",
+          "description": "Dashboard med konfigurerbara widgets, drag & drop och persistens."
+        }
+      },
+      "21": {
+        "example1": {
+          "title": "Rollbaserad åtkomstkontroll",
+          "description": "Visa/dölj funktioner baserat på användarroller i hela systemet."
+        },
+        "example2": {
+          "title": "Realtids­synkronisering",
+          "description": "WebSocket-baserade realtidsuppdateringar för flera klienter."
+        }
+      },
+      "40": {
+        "example1": {
+          "title": "Cache-lager",
+          "description": "Implementera serverside-cache med invalidering och cache-strategier."
+        }
+      },
+      "100": {
+        "example1": {
+          "title": "Systemomfattande auth-migrering",
+          "description": "Migrering till en ny autentiseringsleverantör i hela systemet."
+        }
+      },
+      "unknown": {
+        "example1": {
+          "title": "Oklara krav",
+          "description": "Kraven är inte tillräckligt tydliga för att uppskatta arbete. Klargör först."
+        }
+      },
+      "coffee": {
+        "example1": {
+          "title": "Paus / Ingen omröstning",
+          "description": "Denna story uppskattas inte eller så behövs en paus."
+        }
+      }
+    }
   }
 }

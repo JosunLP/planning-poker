@@ -133,5 +133,175 @@
   },
   "alert": {
     "close": "关闭"
+  },
+  "storyExamples": {
+    "title": "示例故事",
+    "subtitle": "用于 Story Points 估算的参考示例",
+    "selectPoints": "选择 Story Points",
+    "selectPrompt": "在左侧选择一个 story point 值以查看示例。",
+    "points": "Story Points",
+    "riskLabel": "风险",
+    "hint": "这些示例仅供参考，可根据团队约定和领域进行调整。",
+    "close": "关闭",
+    "openButton": "查看示例",
+    "tabs": {
+      "examples": "示例",
+      "matrix": "矩阵"
+    },
+    "matrix": {
+      "title": "风险‑复杂度矩阵",
+      "subtitle": "根据风险与复杂度的关系推导 Story Points",
+      "axis": {
+        "risk": "风险",
+        "complexity": "复杂度"
+      },
+      "levels": {
+        "veryLow": "非常低",
+        "low": "低",
+        "medium": "中",
+        "high": "高"
+      },
+      "cells": {
+        "lowLow": "0",
+        "lowMedium": "1–2",
+        "lowHigh": "3–5",
+        "mediumLow": "2–3",
+        "mediumMedium": "5–8",
+        "mediumHigh": "8–13",
+        "highLow": "13",
+        "highMedium": "21–40",
+        "highHigh": "100"
+      },
+      "hint": "风险和复杂度越高，点数越高。不确定性高时选择 ?。"
+    },
+    "efforts": {
+      "minimal": "最小",
+      "verySmall": "很小",
+      "small": "小",
+      "halfDay": "半天",
+      "oneToTwoDays": "1-2 天",
+      "twoToThreeDays": "2-3 天",
+      "threeToFiveDays": "3-5 天",
+      "oneWeek": "1 周",
+      "oneToTwoWeeks": "1-2 周",
+      "epic": "史诗级",
+      "unknown": "未知",
+      "break": "休息"
+    },
+    "risks": {
+      "none": "无风险",
+      "low": "低",
+      "moderate": "中等",
+      "elevated": "较高",
+      "high": "高",
+      "veryHigh": "很高",
+      "unknown": "未知"
+    },
+    "examples": {
+      "0": {
+        "example1": {
+          "title": "启用功能开关",
+          "description": "通过在配置中设置开关，启用已实现的功能。"
+        },
+        "example2": {
+          "title": "修正错别字",
+          "description": "修正静态文本或标签中的错别字。"
+        }
+      },
+      "1": {
+        "example1": {
+          "title": "替换图标",
+          "description": "在组件中将标准图标替换为新图标。"
+        },
+        "example2": {
+          "title": "添加提示",
+          "description": "为现有 UI 元素添加简单的提示信息。"
+        }
+      },
+      "2": {
+        "example1": {
+          "title": "新增表单字段",
+          "description": "在表单中添加一个带校验的可选输入字段。"
+        },
+        "example2": {
+          "title": "简单样式调整",
+          "description": "根据样式指南调整组件颜色或间距。"
+        }
+      },
+      "3": {
+        "example1": {
+          "title": "列表筛选",
+          "description": "为现有列表实现筛选功能。"
+        },
+        "example2": {
+          "title": "添加排序",
+          "description": "为表格添加某一列的排序功能。"
+        }
+      },
+      "5": {
+        "example1": {
+          "title": "CSV 导出",
+          "description": "将数据列表导出为带表头和格式的 CSV 文件。"
+        },
+        "example2": {
+          "title": "实现分页",
+          "description": "为列表实现服务端分页并提供导航。"
+        }
+      },
+      "8": {
+        "example1": {
+          "title": "邮件通知",
+          "description": "为特定操作实现自动邮件发送。"
+        },
+        "example2": {
+          "title": "文件上传",
+          "description": "文件上传，包含预览、校验与错误处理。"
+        }
+      },
+      "13": {
+        "example1": {
+          "title": "多步骤向导",
+          "description": "3-4 步向导，包含校验、返回导航与中间保存。"
+        },
+        "example2": {
+          "title": "可定制仪表盘",
+          "description": "支持可配置小组件、拖拽与持久化的仪表盘。"
+        }
+      },
+      "21": {
+        "example1": {
+          "title": "基于角色的访问控制",
+          "description": "在整个系统中根据用户角色显示/隐藏功能。"
+        },
+        "example2": {
+          "title": "实时同步",
+          "description": "基于 WebSocket 的多客户端实时更新。"
+        }
+      },
+      "40": {
+        "example1": {
+          "title": "缓存层",
+          "description": "实现服务端缓存，包含失效策略与缓存策略。"
+        }
+      },
+      "100": {
+        "example1": {
+          "title": "全系统认证迁移",
+          "description": "将全系统迁移到新的认证提供商。"
+        }
+      },
+      "unknown": {
+        "example1": {
+          "title": "需求不明确",
+          "description": "需求不够清晰，无法估算工作量，需要先澄清。"
+        }
+      },
+      "coffee": {
+        "example1": {
+          "title": "休息 / 不投票",
+          "description": "该故事不进行估算或需要休息。"
+        }
+      }
+    }
   }
 }

@@ -133,5 +133,175 @@
   },
   "alert": {
     "close": "Fermer"
+  },
+  "storyExamples": {
+    "title": "Exemples d'Histoires",
+    "subtitle": "Exemples de référence pour l'estimation des story points",
+    "selectPoints": "Sélectionner les Story Points",
+    "selectPrompt": "Sélectionnez une valeur de story point à gauche pour voir les exemples.",
+    "points": "Story Points",
+    "riskLabel": "Risque",
+    "hint": "Ces exemples servent de guide. Adaptez-les aux conventions et au domaine de votre équipe.",
+    "close": "Fermer",
+    "openButton": "Voir les Exemples",
+    "tabs": {
+      "examples": "Exemples",
+      "matrix": "Matrice"
+    },
+    "matrix": {
+      "title": "Matrice Risque vs Complexité",
+      "subtitle": "Déduire les story points du ratio risque‑complexité",
+      "axis": {
+        "risk": "Risque",
+        "complexity": "Complexité"
+      },
+      "levels": {
+        "veryLow": "Très faible",
+        "low": "Faible",
+        "medium": "Moyen",
+        "high": "Élevé"
+      },
+      "cells": {
+        "lowLow": "0",
+        "lowMedium": "1–2",
+        "lowHigh": "3–5",
+        "mediumLow": "2–3",
+        "mediumMedium": "5–8",
+        "mediumHigh": "8–13",
+        "highLow": "13",
+        "highMedium": "21–40",
+        "highHigh": "100"
+      },
+      "hint": "Plus le risque et la complexité sont élevés, plus les points sont élevés. En cas d'incertitude, choisissez ?."
+    },
+    "risks": {
+      "none": "Aucun risque",
+      "low": "Faible",
+      "moderate": "Modéré",
+      "elevated": "Élevé",
+      "high": "Haut",
+      "veryHigh": "Très élevé",
+      "unknown": "Inconnu"
+    },
+    "efforts": {
+      "minimal": "Minimal",
+      "verySmall": "Très petit",
+      "small": "Petit",
+      "halfDay": "Demi-journée",
+      "oneToTwoDays": "1-2 jours",
+      "twoToThreeDays": "2-3 jours",
+      "threeToFiveDays": "3-5 jours",
+      "oneWeek": "1 semaine",
+      "oneToTwoWeeks": "1-2 semaines",
+      "epic": "Epic",
+      "unknown": "Inconnu",
+      "break": "Pause"
+    },
+    "examples": {
+      "0": {
+        "example1": {
+          "title": "Activer un feature flag",
+          "description": "Activer une fonctionnalité déjà implémentée en configurant un flag dans la configuration."
+        },
+        "example2": {
+          "title": "Corriger une faute de frappe",
+          "description": "Corriger une faute de frappe dans un texte statique ou une étiquette."
+        }
+      },
+      "1": {
+        "example1": {
+          "title": "Remplacer une icône",
+          "description": "Remplacer une icône standard par une nouvelle icône dans un composant."
+        },
+        "example2": {
+          "title": "Ajouter une infobulle",
+          "description": "Ajouter une infobulle simple à un élément UI existant."
+        }
+      },
+      "2": {
+        "example1": {
+          "title": "Nouveau champ de formulaire",
+          "description": "Ajouter un champ de saisie optionnel supplémentaire avec validation à un formulaire."
+        },
+        "example2": {
+          "title": "Ajustement de style simple",
+          "description": "Ajuster les couleurs ou l'espacement d'un composant selon le guide de style."
+        }
+      },
+      "3": {
+        "example1": {
+          "title": "Filtrer une liste",
+          "description": "Implémenter une fonction de filtre pour une liste existante."
+        },
+        "example2": {
+          "title": "Ajouter un tri",
+          "description": "Étendre un tableau avec une fonctionnalité de tri pour une colonne."
+        }
+      },
+      "5": {
+        "example1": {
+          "title": "Export CSV",
+          "description": "Exporter une liste de données en fichier CSV avec en-tête et formatage."
+        },
+        "example2": {
+          "title": "Implémenter la pagination",
+          "description": "Pagination côté serveur pour une liste d'articles avec navigation."
+        }
+      },
+      "8": {
+        "example1": {
+          "title": "Notification par email",
+          "description": "Implémenter l'envoi automatique d'emails pour des actions spécifiques."
+        },
+        "example2": {
+          "title": "Téléchargement de fichiers",
+          "description": "Téléchargement de fichiers avec aperçu, validation et gestion des erreurs."
+        }
+      },
+      "13": {
+        "example1": {
+          "title": "Assistant multi-étapes",
+          "description": "Un assistant de 3-4 étapes avec validation, navigation arrière et sauvegarde intermédiaire."
+        },
+        "example2": {
+          "title": "Tableau de bord personnalisable",
+          "description": "Tableau de bord avec widgets configurables, glisser-déposer et persistance."
+        }
+      },
+      "21": {
+        "example1": {
+          "title": "Contrôle d'accès basé sur les rôles",
+          "description": "Afficher/masquer les fonctionnalités selon les rôles des utilisateurs dans tout le système."
+        },
+        "example2": {
+          "title": "Synchronisation en temps réel",
+          "description": "Mises à jour en temps réel basées sur WebSocket pour plusieurs clients."
+        }
+      },
+      "40": {
+        "example1": {
+          "title": "Couche de cache",
+          "description": "Implémenter un cache côté serveur avec invalidation et stratégies de cache."
+        }
+      },
+      "100": {
+        "example1": {
+          "title": "Migration d'authentification",
+          "description": "Migration vers un nouveau fournisseur d'authentification dans tout le système."
+        }
+      },
+      "unknown": {
+        "example1": {
+          "title": "Exigences floues",
+          "description": "Les exigences ne sont pas assez claires pour estimer l'effort. Clarifier d'abord."
+        }
+      },
+      "coffee": {
+        "example1": {
+          "title": "Pause / Pas de vote",
+          "description": "Cette histoire n'est pas estimée ou une pause est nécessaire."
+        }
+      }
+    }
   }
 }

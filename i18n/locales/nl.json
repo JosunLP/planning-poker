@@ -133,5 +133,175 @@
   },
   "alert": {
     "close": "Sluiten"
+  },
+  "storyExamples": {
+    "title": "Voorbeeldverhalen",
+    "subtitle": "Referentievoorbeelden voor story point schatting",
+    "selectPoints": "Selecteer Story Points",
+    "selectPrompt": "Selecteer links een story point waarde om voorbeelden te zien.",
+    "points": "Story Points",
+    "riskLabel": "Risico",
+    "hint": "Deze voorbeelden dienen als richtlijn. Pas ze aan aan de conventies en het domein van je team.",
+    "close": "Sluiten",
+    "openButton": "Bekijk Voorbeelden",
+    "tabs": {
+      "examples": "Voorbeelden",
+      "matrix": "Matrix"
+    },
+    "matrix": {
+      "title": "Risico‑complexiteitsmatrix",
+      "subtitle": "Leid story points af uit de verhouding risico/complexiteit",
+      "axis": {
+        "risk": "Risico",
+        "complexity": "Complexiteit"
+      },
+      "levels": {
+        "veryLow": "Zeer laag",
+        "low": "Laag",
+        "medium": "Gemiddeld",
+        "high": "Hoog"
+      },
+      "cells": {
+        "lowLow": "0",
+        "lowMedium": "1–2",
+        "lowHigh": "3–5",
+        "mediumLow": "2–3",
+        "mediumMedium": "5–8",
+        "mediumHigh": "8–13",
+        "highLow": "13",
+        "highMedium": "21–40",
+        "highHigh": "100"
+      },
+      "hint": "Hoe hoger risico en complexiteit, hoe hoger de punten. Bij hoge onzekerheid kies ?."
+    },
+    "risks": {
+      "none": "Geen risico",
+      "low": "Laag",
+      "moderate": "Matig",
+      "elevated": "Verhoogd",
+      "high": "Hoog",
+      "veryHigh": "Zeer hoog",
+      "unknown": "Onbekend"
+    },
+    "efforts": {
+      "minimal": "Minimaal",
+      "verySmall": "Zeer klein",
+      "small": "Klein",
+      "halfDay": "Halve dag",
+      "oneToTwoDays": "1-2 dagen",
+      "twoToThreeDays": "2-3 dagen",
+      "threeToFiveDays": "3-5 dagen",
+      "oneWeek": "1 week",
+      "oneToTwoWeeks": "1-2 weken",
+      "epic": "Epic",
+      "unknown": "Onbekend",
+      "break": "Pauze"
+    },
+    "examples": {
+      "0": {
+        "example1": {
+          "title": "Feature flag activeren",
+          "description": "Een reeds geïmplementeerde functie activeren door een flag in de configuratie in te stellen."
+        },
+        "example2": {
+          "title": "Typfout corrigeren",
+          "description": "Een typfout in statische tekst of label corrigeren."
+        }
+      },
+      "1": {
+        "example1": {
+          "title": "Icoon vervangen",
+          "description": "Een standaard icoon vervangen door een nieuw icoon in een component."
+        },
+        "example2": {
+          "title": "Tooltip toevoegen",
+          "description": "Een eenvoudige tooltip toevoegen aan een bestaand UI-element."
+        }
+      },
+      "2": {
+        "example1": {
+          "title": "Nieuw formulierveld",
+          "description": "Een extra optioneel invoerveld met validatie toevoegen aan een formulier."
+        },
+        "example2": {
+          "title": "Eenvoudige stijlaanpassing",
+          "description": "Kleuren of spatiëring van een component aanpassen volgens de stijlgids."
+        }
+      },
+      "3": {
+        "example1": {
+          "title": "Lijst filteren",
+          "description": "Een filterfunctie implementeren voor een bestaande lijst."
+        },
+        "example2": {
+          "title": "Sortering toevoegen",
+          "description": "Een tabel uitbreiden met sorteerfunctionaliteit voor een kolom."
+        }
+      },
+      "5": {
+        "example1": {
+          "title": "CSV-export",
+          "description": "Een gegevenslijst exporteren als CSV-bestand met header en opmaak."
+        },
+        "example2": {
+          "title": "Paginering implementeren",
+          "description": "Server-side paginering voor een artikellijst met navigatie."
+        }
+      },
+      "8": {
+        "example1": {
+          "title": "E-mailnotificatie",
+          "description": "Automatisch e-mails verzenden implementeren voor specifieke acties."
+        },
+        "example2": {
+          "title": "Bestandsupload",
+          "description": "Bestandsupload met preview, validatie en foutafhandeling."
+        }
+      },
+      "13": {
+        "example1": {
+          "title": "Multi-stap wizard",
+          "description": "Een 3-4 stappen wizard met validatie, terug-navigatie en tussentijds opslaan."
+        },
+        "example2": {
+          "title": "Aanpasbaar dashboard",
+          "description": "Dashboard met configureerbare widgets, drag & drop en persistentie."
+        }
+      },
+      "21": {
+        "example1": {
+          "title": "Rolgebaseerde toegangscontrole",
+          "description": "Functies tonen/verbergen op basis van gebruikersrollen in het hele systeem."
+        },
+        "example2": {
+          "title": "Real-time synchronisatie",
+          "description": "WebSocket-gebaseerde real-time updates voor meerdere clients."
+        }
+      },
+      "40": {
+        "example1": {
+          "title": "Cache-laag",
+          "description": "Server-side caching implementeren met invalidatie en cache-strategieën."
+        }
+      },
+      "100": {
+        "example1": {
+          "title": "Systeembrede auth-migratie",
+          "description": "Migratie naar een nieuwe authenticatieprovider in het hele systeem."
+        }
+      },
+      "unknown": {
+        "example1": {
+          "title": "Onduidelijke vereisten",
+          "description": "De vereisten zijn niet duidelijk genoeg om de inspanning te schatten. Eerst verduidelijken."
+        }
+      },
+      "coffee": {
+        "example1": {
+          "title": "Pauze / Geen stemming",
+          "description": "Deze story wordt niet geschat of er is een pauze nodig."
+        }
+      }
+    }
   }
 }

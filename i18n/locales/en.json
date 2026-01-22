@@ -133,5 +133,175 @@
   },
   "alert": {
     "close": "Close"
+  },
+  "storyExamples": {
+    "title": "Example Stories",
+    "subtitle": "Reference examples for story point estimation",
+    "selectPoints": "Select Story Points",
+    "selectPrompt": "Select a story point value on the left to see examples.",
+    "points": "Story Points",
+    "riskLabel": "Risk",
+    "hint": "These examples serve as guidance. Adapt them to your team's conventions and domain.",
+    "close": "Close",
+    "openButton": "View Examples",
+    "tabs": {
+      "examples": "Examples",
+      "matrix": "Matrix"
+    },
+    "matrix": {
+      "title": "Risk vs Complexity Matrix",
+      "subtitle": "Derive story points from the risk-to-complexity ratio",
+      "axis": {
+        "risk": "Risk",
+        "complexity": "Complexity"
+      },
+      "levels": {
+        "veryLow": "Very Low",
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "cells": {
+        "lowLow": "0",
+        "lowMedium": "1–2",
+        "lowHigh": "3–5",
+        "mediumLow": "2–3",
+        "mediumMedium": "5–8",
+        "mediumHigh": "8–13",
+        "highLow": "13",
+        "highMedium": "21–40",
+        "highHigh": "100"
+      },
+      "hint": "Higher risk and complexity lead to higher points. If uncertainty is high, choose ?."
+    },
+    "efforts": {
+      "minimal": "Minimal",
+      "verySmall": "Very small",
+      "small": "Small",
+      "halfDay": "Half day",
+      "oneToTwoDays": "1-2 days",
+      "twoToThreeDays": "2-3 days",
+      "threeToFiveDays": "3-5 days",
+      "oneWeek": "1 week",
+      "oneToTwoWeeks": "1-2 weeks",
+      "epic": "Epic",
+      "unknown": "Unknown",
+      "break": "Break"
+    },
+    "risks": {
+      "none": "No risk",
+      "low": "Low",
+      "moderate": "Moderate",
+      "elevated": "Elevated",
+      "high": "High",
+      "veryHigh": "Very high",
+      "unknown": "Unknown"
+    },
+    "examples": {
+      "0": {
+        "example1": {
+          "title": "Enable feature flag",
+          "description": "Enable an already implemented feature by setting a flag in the configuration."
+        },
+        "example2": {
+          "title": "Fix typo",
+          "description": "Fix a typo in a static text or label."
+        }
+      },
+      "1": {
+        "example1": {
+          "title": "Replace icon",
+          "description": "Replace a standard icon with a new icon in a component."
+        },
+        "example2": {
+          "title": "Add tooltip",
+          "description": "Add a simple tooltip to an existing UI element."
+        }
+      },
+      "2": {
+        "example1": {
+          "title": "New form field",
+          "description": "Add an additional optional input field with validation to a form."
+        },
+        "example2": {
+          "title": "Simple style adjustment",
+          "description": "Adjust colors or spacing of a component according to styleguide."
+        }
+      },
+      "3": {
+        "example1": {
+          "title": "Filter list",
+          "description": "Implement a filter function for an existing list."
+        },
+        "example2": {
+          "title": "Add sorting",
+          "description": "Extend a table with sorting functionality for a column."
+        }
+      },
+      "5": {
+        "example1": {
+          "title": "CSV export",
+          "description": "Export a data list as CSV file with header and formatting."
+        },
+        "example2": {
+          "title": "Implement pagination",
+          "description": "Server-side pagination for an article list with navigation."
+        }
+      },
+      "8": {
+        "example1": {
+          "title": "Email notification",
+          "description": "Implement automatic email sending for specific actions."
+        },
+        "example2": {
+          "title": "File upload",
+          "description": "File upload with preview, validation and error handling."
+        }
+      },
+      "13": {
+        "example1": {
+          "title": "Multi-step wizard",
+          "description": "A 3-4 step wizard with validation, back navigation and intermediate saving."
+        },
+        "example2": {
+          "title": "Customizable dashboard",
+          "description": "Dashboard with configurable widgets, drag & drop and persistence."
+        }
+      },
+      "21": {
+        "example1": {
+          "title": "Role-based access control",
+          "description": "Show/hide features based on user roles across the entire system."
+        },
+        "example2": {
+          "title": "Real-time synchronization",
+          "description": "WebSocket-based real-time updates for multiple clients."
+        }
+      },
+      "40": {
+        "example1": {
+          "title": "Caching layer",
+          "description": "Implement server-side caching with invalidation and cache strategies."
+        }
+      },
+      "100": {
+        "example1": {
+          "title": "System-wide auth migration",
+          "description": "Migration to a new authentication provider across the entire system."
+        }
+      },
+      "unknown": {
+        "example1": {
+          "title": "Unclear requirements",
+          "description": "The requirements are not clear enough to estimate the effort. Clarify first."
+        }
+      },
+      "coffee": {
+        "example1": {
+          "title": "Break / No voting",
+          "description": "This story is not being estimated or a break is needed."
+        }
+      }
+    }
   }
 }

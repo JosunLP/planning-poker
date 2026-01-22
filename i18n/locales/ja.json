@@ -133,5 +133,175 @@
   },
   "alert": {
     "close": "閉じる"
+  },
+  "storyExamples": {
+    "title": "ストーリー例",
+    "subtitle": "ストーリーポイント見積もりの参考例",
+    "selectPoints": "ストーリーポイントを選択",
+    "selectPrompt": "左側でストーリーポイント値を選択すると、例が表示されます。",
+    "points": "ストーリーポイント",
+    "riskLabel": "リスク",
+    "hint": "これらの例はガイドラインです。チームの慣例とドメインに合わせて調整してください。",
+    "close": "閉じる",
+    "openButton": "例を表示",
+    "tabs": {
+      "examples": "例",
+      "matrix": "マトリクス"
+    },
+    "matrix": {
+      "title": "リスク×複雑性マトリクス",
+      "subtitle": "リスクと複雑性の比率からストーリーポイントを導出",
+      "axis": {
+        "risk": "リスク",
+        "complexity": "複雑性"
+      },
+      "levels": {
+        "veryLow": "非常に低",
+        "low": "低",
+        "medium": "中",
+        "high": "高"
+      },
+      "cells": {
+        "lowLow": "0",
+        "lowMedium": "1–2",
+        "lowHigh": "3–5",
+        "mediumLow": "2–3",
+        "mediumMedium": "5–8",
+        "mediumHigh": "8–13",
+        "highLow": "13",
+        "highMedium": "21–40",
+        "highHigh": "100"
+      },
+      "hint": "リスクと複雑性が高いほどポイントも高くなります。不確実性が高い場合は ? を選択。"
+    },
+    "risks": {
+      "none": "リスクなし",
+      "low": "低",
+      "moderate": "中程度",
+      "elevated": "やや高い",
+      "high": "高",
+      "veryHigh": "非常に高い",
+      "unknown": "不明"
+    },
+    "efforts": {
+      "minimal": "最小",
+      "verySmall": "非常に小さい",
+      "small": "小さい",
+      "halfDay": "半日",
+      "oneToTwoDays": "1-2日",
+      "twoToThreeDays": "2-3日",
+      "threeToFiveDays": "3-5日",
+      "oneWeek": "1週間",
+      "oneToTwoWeeks": "1-2週間",
+      "epic": "エピック",
+      "unknown": "不明",
+      "break": "休憩"
+    },
+    "examples": {
+      "0": {
+        "example1": {
+          "title": "フィーチャーフラグを有効化",
+          "description": "設定でフラグを設定することで、既に実装された機能を有効化する。"
+        },
+        "example2": {
+          "title": "誤字を修正",
+          "description": "静的テキストまたはラベルの誤字を修正する。"
+        }
+      },
+      "1": {
+        "example1": {
+          "title": "アイコンを置換",
+          "description": "コンポーネント内の標準アイコンを新しいアイコンに置き換える。"
+        },
+        "example2": {
+          "title": "ツールチップを追加",
+          "description": "既存のUI要素にシンプルなツールチップを追加する。"
+        }
+      },
+      "2": {
+        "example1": {
+          "title": "新しいフォームフィールド",
+          "description": "フォームにバリデーション付きのオプション入力フィールドを追加する。"
+        },
+        "example2": {
+          "title": "シンプルなスタイル調整",
+          "description": "スタイルガイドに従ってコンポーネントの色やスペースを調整する。"
+        }
+      },
+      "3": {
+        "example1": {
+          "title": "リストをフィルター",
+          "description": "既存のリストにフィルター機能を実装する。"
+        },
+        "example2": {
+          "title": "ソートを追加",
+          "description": "テーブルに列のソート機能を拡張する。"
+        }
+      },
+      "5": {
+        "example1": {
+          "title": "CSVエクスポート",
+          "description": "ヘッダーとフォーマット付きでデータリストをCSVファイルとしてエクスポートする。"
+        },
+        "example2": {
+          "title": "ページネーションを実装",
+          "description": "ナビゲーション付きの記事リストのサーバーサイドページネーション。"
+        }
+      },
+      "8": {
+        "example1": {
+          "title": "メール通知",
+          "description": "特定のアクションに対する自動メール送信を実装する。"
+        },
+        "example2": {
+          "title": "ファイルアップロード",
+          "description": "プレビュー、バリデーション、エラーハンドリング付きのファイルアップロード。"
+        }
+      },
+      "13": {
+        "example1": {
+          "title": "マルチステップウィザード",
+          "description": "バリデーション、戻るナビゲーション、中間保存付きの3-4ステップウィザード。"
+        },
+        "example2": {
+          "title": "カスタマイズ可能なダッシュボード",
+          "description": "設定可能なウィジェット、ドラッグ&ドロップ、永続化機能付きダッシュボード。"
+        }
+      },
+      "21": {
+        "example1": {
+          "title": "ロールベースアクセス制御",
+          "description": "システム全体でユーザーロールに基づいて機能を表示/非表示にする。"
+        },
+        "example2": {
+          "title": "リアルタイム同期",
+          "description": "複数クライアント向けのWebSocketベースのリアルタイム更新。"
+        }
+      },
+      "40": {
+        "example1": {
+          "title": "キャッシュレイヤー",
+          "description": "無効化とキャッシュ戦略付きのサーバーサイドキャッシュを実装する。"
+        }
+      },
+      "100": {
+        "example1": {
+          "title": "システム全体の認証移行",
+          "description": "システム全体で新しい認証プロバイダーへの移行。"
+        }
+      },
+      "unknown": {
+        "example1": {
+          "title": "不明確な要件",
+          "description": "要件が明確でないため、工数を見積もれません。まず明確にしてください。"
+        }
+      },
+      "coffee": {
+        "example1": {
+          "title": "休憩 / 投票なし",
+          "description": "このストーリーは見積もり対象外、または休憩が必要です。"
+        }
+      }
+    }
   }
 }
