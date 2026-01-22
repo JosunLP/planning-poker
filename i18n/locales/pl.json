@@ -1,0 +1,137 @@
+{
+  "app": {
+    "name": "Planning Poker",
+    "tagline": "Uproszczone estymacje agile",
+    "footer": "Stworzone z {heart} i Nuxt 3"
+  },
+  "connection": {
+    "connected": "Połączono",
+    "connecting": "Łączenie...",
+    "disconnected": "Offline",
+    "error": "Błąd"
+  },
+  "home": {
+    "welcome": "Witamy w Planning Poker",
+    "subtitle": "Rozpocznij nową sesję lub dołącz do istniejącej.",
+    "newSession": "Nowa sesja",
+    "join": "Dołącz"
+  },
+  "session": {
+    "create": {
+      "title": "Utwórz nową sesję",
+      "sessionName": "Nazwa sesji",
+      "sessionNamePlaceholder": "np. Planowanie sprintu 42",
+      "yourName": "Twoje imię",
+      "yourNamePlaceholder": "np. Jan",
+      "button": "Utwórz sesję"
+    },
+    "join": {
+      "title": "Dołącz do sesji",
+      "joinCode": "Kod dołączenia",
+      "joinCodePlaceholder": "np. ABC123",
+      "yourName": "Twoje imię",
+      "yourNamePlaceholder": "np. Jan",
+      "asObserver": "Dołącz jako obserwator",
+      "observerHint": "Obserwatorzy mogą oglądać, ale nie głosować",
+      "button": "Dołącz do sesji",
+      "noCode": "Brak kodu?",
+      "createOwn": "Utwórz własną sesję"
+    },
+    "info": {
+      "sessionLabel": "Sesja:",
+      "shareCode": "Udostępnij kod",
+      "copiedToClipboard": "Skopiowano!",
+      "participantsOnline": "{count} uczestnik online | {count} uczestników online",
+      "leave": "Opuść"
+    },
+    "currentStory": "Aktualna historyjka",
+    "showDetails": "Pokaż szczegóły",
+    "waitingForHost": "Oczekiwanie na hosta, aby rozpoczął następną rundę..."
+  },
+  "participants": {
+    "title": "Uczestnicy",
+    "you": "Ty",
+    "host": "Host",
+    "observer": "Obserwator",
+    "voted": "Zagłosował",
+    "notVoted": "Nie zagłosował"
+  },
+  "controls": {
+    "title": "Sterowanie hosta",
+    "startVoting": "Rozpocznij głosowanie",
+    "storyTitle": "Tytuł historyjki",
+    "storyTitlePlaceholder": "np. Jako użytkownik chcę...",
+    "description": "Opis",
+    "descriptionPlaceholder": "Dodaj opis lub kryteria akceptacji...",
+    "revealCards": "Odkryj karty",
+    "allVotesIn": "Wszystkie głosy oddane!",
+    "votingInProgress": "Głosowanie w toku",
+    "votingComplete": "Głosowanie zakończone",
+    "waitingForVotes": "Oczekiwanie na głosy... ({count}/{total})",
+    "resetVoting": "Resetuj głosowanie",
+    "nextStory": "Następna historyjka",
+    "hostOnly": "Tylko host może sterować sesją"
+  },
+  "cards": {
+    "chooseEstimate": "Wybierz swoją estymację",
+    "selectedCard": "Wybrana karta: {value}"
+  },
+  "results": {
+    "title": "Wyniki",
+    "average": "Średnia",
+    "median": "Mediana",
+    "votes": "Głosy",
+    "consensus": "Konsensus!",
+    "allAgreed": "Wszyscy uczestnicy zgodzili się na {value}",
+    "hiddenUntilReveal": "Wyniki zostaną wyświetlone po odsłonięciu kart."
+  },
+  "storyQueue": {
+    "title": "Kolejka historyjek",
+    "addStory": "Dodaj historyjkę",
+    "addToQueue": "Dodaj do kolejki",
+    "storyTitlePlaceholder": "Tytuł historyjki",
+    "descriptionPlaceholder": "Opis (opcjonalny, obsługa Markdown)",
+    "markdownSupported": "Markdown jest obsługiwany",
+    "optional": "opcjonalne",
+    "remaining": "Pozostała {count} historyjka | Pozostało {count} historyjek",
+    "estimated": "Oszacowana",
+    "notEstimated": "Nieoszacowana",
+    "edit": "Edytuj",
+    "remove": "Usuń",
+    "save": "Zapisz",
+    "cancel": "Anuluj"
+  },
+  "storyPreview": {
+    "close": "Zamknij",
+    "noDescription": "Brak dostępnego opisu."
+  },
+  "observer": {
+    "hint": "Uczestniczysz jako obserwator i nie możesz głosować."
+  },
+  "features": {
+    "teamEstimation": {
+      "title": "Estymacja zespołowa",
+      "description": "Szacuj w czasie rzeczywistym razem z zespołem."
+    },
+    "statistics": {
+      "title": "Statystyki",
+      "description": "Zobacz średnią, medianę i rozkład głosów."
+    },
+    "quickEasy": {
+      "title": "Szybko i prosto",
+      "description": "Bez rejestracji. Zacznij od razu!"
+    }
+  },
+  "errors": {
+    "fillAllFields": "Proszę wypełnić wszystkie pola.",
+    "invalidJoinCode": "Kod dołączenia musi mieć 6 znaków.",
+    "connectionFailed": "Nie udało się połączyć z serwerem. Spróbuj ponownie.",
+    "sessionNotFound": "Nie znaleziono sesji. Sprawdź kod.",
+    "notAuthorized": "Nie masz uprawnień do wykonania tej akcji.",
+    "voteFailed": "Nie udało się zapisać głosu.",
+    "invalidMessage": "Nieprawidłowa wiadomość"
+  },
+  "alert": {
+    "close": "Zamknij"
+  }
+}

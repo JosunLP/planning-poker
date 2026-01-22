@@ -1,0 +1,137 @@
+{
+  "app": {
+    "name": "Planning Poker",
+    "tagline": "Estimation agile simplifiée",
+    "footer": "Créé avec {heart} et Nuxt 3"
+  },
+  "connection": {
+    "connected": "Connecté",
+    "connecting": "Connexion...",
+    "disconnected": "Hors ligne",
+    "error": "Erreur"
+  },
+  "home": {
+    "welcome": "Bienvenue sur Planning Poker",
+    "subtitle": "Démarrez une nouvelle session ou rejoignez-en une existante.",
+    "newSession": "Nouvelle session",
+    "join": "Rejoindre"
+  },
+  "session": {
+    "create": {
+      "title": "Créer une nouvelle session",
+      "sessionName": "Nom de la session",
+      "sessionNamePlaceholder": "ex. Planification sprint 42",
+      "yourName": "Votre nom",
+      "yourNamePlaceholder": "ex. Jean",
+      "button": "Créer la session"
+    },
+    "join": {
+      "title": "Rejoindre la session",
+      "joinCode": "Code d'accès",
+      "joinCodePlaceholder": "ex. ABC123",
+      "yourName": "Votre nom",
+      "yourNamePlaceholder": "ex. Jean",
+      "asObserver": "Rejoindre comme observateur",
+      "observerHint": "Les observateurs peuvent regarder mais ne peuvent pas voter",
+      "button": "Rejoindre la session",
+      "noCode": "Pas de code ?",
+      "createOwn": "Créez votre propre session"
+    },
+    "info": {
+      "sessionLabel": "Session :",
+      "shareCode": "Partager le code",
+      "copiedToClipboard": "Copié !",
+      "participantsOnline": "{count} participant en ligne | {count} participants en ligne",
+      "leave": "Quitter"
+    },
+    "currentStory": "Histoire en cours",
+    "showDetails": "Afficher les détails",
+    "waitingForHost": "En attente que l'hôte lance la prochaine manche..."
+  },
+  "participants": {
+    "title": "Participants",
+    "you": "Vous",
+    "host": "Hôte",
+    "observer": "Observateur",
+    "voted": "A voté",
+    "notVoted": "N'a pas voté"
+  },
+  "controls": {
+    "title": "Contrôles de l'hôte",
+    "startVoting": "Démarrer le vote",
+    "storyTitle": "Titre de l'histoire",
+    "storyTitlePlaceholder": "ex. En tant qu'utilisateur, je veux...",
+    "description": "Description",
+    "descriptionPlaceholder": "Ajouter une description ou des critères d'acceptation...",
+    "revealCards": "Révéler les cartes",
+    "allVotesIn": "Tous les votes sont arrivés !",
+    "votingInProgress": "Vote en cours",
+    "votingComplete": "Vote terminé",
+    "waitingForVotes": "En attente des votes... ({count}/{total})",
+    "resetVoting": "Réinitialiser le vote",
+    "nextStory": "Histoire suivante",
+    "hostOnly": "Seul l'hôte peut contrôler la session"
+  },
+  "cards": {
+    "chooseEstimate": "Choisissez votre estimation",
+    "selectedCard": "Carte sélectionnée : {value}"
+  },
+  "results": {
+    "title": "Résultats",
+    "average": "Moyenne",
+    "median": "Médiane",
+    "votes": "Votes",
+    "consensus": "Consensus !",
+    "allAgreed": "Tous les participants sont d'accord sur {value}",
+    "hiddenUntilReveal": "Les résultats s'afficheront une fois les cartes révélées."
+  },
+  "storyQueue": {
+    "title": "File d'histoires",
+    "addStory": "Ajouter une histoire",
+    "addToQueue": "Ajouter à la file",
+    "storyTitlePlaceholder": "Titre de l'histoire",
+    "descriptionPlaceholder": "Description (optionnelle, Markdown pris en charge)",
+    "markdownSupported": "Markdown est pris en charge",
+    "optional": "optionnel",
+    "remaining": "{count} histoire restante | {count} histoires restantes",
+    "estimated": "Estimée",
+    "notEstimated": "Non estimée",
+    "edit": "Modifier",
+    "remove": "Supprimer",
+    "save": "Enregistrer",
+    "cancel": "Annuler"
+  },
+  "storyPreview": {
+    "close": "Fermer",
+    "noDescription": "Aucune description disponible."
+  },
+  "observer": {
+    "hint": "Vous participez en tant qu'observateur et ne pouvez pas voter."
+  },
+  "features": {
+    "teamEstimation": {
+      "title": "Estimation en équipe",
+      "description": "Estimez en temps réel avec votre équipe."
+    },
+    "statistics": {
+      "title": "Statistiques",
+      "description": "Consultez la moyenne, la médiane et la répartition des votes."
+    },
+    "quickEasy": {
+      "title": "Rapide et simple",
+      "description": "Aucune inscription requise. Lancez-vous immédiatement !"
+    }
+  },
+  "errors": {
+    "fillAllFields": "Veuillez remplir tous les champs.",
+    "invalidJoinCode": "Le code d'accès doit comporter 6 caractères.",
+    "connectionFailed": "Impossible de se connecter au serveur. Veuillez réessayer.",
+    "sessionNotFound": "Session introuvable. Veuillez vérifier le code.",
+    "notAuthorized": "Vous n'êtes pas autorisé à effectuer cette action.",
+    "voteFailed": "Le vote n'a pas pu être enregistré.",
+    "invalidMessage": "Message invalide"
+  },
+  "alert": {
+    "close": "Fermer"
+  }
+}

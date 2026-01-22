@@ -1,0 +1,137 @@
+{
+  "app": {
+    "name": "Planning Poker",
+    "tagline": "Agile schatten eenvoudig",
+    "footer": "Gemaakt met {heart} en Nuxt 3"
+  },
+  "connection": {
+    "connected": "Verbonden",
+    "connecting": "Verbinding maken...",
+    "disconnected": "Offline",
+    "error": "Fout"
+  },
+  "home": {
+    "welcome": "Welkom bij Planning Poker",
+    "subtitle": "Start een nieuwe sessie of sluit je aan bij een bestaande.",
+    "newSession": "Nieuwe sessie",
+    "join": "Deelnemen"
+  },
+  "session": {
+    "create": {
+      "title": "Nieuwe sessie maken",
+      "sessionName": "Sessienaam",
+      "sessionNamePlaceholder": "bijv. Sprint 42 planning",
+      "yourName": "Jouw naam",
+      "yourNamePlaceholder": "bijv. Jan",
+      "button": "Sessie maken"
+    },
+    "join": {
+      "title": "Deelnemen aan sessie",
+      "joinCode": "Toegangscode",
+      "joinCodePlaceholder": "bijv. ABC123",
+      "yourName": "Jouw naam",
+      "yourNamePlaceholder": "bijv. Jan",
+      "asObserver": "Deelnemen als toeschouwer",
+      "observerHint": "Toeschouwers kunnen kijken maar niet stemmen",
+      "button": "Meedoen",
+      "noCode": "Geen code?",
+      "createOwn": "Maak je eigen sessie"
+    },
+    "info": {
+      "sessionLabel": "Sessie:",
+      "shareCode": "Code delen",
+      "copiedToClipboard": "Gekopieerd!",
+      "participantsOnline": "{count} deelnemer online | {count} deelnemers online",
+      "leave": "Verlaten"
+    },
+    "currentStory": "Huidige story",
+    "showDetails": "Details tonen",
+    "waitingForHost": "Wachten tot de host de volgende ronde start..."
+  },
+  "participants": {
+    "title": "Deelnemers",
+    "you": "Jij",
+    "host": "Host",
+    "observer": "Toeschouwer",
+    "voted": "Gestemd",
+    "notVoted": "Niet gestemd"
+  },
+  "controls": {
+    "title": "Host-bediening",
+    "startVoting": "Start stemming",
+    "storyTitle": "Storytitel",
+    "storyTitlePlaceholder": "bijv. Als gebruiker wil ik...",
+    "description": "Beschrijving",
+    "descriptionPlaceholder": "Voeg een beschrijving of acceptatiecriteria toe...",
+    "revealCards": "Kaarten onthullen",
+    "allVotesIn": "Alle stemmen zijn binnen!",
+    "votingInProgress": "Stemming bezig",
+    "votingComplete": "Stemming voltooid",
+    "waitingForVotes": "Wachten op stemmen... ({count}/{total})",
+    "resetVoting": "Stemming resetten",
+    "nextStory": "Volgende story",
+    "hostOnly": "Alleen de host kan de sessie bedienen"
+  },
+  "cards": {
+    "chooseEstimate": "Kies je schatting",
+    "selectedCard": "Geselecteerde kaart: {value}"
+  },
+  "results": {
+    "title": "Resultaten",
+    "average": "Gemiddelde",
+    "median": "Mediaan",
+    "votes": "Stemmen",
+    "consensus": "Consensus!",
+    "allAgreed": "Alle deelnemers stemden in met {value}",
+    "hiddenUntilReveal": "Resultaten worden getoond zodra de kaarten zijn onthuld."
+  },
+  "storyQueue": {
+    "title": "Story-queue",
+    "addStory": "Story toevoegen",
+    "addToQueue": "Toevoegen aan queue",
+    "storyTitlePlaceholder": "Titel van de story",
+    "descriptionPlaceholder": "Beschrijving (optioneel, Markdown ondersteund)",
+    "markdownSupported": "Markdown wordt ondersteund",
+    "optional": "optioneel",
+    "remaining": "{count} story resterend | {count} stories resterend",
+    "estimated": "Ingeschat",
+    "notEstimated": "Niet ingeschat",
+    "edit": "Bewerken",
+    "remove": "Verwijderen",
+    "save": "Opslaan",
+    "cancel": "Annuleren"
+  },
+  "storyPreview": {
+    "close": "Sluiten",
+    "noDescription": "Geen beschrijving beschikbaar."
+  },
+  "observer": {
+    "hint": "Je neemt deel als toeschouwer en kunt niet stemmen."
+  },
+  "features": {
+    "teamEstimation": {
+      "title": "Teamschatting",
+      "description": "Schat samen met je team in real time."
+    },
+    "statistics": {
+      "title": "Statistieken",
+      "description": "Zie gemiddelde, mediaan en stemverdeling."
+    },
+    "quickEasy": {
+      "title": "Snel en eenvoudig",
+      "description": "Geen registratie nodig. Begin direct!"
+    }
+  },
+  "errors": {
+    "fillAllFields": "Vul alle velden in.",
+    "invalidJoinCode": "De toegangscode moet 6 tekens lang zijn.",
+    "connectionFailed": "Kon geen verbinding maken met de server. Probeer opnieuw.",
+    "sessionNotFound": "Sessie niet gevonden. Controleer de code.",
+    "notAuthorized": "Je bent niet bevoegd om deze actie uit te voeren.",
+    "voteFailed": "Stem kon niet worden opgeslagen.",
+    "invalidMessage": "Ongeldig bericht"
+  },
+  "alert": {
+    "close": "Sluiten"
+  }
+}

@@ -11,7 +11,8 @@
     "preview": "nuxt preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "test": "bun test"
   },
   "dependencies": {
     "@nuxt/content": "^3.9.0",
@@ -31,6 +32,7 @@
     "@iconify-json/heroicons": "^1.2.3",
     "@nuxtjs/tailwindcss": "^6.14.0",
     "@tailwindcss/typography": "^0.5.19",
+    "bun-types": "^1.1.34",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.1.7"
   }

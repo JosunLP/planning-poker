@@ -5,7 +5,7 @@
  * Encapsulates the logic for participant actions.
  */
 
-import type { IParticipant, PokerValue } from '~/types'
+import type { IParticipant, PokerValue } from '../types'
 
 /**
  * Class for managing a session participant
