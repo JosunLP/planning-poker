@@ -14,11 +14,7 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
 
-  future: {
-    compatibilityVersion: 4,
-  },
-
-  compatibilityDate: '2024-04-03',
+  compatibilityDate: '2026-01-22',
 
   /**
    * TypeScript Configuration
