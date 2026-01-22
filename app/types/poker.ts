@@ -7,9 +7,9 @@
 
 /**
  * Standard Poker Card Values
- * Fibonacci-based with additional options
+ * Modified Fibonacci-based with additional options
  */
-export const POKER_VALUES = ['0', '0.5', '1', '2', '3', '5', '8', '13', '21', '34', '55', '89', '?', '☕'] as const
+export const POKER_VALUES = ['0', '1', '2', '3', '5', '8', '13', '21', '40', '100', '?', '☕'] as const
 
 /**
  * Type for a poker card value

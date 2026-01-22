@@ -51,6 +51,11 @@ const parsedDescription = computed(() => {
 const showStoryPreview = ref(false)
 
 /**
+ * Story Examples Modal State
+ */
+const showStoryExamples = ref(false)
+
+/**
  * Route for Join-Code from URL
  */
 const route = useRoute()
@@ -243,6 +248,18 @@ function switchMode(newMode: 'create' | 'join'): void {
             </p>
           </div>
         </div>
+
+        <!-- Story Examples Button -->
+        <div class="mt-8 text-center">
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-primary-600 bg-primary-50 hover:bg-primary-100 rounded-lg transition-colors border border-primary-200"
+            @click="showStoryExamples = true"
+          >
+            <Icon name="heroicons:book-open" class="w-5 h-5" />
+            {{ t('storyExamples.openButton') }}
+          </button>
+        </div>
       </div>
 
       <!-- Session active -->
@@ -332,6 +349,17 @@ function switchMode(newMode: 'create' | 'join'): void {
                 :disabled="session.cardsRevealed"
                 @select="selectCard"
               />
+              <!-- Story Examples Help Button -->
+              <div class="mt-4 text-center">
+                <button
+                  type="button"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-secondary-500 hover:text-primary-600 bg-secondary-50 hover:bg-primary-50 rounded-lg transition-colors"
+                  @click="showStoryExamples = true"
+                >
+                  <Icon name="heroicons:book-open" class="w-4 h-4" />
+                  {{ t('storyExamples.openButton') }}
+                </button>
+              </div>
             </div>
 
             <!-- Observer hint -->
@@ -385,6 +413,12 @@ function switchMode(newMode: 'create' | 'join'): void {
       :title="session.currentStory || ''"
       :description="session.currentStoryDescription"
       @close="showStoryPreview = false"
+    />
+
+    <!-- Story Examples Modal -->
+    <StoryExamplesModal
+      :visible="showStoryExamples"
+      @close="showStoryExamples = false"
     />
   </div>
 </template>

@@ -133,5 +133,145 @@
   },
   "alert": {
     "close": "Schließen"
+  },
+  "storyExamples": {
+    "title": "Beispiel-Storys",
+    "subtitle": "Referenzbeispiele für Story-Point-Schätzungen",
+    "selectPoints": "Story Points wählen",
+    "selectPrompt": "Wähle links einen Story-Point-Wert, um Beispiele zu sehen.",
+    "points": "Story Points",
+    "riskLabel": "Risiko",
+    "hint": "Diese Beispiele dienen als Orientierung. Passe sie an die Konventionen und Domäne deines Teams an.",
+    "close": "Schließen",
+    "openButton": "Beispiele anzeigen",
+    "efforts": {
+      "minimal": "Minimal",
+      "verySmall": "Sehr klein",
+      "small": "Klein",
+      "halfDay": "Halber Tag",
+      "oneToTwoDays": "1-2 Tage",
+      "twoToThreeDays": "2-3 Tage",
+      "threeToFiveDays": "3-5 Tage",
+      "oneWeek": "1 Woche",
+      "oneToTwoWeeks": "1-2 Wochen",
+      "epic": "Epic",
+      "unknown": "Unbekannt",
+      "break": "Pause"
+    },
+    "risks": {
+      "none": "Kein Risiko",
+      "low": "Gering",
+      "moderate": "Moderat",
+      "elevated": "Erhöht",
+      "high": "Hoch",
+      "veryHigh": "Sehr hoch",
+      "unknown": "Unbekannt"
+    },
+    "examples": {
+      "0": {
+        "example1": {
+          "title": "Feature-Flag aktivieren",
+          "description": "Ein bereits implementiertes Feature durch Setzen eines Flags in der Konfiguration aktivieren."
+        },
+        "example2": {
+          "title": "Tippfehler korrigieren",
+          "description": "Einen Tippfehler in einem statischen Text oder Label beheben."
+        }
+      },
+      "1": {
+        "example1": {
+          "title": "Icon austauschen",
+          "description": "Ein Standard-Icon gegen ein neues Icon in einer Komponente ersetzen."
+        },
+        "example2": {
+          "title": "Tooltip hinzufügen",
+          "description": "Einen einfachen Tooltip zu einem vorhandenen UI-Element hinzufügen."
+        }
+      },
+      "2": {
+        "example1": {
+          "title": "Neues Formularfeld",
+          "description": "Ein zusätzliches optionales Eingabefeld mit Validierung zu einem Formular hinzufügen."
+        },
+        "example2": {
+          "title": "Einfache Stilanpassung",
+          "description": "Farben oder Abstände einer Komponente gemäß Styleguide anpassen."
+        }
+      },
+      "3": {
+        "example1": {
+          "title": "Liste filtern",
+          "description": "Eine Filterfunktion für eine bestehende Liste implementieren."
+        },
+        "example2": {
+          "title": "Sortierung hinzufügen",
+          "description": "Eine Tabelle um Sortierfunktion für eine Spalte erweitern."
+        }
+      },
+      "5": {
+        "example1": {
+          "title": "CSV-Export",
+          "description": "Export einer Datenliste als CSV-Datei mit Header und Formatierung."
+        },
+        "example2": {
+          "title": "Pagination implementieren",
+          "description": "Serverseitige Pagination für eine Artikelliste mit Navigation."
+        }
+      },
+      "8": {
+        "example1": {
+          "title": "E-Mail-Benachrichtigung",
+          "description": "Automatischen E-Mail-Versand bei bestimmten Aktionen implementieren."
+        },
+        "example2": {
+          "title": "Datei-Upload",
+          "description": "Datei-Upload mit Vorschau, Validierung und Fehlerbehandlung."
+        }
+      },
+      "13": {
+        "example1": {
+          "title": "Mehrstufiger Wizard",
+          "description": "Ein 3-4 stufiger Wizard mit Validierung, Zurück-Navigation und Zwischenspeicherung."
+        },
+        "example2": {
+          "title": "Anpassbares Dashboard",
+          "description": "Dashboard mit konfigurierbaren Widgets, Drag & Drop und Persistenz."
+        }
+      },
+      "21": {
+        "example1": {
+          "title": "Rollenbasierte Zugriffssteuerung",
+          "description": "Features basierend auf Benutzerrollen ein-/ausblenden im gesamten System."
+        },
+        "example2": {
+          "title": "Echtzeit-Synchronisation",
+          "description": "WebSocket-basierte Echtzeit-Updates für mehrere Clients."
+        }
+      },
+      "40": {
+        "example1": {
+          "title": "Caching-Layer",
+          "description": "Serverseitiges Caching mit Invalidierung und Cache-Strategien implementieren."
+        }
+      },
+      "100": {
+        "example1": {
+          "title": "Systemweite Auth-Umstellung",
+          "description": "Migration zu einem neuen Authentifizierungs-Provider im gesamten System."
+        }
+      },
+      "unknown": {
+        "example1": {
+          "title": "Unklare Anforderungen",
+          "description": "Die Anforderungen sind nicht klar genug, um den Aufwand zu schätzen. Zuerst klären."
+        }
+      },
+      "coffee": {
+        "example1": {
+          "title": "Pause / Kein Voting",
+          "description": "Diese Story wird nicht geschätzt oder eine Pause ist nötig."
+        }
+      }
+    }
   }
 }
