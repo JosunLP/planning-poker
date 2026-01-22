@@ -144,6 +144,31 @@
     "hint": "这些示例仅供参考，可根据团队约定和领域进行调整。",
     "close": "关闭",
     "openButton": "查看示例",
+    "tabs": {
+      "examples": "示例",
+      "matrix": "矩阵"
+    },
+    "matrix": {
+      "title": "风险‑复杂度矩阵",
+      "subtitle": "根据风险与复杂度的关系推导 Story Points",
+      "levels": {
+        "low": "低",
+        "medium": "中",
+        "high": "高"
+      },
+      "cells": {
+        "lowLow": "0–1",
+        "lowMedium": "2–3",
+        "lowHigh": "5",
+        "mediumLow": "2–3",
+        "mediumMedium": "5",
+        "mediumHigh": "8–13",
+        "highLow": "5–8",
+        "highMedium": "13",
+        "highHigh": "21+"
+      },
+      "hint": "风险和复杂度越高，点数越高。不确定性高时选择 ?。"
+    },
     "efforts": {
       "minimal": "最小",
       "verySmall": "很小",

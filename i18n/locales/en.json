@@ -144,6 +144,31 @@
     "hint": "These examples serve as guidance. Adapt them to your team's conventions and domain.",
     "close": "Close",
     "openButton": "View Examples",
+    "tabs": {
+      "examples": "Examples",
+      "matrix": "Matrix"
+    },
+    "matrix": {
+      "title": "Risk vs Complexity Matrix",
+      "subtitle": "Derive story points from the risk-to-complexity ratio",
+      "levels": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "cells": {
+        "lowLow": "0–1",
+        "lowMedium": "2–3",
+        "lowHigh": "5",
+        "mediumLow": "2–3",
+        "mediumMedium": "5",
+        "mediumHigh": "8–13",
+        "highLow": "5–8",
+        "highMedium": "13",
+        "highHigh": "21+"
+      },
+      "hint": "Higher risk and complexity lead to higher points. If uncertainty is high, choose ?."
+    },
     "efforts": {
       "minimal": "Minimal",
       "verySmall": "Very small",

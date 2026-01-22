@@ -144,6 +144,31 @@
     "hint": "Ces exemples servent de guide. Adaptez-les aux conventions et au domaine de votre équipe.",
     "close": "Fermer",
     "openButton": "Voir les Exemples",
+    "tabs": {
+      "examples": "Exemples",
+      "matrix": "Matrice"
+    },
+    "matrix": {
+      "title": "Matrice Risque vs Complexité",
+      "subtitle": "Déduire les story points du ratio risque‑complexité",
+      "levels": {
+        "low": "Faible",
+        "medium": "Moyen",
+        "high": "Élevé"
+      },
+      "cells": {
+        "lowLow": "0–1",
+        "lowMedium": "2–3",
+        "lowHigh": "5",
+        "mediumLow": "2–3",
+        "mediumMedium": "5",
+        "mediumHigh": "8–13",
+        "highLow": "5–8",
+        "highMedium": "13",
+        "highHigh": "21+"
+      },
+      "hint": "Plus le risque et la complexité sont élevés, plus les points sont élevés. En cas d'incertitude, choisissez ?."
+    },
     "risks": {
       "none": "Aucun risque",
       "low": "Faible",

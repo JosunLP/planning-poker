@@ -144,6 +144,31 @@
     "hint": "これらの例はガイドラインです。チームの慣例とドメインに合わせて調整してください。",
     "close": "閉じる",
     "openButton": "例を表示",
+    "tabs": {
+      "examples": "例",
+      "matrix": "マトリクス"
+    },
+    "matrix": {
+      "title": "リスク×複雑性マトリクス",
+      "subtitle": "リスクと複雑性の比率からストーリーポイントを導出",
+      "levels": {
+        "low": "低",
+        "medium": "中",
+        "high": "高"
+      },
+      "cells": {
+        "lowLow": "0–1",
+        "lowMedium": "2–3",
+        "lowHigh": "5",
+        "mediumLow": "2–3",
+        "mediumMedium": "5",
+        "mediumHigh": "8–13",
+        "highLow": "5–8",
+        "highMedium": "13",
+        "highHigh": "21+"
+      },
+      "hint": "リスクと複雑性が高いほどポイントも高くなります。不確実性が高い場合は ? を選択。"
+    },
     "risks": {
       "none": "リスクなし",
       "low": "低",

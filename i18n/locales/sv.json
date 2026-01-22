@@ -144,6 +144,31 @@
     "hint": "Dessa exempel är vägledande. Anpassa dem efter teamets konventioner och domän.",
     "close": "Stäng",
     "openButton": "Visa exempel",
+    "tabs": {
+      "examples": "Exempel",
+      "matrix": "Matris"
+    },
+    "matrix": {
+      "title": "Risk‑ och komplexitetsmatris",
+      "subtitle": "Härled story points från risk‑till‑komplexitet",
+      "levels": {
+        "low": "Låg",
+        "medium": "Medel",
+        "high": "Hög"
+      },
+      "cells": {
+        "lowLow": "0–1",
+        "lowMedium": "2–3",
+        "lowHigh": "5",
+        "mediumLow": "2–3",
+        "mediumMedium": "5",
+        "mediumHigh": "8–13",
+        "highLow": "5–8",
+        "highMedium": "13",
+        "highHigh": "21+"
+      },
+      "hint": "Ju högre risk och komplexitet, desto högre poäng. Vid hög osäkerhet, välj ?."
+    },
     "efforts": {
       "minimal": "Minimal",
       "verySmall": "Mycket liten",

@@ -144,6 +144,31 @@
     "hint": "Deze voorbeelden dienen als richtlijn. Pas ze aan aan de conventies en het domein van je team.",
     "close": "Sluiten",
     "openButton": "Bekijk Voorbeelden",
+    "tabs": {
+      "examples": "Voorbeelden",
+      "matrix": "Matrix"
+    },
+    "matrix": {
+      "title": "Risico‑complexiteitsmatrix",
+      "subtitle": "Leid story points af uit de verhouding risico/complexiteit",
+      "levels": {
+        "low": "Laag",
+        "medium": "Gemiddeld",
+        "high": "Hoog"
+      },
+      "cells": {
+        "lowLow": "0–1",
+        "lowMedium": "2–3",
+        "lowHigh": "5",
+        "mediumLow": "2–3",
+        "mediumMedium": "5",
+        "mediumHigh": "8–13",
+        "highLow": "5–8",
+        "highMedium": "13",
+        "highHigh": "21+"
+      },
+      "hint": "Hoe hoger risico en complexiteit, hoe hoger de punten. Bij hoge onzekerheid kies ?."
+    },
     "risks": {
       "none": "Geen risico",
       "low": "Laag",

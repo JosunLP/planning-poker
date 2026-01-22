@@ -144,6 +144,31 @@
     "hint": "Diese Beispiele dienen als Orientierung. Passe sie an die Konventionen und Domäne deines Teams an.",
     "close": "Schließen",
     "openButton": "Beispiele anzeigen",
+    "tabs": {
+      "examples": "Beispiele",
+      "matrix": "Matrix"
+    },
+    "matrix": {
+      "title": "Risiko‑Komplexität‑Matrix",
+      "subtitle": "Story Points aus dem Verhältnis von Risiko und Komplexität ableiten",
+      "levels": {
+        "low": "Niedrig",
+        "medium": "Mittel",
+        "high": "Hoch"
+      },
+      "cells": {
+        "lowLow": "0–1",
+        "lowMedium": "2–3",
+        "lowHigh": "5",
+        "mediumLow": "2–3",
+        "mediumMedium": "5",
+        "mediumHigh": "8–13",
+        "highLow": "5–8",
+        "highMedium": "13",
+        "highHigh": "21+"
+      },
+      "hint": "Je höher Risiko und Komplexität, desto höher die Punkte. Bei hoher Unsicherheit ? wählen."
+    },
     "efforts": {
       "minimal": "Minimal",
       "verySmall": "Sehr klein",

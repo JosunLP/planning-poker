@@ -31,6 +31,11 @@ const emit = defineEmits<{
 const selectedPoints = ref<string | null>(null)
 
 /**
+ * Active tab in modal
+ */
+const selectedTab = ref<'examples' | 'matrix'>('examples')
+
+/**
  * Story point categories with examples
  */
 interface StoryExample {
@@ -301,6 +306,36 @@ const selectedCategory = computed(() => {
 })
 
 /**
+ * Matrix data for risk vs complexity
+ */
+const matrixRows = computed(() => [
+  {
+    label: t('storyExamples.matrix.levels.low'),
+    cells: [
+      t('storyExamples.matrix.cells.lowLow'),
+      t('storyExamples.matrix.cells.lowMedium'),
+      t('storyExamples.matrix.cells.lowHigh'),
+    ],
+  },
+  {
+    label: t('storyExamples.matrix.levels.medium'),
+    cells: [
+      t('storyExamples.matrix.cells.mediumLow'),
+      t('storyExamples.matrix.cells.mediumMedium'),
+      t('storyExamples.matrix.cells.mediumHigh'),
+    ],
+  },
+  {
+    label: t('storyExamples.matrix.levels.high'),
+    cells: [
+      t('storyExamples.matrix.cells.highLow'),
+      t('storyExamples.matrix.cells.highMedium'),
+      t('storyExamples.matrix.cells.highHigh'),
+    ],
+  },
+])
+
+/**
  * Close on Escape
  */
 function handleKeydown(e: KeyboardEvent): void {
@@ -315,6 +350,7 @@ function handleKeydown(e: KeyboardEvent): void {
 watch(() => props.visible, (isVisible) => {
   if (isVisible) {
     selectedPoints.value = null
+    selectedTab.value = 'examples'
   }
 })
 
@@ -368,8 +404,46 @@ onUnmounted(() => {
 
           <!-- Content -->
           <div class="flex-1 overflow-hidden flex flex-col md:flex-row">
+            <!-- Tabs -->
+            <div class="w-full flex md:hidden border-b border-secondary-100">
+              <button
+                type="button"
+                class="flex-1 px-4 py-3 text-sm font-medium transition-colors"
+                :class="selectedTab === 'examples' ? 'text-primary-700 border-b-2 border-primary-500' : 'text-secondary-600'"
+                @click="selectedTab = 'examples'"
+              >
+                {{ t('storyExamples.tabs.examples') }}
+              </button>
+              <button
+                type="button"
+                class="flex-1 px-4 py-3 text-sm font-medium transition-colors"
+                :class="selectedTab === 'matrix' ? 'text-primary-700 border-b-2 border-primary-500' : 'text-secondary-600'"
+                @click="selectedTab = 'matrix'"
+              >
+                {{ t('storyExamples.tabs.matrix') }}
+              </button>
+            </div>
+
             <!-- Story Point Selector -->
-            <div class="md:w-64 border-b md:border-b-0 md:border-r border-secondary-100 p-4 flex-shrink-0 overflow-y-auto">
+            <div v-show="selectedTab === 'examples'" class="md:w-64 border-b md:border-b-0 md:border-r border-secondary-100 p-4 flex-shrink-0 overflow-y-auto">
+              <div class="hidden md:flex gap-2 mb-4">
+                <button
+                  type="button"
+                  class="px-3 py-1.5 text-xs font-medium rounded-lg transition-colors"
+                  :class="selectedTab === 'examples' ? 'bg-primary-100 text-primary-700' : 'bg-secondary-100 text-secondary-600'"
+                  @click="selectedTab = 'examples'"
+                >
+                  {{ t('storyExamples.tabs.examples') }}
+                </button>
+                <button
+                  type="button"
+                  class="px-3 py-1.5 text-xs font-medium rounded-lg transition-colors"
+                  :class="selectedTab === 'matrix' ? 'bg-primary-100 text-primary-700' : 'bg-secondary-100 text-secondary-600'"
+                  @click="selectedTab = 'matrix'"
+                >
+                  {{ t('storyExamples.tabs.matrix') }}
+                </button>
+              </div>
               <div class="text-xs font-medium text-secondary-500 uppercase tracking-wide mb-3">
                 {{ t('storyExamples.selectPoints') }}
               </div>
@@ -389,15 +463,12 @@ onUnmounted(() => {
                   <div class="text-xl font-bold" :class="selectedPoints === category.value ? category.color : 'text-secondary-700'">
                     {{ category.label }}
                   </div>
-                  <div class="text-xs text-secondary-500 hidden md:block mt-1">
-                    {{ category.effort }}
-                  </div>
                 </button>
               </div>
             </div>
 
             <!-- Examples Display -->
-            <div class="flex-1 p-6 overflow-y-auto">
+            <div v-show="selectedTab === 'examples'" class="flex-1 p-6 overflow-y-auto">
               <Transition name="fade" mode="out-in">
                 <!-- No selection -->
                 <div v-if="!selectedCategory" class="text-center py-12">
@@ -422,10 +493,6 @@ onUnmounted(() => {
                         {{ selectedCategory.label }} {{ selectedCategory.value !== '?' && selectedCategory.value !== '☕' ? t('storyExamples.points') : '' }}
                       </div>
                       <div class="flex gap-4 text-sm text-secondary-600">
-                        <span class="flex items-center gap-1">
-                          <Icon name="heroicons:clock" class="w-4 h-4" />
-                          {{ selectedCategory.effort }}
-                        </span>
                         <span class="flex items-center gap-1">
                           <Icon name="heroicons:exclamation-triangle" class="w-4 h-4" />
                           {{ t('storyExamples.riskLabel') }}: {{ selectedCategory.risk }}
@@ -462,6 +529,55 @@ onUnmounted(() => {
                   </div>
                 </div>
               </Transition>
+            </div>
+
+            <!-- Matrix Display -->
+            <div v-show="selectedTab === 'matrix'" class="flex-1 p-6 overflow-y-auto">
+              <div class="mb-4">
+                <h4 class="text-lg font-bold text-secondary-800">
+                  {{ t('storyExamples.matrix.title') }}
+                </h4>
+                <p class="text-sm text-secondary-500">
+                  {{ t('storyExamples.matrix.subtitle') }}
+                </p>
+              </div>
+
+              <div class="overflow-x-auto">
+                <div class="min-w-[420px]">
+                  <div class="grid grid-cols-4 gap-2 text-xs font-medium text-secondary-500 mb-2">
+                    <div />
+                    <div class="text-center">{{ t('storyExamples.matrix.levels.low') }}</div>
+                    <div class="text-center">{{ t('storyExamples.matrix.levels.medium') }}</div>
+                    <div class="text-center">{{ t('storyExamples.matrix.levels.high') }}</div>
+                  </div>
+
+                  <div
+                    v-for="(row, index) in matrixRows"
+                    :key="index"
+                    class="grid grid-cols-4 gap-2 items-stretch"
+                  >
+                    <div class="flex items-center justify-end text-xs font-medium text-secondary-500 pr-2">
+                      {{ row.label }}
+                    </div>
+                    <div
+                      v-for="(cell, cellIndex) in row.cells"
+                      :key="cellIndex"
+                      class="bg-secondary-50 border border-secondary-100 rounded-lg p-3 text-center text-sm font-semibold text-secondary-800"
+                    >
+                      {{ cell }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 p-4 bg-accent-50 rounded-xl border border-accent-100">
+                <div class="flex items-start gap-3">
+                  <Icon name="heroicons:light-bulb" class="w-5 h-5 text-accent-600 flex-shrink-0 mt-0.5" />
+                  <p class="text-sm text-accent-700">
+                    {{ t('storyExamples.matrix.hint') }}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 

@@ -144,6 +144,31 @@
     "hint": "Questi esempi servono come guida. Adattali alle convenzioni e al dominio del tuo team.",
     "close": "Chiudi",
     "openButton": "Vedi Esempi",
+    "tabs": {
+      "examples": "Esempi",
+      "matrix": "Matrice"
+    },
+    "matrix": {
+      "title": "Matrice Rischio vs Complessità",
+      "subtitle": "Deriva gli story point dal rapporto rischio‑complessità",
+      "levels": {
+        "low": "Basso",
+        "medium": "Medio",
+        "high": "Alto"
+      },
+      "cells": {
+        "lowLow": "0–1",
+        "lowMedium": "2–3",
+        "lowHigh": "5",
+        "mediumLow": "2–3",
+        "mediumMedium": "5",
+        "mediumHigh": "8–13",
+        "highLow": "5–8",
+        "highMedium": "13",
+        "highHigh": "21+"
+      },
+      "hint": "Più rischio e complessità sono alti, più alti saranno i punti. In caso di incertezza, scegli ?."
+    },
     "risks": {
       "none": "Nessun rischio",
       "low": "Basso",
