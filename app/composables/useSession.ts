@@ -66,6 +66,11 @@ export function useSession() {
   }))
 
   /**
+   * Flag to ensure WebSocket handlers are registered only once per browser tab
+   */
+  const handlersRegistered = useState<boolean>('session-handlers-registered', () => false)
+
+  /**
    * Wait for connection if not yet connected
    */
   async function ensureConnected(): Promise<boolean> {
@@ -91,9 +96,10 @@ export function useSession() {
   }
 
   /**
-   * Register WebSocket event handlers
+   * Register WebSocket event handlers (only once per browser tab)
    */
-  if (import.meta.client) {
+  if (import.meta.client && !handlersRegistered.value) {
+    handlersRegistered.value = true
     // Session created
     on<SessionCreatedPayload>('session:created', (payload) => {
       state.value = {

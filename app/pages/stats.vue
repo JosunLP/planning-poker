@@ -296,7 +296,14 @@ useSeoMeta({
           <div class="bg-white rounded-xl shadow-sm border border-secondary-100 p-3 sm:p-4">
             <h3 class="text-xs sm:text-sm font-medium text-secondary-600 mb-2 sm:mb-3">{{ t('stats.charts.pointsOverTime') }}</h3>
             <div class="h-48 sm:h-56">
-              <StatsLineChart :data="pointsTimeSeries" />
+              <ClientOnly>
+                <StatsLineChart :data="pointsTimeSeries" />
+                <template #fallback>
+                  <div class="h-full flex items-center justify-center text-secondary-400">
+                    <Icon name="heroicons:chart-bar" class="w-8 h-8 animate-pulse" />
+                  </div>
+                </template>
+              </ClientOnly>
             </div>
           </div>
 
@@ -304,7 +311,14 @@ useSeoMeta({
           <div class="bg-white rounded-xl shadow-sm border border-secondary-100 p-3 sm:p-4">
             <h3 class="text-xs sm:text-sm font-medium text-secondary-600 mb-2 sm:mb-3">{{ t('stats.charts.cardFrequency') }}</h3>
             <div class="h-48 sm:h-56">
-              <StatsBarChart :data="cardFrequency" />
+              <ClientOnly>
+                <StatsBarChart :data="cardFrequency" />
+                <template #fallback>
+                  <div class="h-full flex items-center justify-center text-secondary-400">
+                    <Icon name="heroicons:chart-bar" class="w-8 h-8 animate-pulse" />
+                  </div>
+                </template>
+              </ClientOnly>
             </div>
           </div>
 
@@ -312,10 +326,17 @@ useSeoMeta({
           <div class="bg-white rounded-xl shadow-sm border border-secondary-100 p-3 sm:p-4 md:col-span-2 lg:col-span-1">
             <h3 class="text-xs sm:text-sm font-medium text-secondary-600 mb-2 sm:mb-3">{{ t('stats.charts.consensusDistribution') }}</h3>
             <div class="h-48 sm:h-56">
-              <StatsDoughnutChart
-                :consensus="consensusDistribution.consensus"
-                :no-consensus="consensusDistribution.noConsensus"
-              />
+              <ClientOnly>
+                <StatsDoughnutChart
+                  :consensus="consensusDistribution.consensus"
+                  :no-consensus="consensusDistribution.noConsensus"
+                />
+                <template #fallback>
+                  <div class="h-full flex items-center justify-center text-secondary-400">
+                    <Icon name="heroicons:chart-pie" class="w-8 h-8 animate-pulse" />
+                  </div>
+                </template>
+              </ClientOnly>
             </div>
           </div>
         </div>
