@@ -5,7 +5,7 @@
 
 ---
 
-## Wann wird „☕" verwendet?
+## Wann wird „☕“ verwendet?
 
 Die Kaffeetassen-Karte hat verschiedene Bedeutungen im Planning Poker:
 
