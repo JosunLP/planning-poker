@@ -33,7 +33,7 @@ export class Session implements ISession {
   public storyQueue: IStory[]
   public currentStoryIndex: number
 
-  public config: ISessionConfig
+  private _config: ISessionConfig
   private votingHistory: IVotingResult[]
 
   /**
@@ -54,7 +54,7 @@ export class Session implements ISession {
     this.cardsRevealed = false
     this.createdAt = new Date()
     this.updatedAt = new Date()
-    this.config = { ...DEFAULT_SESSION_CONFIG, ...config }
+    this._config = { ...DEFAULT_SESSION_CONFIG, ...config }
     this.votingHistory = []
     this.storyQueue = []
     this.currentStoryIndex = -1
@@ -71,7 +71,7 @@ export class Session implements ISession {
       return false
     }
 
-    if (participant.isObserver && !this.config.allowObservers) {
+    if (participant.isObserver && !this._config.allowObservers) {
       return false
     }
 
@@ -142,7 +142,7 @@ export class Session implements ISession {
    * Reveals cards automatically when configured and all votes are in
    */
   public revealCardsIfReady(): IVotingResult | null {
-    if (!this.config.autoReveal || !this.allVotesIn()) {
+    if (!this._config.autoReveal || !this.allVotesIn()) {
       return null
     }
 
@@ -163,7 +163,7 @@ export class Session implements ISession {
    * Updates the session configuration
    */
   public updateConfig(config: Partial<ISessionConfig>): void {
-    this.config = { ...this.config, ...config }
+    this._config = { ...this._config, ...config }
     this.touch()
   }
 
@@ -288,7 +288,14 @@ export class Session implements ISession {
    * Returns the available card values
    */
   public getCardValues(): readonly PokerValue[] {
-    return this.config.cardValues
+    return this._config.cardValues
+  }
+
+  /**
+   * Returns the session configuration
+   */
+  public get config(): ISessionConfig {
+    return { ...this._config }
   }
 
   /**
@@ -334,9 +341,9 @@ export class Session implements ISession {
       updatedAt: new Date(data.updatedAt),
       storyQueue: data.storyQueue ?? [],
       currentStoryIndex: data.currentStoryIndex ?? -1,
-      config: { ...DEFAULT_SESSION_CONFIG, ...data.config, ...config },
     })
 
+    session._config = { ...DEFAULT_SESSION_CONFIG, ...data.config, ...config }
     session.participants = data.participants.map(p => Participant.fromJSON(p))
     return session
   }
