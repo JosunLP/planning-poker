@@ -144,6 +144,7 @@ function handleJoinSession(peer: Peer, payload: JoinSessionPayload): void {
     payload.participantName,
     payload.asObserver,
     peer,
+    payload.participantId,
   )
 
   if (!result) {
@@ -193,6 +194,26 @@ function handleLeaveSession(peer: Peer): void {
       session: result.session,
     })
   }
+}
+
+/**
+ * Handles an unexpected disconnect
+ */
+function handleDisconnect(peer: Peer): void {
+  const result = sessionStore.disconnectPeer(peer)
+
+  if (!result?.session) {
+    return
+  }
+
+  broadcastToSession(result.sessionId, 'participant:left', {
+    participantId: result.participantId,
+    sessionId: result.sessionId,
+  })
+
+  broadcastToSession(result.sessionId, 'session:updated', {
+    session: result.session,
+  })
 }
 
 /**
@@ -370,8 +391,7 @@ export default defineWebSocketHandler({
 
   close(peer) {
     console.log(`[WebSocket] Client disconnected: ${peer.id}`)
-    // Automatically remove from session
-    handleLeaveSession(peer)
+    handleDisconnect(peer)
   },
 
   error(peer, error) {

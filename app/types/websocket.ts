@@ -69,6 +69,7 @@ export interface JoinSessionPayload {
   joinCode: string
   participantName: string
   asObserver: boolean
+  participantId?: string
 }
 
 export interface LeaveSessionPayload {

@@ -23,6 +23,54 @@ interface ExtendedSessionState extends ISessionState {
   joinCode: string | null
 }
 
+interface SessionRecoveryData {
+  joinCode: string
+  participantId: string
+  participantName: string
+  asObserver: boolean
+}
+
+const SESSION_RECOVERY_STORAGE_KEY = 'planning-poker:session-recovery'
+
+function getStoredSessionRecovery(): SessionRecoveryData | null {
+  if (!import.meta.client) return null
+
+  const stored = localStorage.getItem(SESSION_RECOVERY_STORAGE_KEY)
+  if (!stored) return null
+
+  try {
+    return JSON.parse(stored) as SessionRecoveryData
+  }
+  catch {
+    localStorage.removeItem(SESSION_RECOVERY_STORAGE_KEY)
+    return null
+  }
+}
+
+function storeSessionRecovery(joinCode: string, participant: ISessionState['currentParticipant']): void {
+  if (!import.meta.client || !participant) return
+
+  const recoveryData: SessionRecoveryData = {
+    joinCode,
+    participantId: participant.id,
+    participantName: participant.name,
+    asObserver: participant.isObserver,
+  }
+
+  localStorage.setItem(SESSION_RECOVERY_STORAGE_KEY, JSON.stringify(recoveryData))
+}
+
+function clearStoredSessionRecovery(joinCode?: string | null): void {
+  if (!import.meta.client) return
+
+  const stored = getStoredSessionRecovery()
+  if (!stored) return
+
+  if (!joinCode || stored.joinCode === joinCode) {
+    localStorage.removeItem(SESSION_RECOVERY_STORAGE_KEY)
+  }
+}
+
 /**
  * Check if cards were just revealed (transition from voting to revealed)
  */
@@ -69,6 +117,7 @@ export function useSession() {
    * Flag to ensure WebSocket handlers are registered only once per browser tab
    */
   const handlersRegistered = useState<boolean>('session-handlers-registered', () => false)
+  const reconnectWatcherRegistered = useState<boolean>('session-reconnect-watcher-registered', () => false)
 
   /**
    * Wait for connection if not yet connected
@@ -102,6 +151,7 @@ export function useSession() {
     handlersRegistered.value = true
     // Session created
     on<SessionCreatedPayload>('session:created', (payload) => {
+      storeSessionRecovery(payload.joinCode, payload.participant)
       state.value = {
         session: payload.session,
         currentParticipant: payload.participant,
@@ -114,6 +164,7 @@ export function useSession() {
 
     // Session joined
     on<SessionJoinedPayload>('session:joined', (payload) => {
+      storeSessionRecovery(payload.joinCode, payload.participant)
       state.value = {
         session: payload.session,
         currentParticipant: payload.participant,
@@ -181,6 +232,7 @@ export function useSession() {
 
     // Session left confirmed
     on<SessionLeftPayload>('session:left', (_payload) => {
+      clearStoredSessionRecovery(state.value.joinCode)
       state.value = {
         session: null,
         currentParticipant: null,
@@ -197,6 +249,27 @@ export function useSession() {
         ...state.value,
         error: payload.message,
       }
+    })
+  }
+
+  if (import.meta.client && !reconnectWatcherRegistered.value) {
+    reconnectWatcherRegistered.value = true
+    watch(connectionStatus, (status, previousStatus) => {
+      if (
+        status !== 'connected'
+        || previousStatus !== 'disconnected'
+        || !state.value.joinCode
+        || !state.value.currentParticipant
+      ) {
+        return
+      }
+
+      send('session:join', {
+        joinCode: state.value.joinCode,
+        participantName: state.value.currentParticipant.name,
+        asObserver: state.value.currentParticipant.isObserver,
+        participantId: state.value.currentParticipant.id,
+      })
     })
   }
 
@@ -304,6 +377,7 @@ export function useSession() {
   async function joinSession(code: string, participantName: string, asObserver = false): Promise<void> {
     // Validation
     const normalizedCode = code.toUpperCase().trim()
+    const normalizedName = participantName.trim()
     if (normalizedCode.length !== 6) {
       state.value = {
         ...state.value,
@@ -312,7 +386,7 @@ export function useSession() {
       return
     }
 
-    if (!participantName.trim()) {
+    if (!normalizedName) {
       state.value = {
         ...state.value,
         error: 'Please enter your name.',
@@ -330,10 +404,19 @@ export function useSession() {
       return
     }
 
+    const recovery = getStoredSessionRecovery()
+    const participantId = recovery
+      && recovery.joinCode === normalizedCode
+      && recovery.participantName === normalizedName
+      && recovery.asObserver === asObserver
+      ? recovery.participantId
+      : undefined
+
     send('session:join', {
       joinCode: normalizedCode,
-      participantName: participantName.trim(),
+      participantName: normalizedName,
       asObserver,
+      participantId,
     })
   }
 
@@ -447,6 +530,7 @@ export function useSession() {
   function leaveSession(): void {
     if (!state.value.session) return
 
+    clearStoredSessionRecovery(state.value.joinCode)
     send('session:leave', {
       sessionId: state.value.session.id,
     })

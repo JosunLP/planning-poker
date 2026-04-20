@@ -16,6 +16,7 @@ interface ManagedSession {
   session: ISession
   joinCode: string
   connections: Map<string, Peer>
+  reconnectableParticipants: Map<string, { participant: IParticipant; wasHost: boolean }>
   lastActivity: number
 }
 
@@ -41,8 +42,8 @@ function generateJoinCode(): string {
  * SessionStore Class
  * Manages all sessions server-side
  */
-class SessionStore {
-  private static instance: SessionStore
+export class SessionStore {
+  private static instance: SessionStore | null = null
   private sessions: Map<string, ManagedSession> = new Map()
   private joinCodeIndex: Map<string, string> = new Map() // joinCode -> sessionId
   private participantToSession: Map<string, string> = new Map() // participantId -> sessionId
@@ -63,6 +64,16 @@ class SessionStore {
       SessionStore.instance = new SessionStore()
     }
     return SessionStore.instance
+  }
+
+  /**
+   * Resets the singleton instance (for tests)
+   */
+  static resetInstance(): void {
+    if (SessionStore.instance) {
+      SessionStore.instance.destroy()
+      SessionStore.instance = null
+    }
   }
 
   /**
@@ -100,6 +111,7 @@ class SessionStore {
       session,
       joinCode,
       connections: new Map([[participantId, peer]]),
+      reconnectableParticipants: new Map(),
       lastActivity: Date.now(),
     }
 
@@ -130,6 +142,7 @@ class SessionStore {
     participantName: string,
     asObserver: boolean,
     peer: Peer,
+    reconnectParticipantId?: string,
   ): { session: ISession; participant: IParticipant; joinCode: string } | null {
     const sessionId = this.joinCodeIndex.get(joinCode.toUpperCase())
     if (!sessionId) return null
@@ -137,22 +150,37 @@ class SessionStore {
     const managed = this.sessions.get(sessionId)
     if (!managed) return null
 
-    const participantId = generateId()
-    const participant: IParticipant = {
-      id: participantId,
-      name: participantName,
-      selectedValue: null,
-      isObserver: asObserver,
-      joinedAt: new Date(),
-    }
+    const reconnectableParticipant = reconnectParticipantId
+      ? managed.reconnectableParticipants.get(reconnectParticipantId)
+      : null
+
+    const participant: IParticipant = reconnectableParticipant
+      ? {
+          ...reconnectableParticipant.participant,
+          name: participantName,
+          isObserver: asObserver,
+        }
+      : {
+          id: generateId(),
+          name: participantName,
+          selectedValue: null,
+          isObserver: asObserver,
+          joinedAt: new Date(),
+        }
 
     managed.session.participants.push(participant)
     managed.session.updatedAt = new Date()
-    managed.connections.set(participantId, peer)
+    managed.connections.set(participant.id, peer)
     managed.lastActivity = Date.now()
 
-    this.participantToSession.set(participantId, sessionId)
-    this.peerToParticipant.set(peer, participantId)
+    if (reconnectableParticipant?.wasHost) {
+      managed.session.hostId = participant.id
+    }
+
+    managed.reconnectableParticipants.delete(participant.id)
+
+    this.participantToSession.set(participant.id, sessionId)
+    this.peerToParticipant.set(peer, participant.id)
 
     return { session: managed.session, participant, joinCode: managed.joinCode }
   }
@@ -161,6 +189,20 @@ class SessionStore {
    * Leaves a session
    */
   leaveSession(peer: Peer): { sessionId: string; participantId: string; session: ISession | null } | null {
+    return this.removePeer(peer, false)
+  }
+
+  /**
+   * Disconnects a peer while preserving their identity for rejoin
+   */
+  disconnectPeer(peer: Peer): { sessionId: string; participantId: string; session: ISession | null } | null {
+    return this.removePeer(peer, true)
+  }
+
+  /**
+   * Removes a peer from a session
+   */
+  private removePeer(peer: Peer, preserveParticipant: boolean): { sessionId: string; participantId: string; session: ISession | null } | null {
     const participantId = this.peerToParticipant.get(peer)
     if (!participantId) return null
 
@@ -169,6 +211,9 @@ class SessionStore {
 
     const managed = this.sessions.get(sessionId)
     if (!managed) return null
+
+    const participant = managed.session.participants.find(p => p.id === participantId)
+    if (!participant) return null
 
     // Remove participant
     managed.session.participants = managed.session.participants.filter(p => p.id !== participantId)
@@ -179,8 +224,15 @@ class SessionStore {
     this.participantToSession.delete(participantId)
     this.peerToParticipant.delete(peer)
 
+    if (preserveParticipant) {
+      managed.reconnectableParticipants.set(participantId, {
+        participant: { ...participant },
+        wasHost: managed.session.hostId === participantId,
+      })
+    }
+
     // Delete session if empty
-    if (managed.session.participants.length === 0) {
+    if (!preserveParticipant && managed.session.participants.length === 0) {
       this.sessions.delete(sessionId)
       this.joinCodeIndex.delete(managed.joinCode)
       return { sessionId, participantId, session: null }
