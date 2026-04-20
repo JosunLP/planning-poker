@@ -26,7 +26,7 @@ interface ExtendedSessionState extends ISessionState {
 
 interface SessionRecoveryData {
   joinCode: string
-  participantId: string
+  reconnectToken: string
   participantName: string
   asObserver: boolean
 }
@@ -48,15 +48,8 @@ function getStoredSessionRecovery(): SessionRecoveryData | null {
   }
 }
 
-function storeSessionRecovery(joinCode: string, participant: ISessionState['currentParticipant']): void {
-  if (!import.meta.client || !participant) return
-
-  const recoveryData: SessionRecoveryData = {
-    joinCode,
-    participantId: participant.id,
-    participantName: participant.name,
-    asObserver: participant.isObserver,
-  }
+function storeSessionRecoveryData(recoveryData: SessionRecoveryData): void {
+  if (!import.meta.client) return
 
   localStorage.setItem(SESSION_RECOVERY_STORAGE_KEY, JSON.stringify(recoveryData))
 }
@@ -73,10 +66,10 @@ function clearStoredSessionRecovery(joinCode?: string | null): void {
 }
 
 /**
- * Returns a stored participant ID only when the rejoin request exactly matches
+ * Returns a stored reconnect token only when the rejoin request exactly matches
  * the original session identity, preventing accidental or cross-user recovery.
  */
-function getRecoveryParticipantId(
+function getRecoveryReconnectToken(
   recovery: SessionRecoveryData | null,
   joinCode: string,
   participantName: string,
@@ -94,7 +87,7 @@ function getRecoveryParticipantId(
     return undefined
   }
 
-  return recovery.participantId
+  return recovery.reconnectToken
 }
 
 function shouldAttemptReconnect(
@@ -188,7 +181,12 @@ export function useSession() {
     handlersRegistered.value = true
     // Session created
     on<SessionCreatedPayload>('session:created', (payload) => {
-      storeSessionRecovery(payload.joinCode, payload.participant)
+      storeSessionRecoveryData({
+        joinCode: payload.joinCode,
+        reconnectToken: payload.reconnectToken,
+        participantName: payload.participant.name,
+        asObserver: payload.participant.isObserver,
+      })
       state.value = {
         session: payload.session,
         currentParticipant: payload.participant,
@@ -201,7 +199,12 @@ export function useSession() {
 
     // Session joined
     on<SessionJoinedPayload>('session:joined', (payload) => {
-      storeSessionRecovery(payload.joinCode, payload.participant)
+      storeSessionRecoveryData({
+        joinCode: payload.joinCode,
+        reconnectToken: payload.reconnectToken,
+        participantName: payload.participant.name,
+        asObserver: payload.participant.isObserver,
+      })
       state.value = {
         session: payload.session,
         currentParticipant: payload.participant,
@@ -302,11 +305,21 @@ export function useSession() {
         return
       }
 
+      const reconnectToken = getRecoveryReconnectToken(
+        getStoredSessionRecovery(),
+        currentJoinCode,
+        currentParticipant.name,
+        currentParticipant.isObserver,
+      )
+      if (!reconnectToken) {
+        return
+      }
+
       send('session:join', {
         joinCode: currentJoinCode,
         participantName: currentParticipant.name,
         asObserver: currentParticipant.isObserver,
-        participantId: currentParticipant.id,
+        reconnectToken,
       })
     })
   }
@@ -443,13 +456,13 @@ export function useSession() {
     }
 
     const recovery = getStoredSessionRecovery()
-    const participantId = getRecoveryParticipantId(recovery, normalizedCode, normalizedName, asObserver)
+    const reconnectToken = getRecoveryReconnectToken(recovery, normalizedCode, normalizedName, asObserver)
 
     send('session:join', {
       joinCode: normalizedCode,
       participantName: normalizedName,
       asObserver,
-      participantId,
+      reconnectToken,
     })
   }
 

@@ -132,6 +132,7 @@ function handleCreateSession(peer: Peer, payload: CreateSessionPayload): void {
     session: result.session,
     joinCode: result.joinCode,
     participant: result.participant,
+    reconnectToken: result.reconnectToken,
   })
 }
 
@@ -144,7 +145,7 @@ function handleJoinSession(peer: Peer, payload: JoinSessionPayload): void {
     payload.participantName,
     payload.asObserver,
     peer,
-    payload.participantId,
+    payload.reconnectToken,
   )
 
   if (!result) {
@@ -160,6 +161,7 @@ function handleJoinSession(peer: Peer, payload: JoinSessionPayload): void {
     session: result.session,
     joinCode: result.joinCode,
     participant: result.participant,
+    reconnectToken: result.reconnectToken,
   })
 
   // Notify all other participants

@@ -16,6 +16,7 @@ interface ManagedSession {
   session: ISession
   joinCode: string
   connections: Map<string, Peer>
+  reconnectTokens: Map<string, string>
   reconnectableParticipants: Map<string, { participant: IParticipant; wasHost: boolean }>
   lastActivity: number
 }
@@ -36,6 +37,13 @@ function generateJoinCode(): string {
     code += JOIN_CODE_CHARS.charAt(Math.floor(Math.random() * JOIN_CODE_CHARS.length))
   }
   return code
+}
+
+/**
+ * Generates a private reconnect token for reclaiming a disconnected participant
+ */
+function generateReconnectToken(): string {
+  return crypto.randomUUID()
 }
 
 /**
@@ -69,7 +77,11 @@ class SessionStore {
   /**
    * Creates a new session
    */
-  createSession(name: string, hostName: string, peer: Peer): { session: ISession; joinCode: string; participant: IParticipant } {
+  createSession(
+    name: string,
+    hostName: string,
+    peer: Peer,
+  ): { session: ISession; joinCode: string; participant: IParticipant; reconnectToken: string } {
     const sessionId = generateId()
     const joinCode = this.generateUniqueJoinCode()
     const participantId = generateId()
@@ -101,6 +113,7 @@ class SessionStore {
       session,
       joinCode,
       connections: new Map([[participantId, peer]]),
+      reconnectTokens: new Map([[participantId, generateReconnectToken()]]),
       reconnectableParticipants: new Map(),
       lastActivity: Date.now(),
     }
@@ -110,7 +123,12 @@ class SessionStore {
     this.participantToSession.set(participantId, sessionId)
     this.peerToParticipant.set(peer, participantId)
 
-    return { session, joinCode, participant }
+    return {
+      session,
+      joinCode,
+      participant,
+      reconnectToken: managedSession.reconnectTokens.get(participantId)!,
+    }
   }
 
   /**
@@ -132,16 +150,16 @@ class SessionStore {
     participantName: string,
     asObserver: boolean,
     peer: Peer,
-    reconnectParticipantId?: string,
-  ): { session: ISession; participant: IParticipant; joinCode: string } | null {
+    reconnectToken?: string,
+  ): { session: ISession; participant: IParticipant; joinCode: string; reconnectToken: string } | null {
     const sessionId = this.joinCodeIndex.get(joinCode.toUpperCase())
     if (!sessionId) return null
 
     const managed = this.sessions.get(sessionId)
     if (!managed) return null
 
-    const reconnectableParticipant = reconnectParticipantId
-      ? managed.reconnectableParticipants.get(reconnectParticipantId)
+    const reconnectableParticipant = reconnectToken
+      ? managed.reconnectableParticipants.get(reconnectToken)
       : null
 
     const participant: IParticipant = reconnectableParticipant
@@ -164,16 +182,28 @@ class SessionStore {
     managed.connections.set(participant.id, peer)
     managed.lastActivity = Date.now()
 
+    const participantReconnectToken = reconnectableParticipant
+      ? reconnectToken!
+      : generateReconnectToken()
+    managed.reconnectTokens.set(participant.id, participantReconnectToken)
+
     if (reconnectableParticipant?.wasHost) {
       managed.session.hostId = participant.id
     }
 
-    managed.reconnectableParticipants.delete(participant.id)
+    if (reconnectToken) {
+      managed.reconnectableParticipants.delete(reconnectToken)
+    }
 
     this.participantToSession.set(participant.id, sessionId)
     this.peerToParticipant.set(peer, participant.id)
 
-    return { session: managed.session, participant, joinCode: managed.joinCode }
+    return {
+      session: managed.session,
+      participant,
+      joinCode: managed.joinCode,
+      reconnectToken: participantReconnectToken,
+    }
   }
 
   /**
@@ -210,13 +240,15 @@ class SessionStore {
     managed.session.participants = managed.session.participants.filter(p => p.id !== participantId)
     managed.session.updatedAt = new Date()
     managed.connections.delete(participantId)
+    const reconnectToken = managed.reconnectTokens.get(participantId)
+    managed.reconnectTokens.delete(participantId)
     managed.lastActivity = Date.now()
 
     this.participantToSession.delete(participantId)
     this.peerToParticipant.delete(peer)
 
-    if (preserveParticipant) {
-      managed.reconnectableParticipants.set(participantId, {
+    if (preserveParticipant && reconnectToken) {
+      managed.reconnectableParticipants.set(reconnectToken, {
         participant: {
           ...participant,
           joinedAt: new Date(participant.joinedAt),
@@ -579,6 +611,7 @@ class SessionStore {
    * Resets in-memory state for tests
    */
   resetForTests(): void {
+    this.destroy()
     this.sessions.clear()
     this.joinCodeIndex.clear()
     this.participantToSession.clear()

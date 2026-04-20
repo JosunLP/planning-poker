@@ -20,7 +20,7 @@ describe('SessionStore reconnect behavior', () => {
     const guestPeer = createPeer('guest-peer')
     const rejoinPeer = createPeer('host-rejoin-peer')
 
-    const { joinCode, participant: host } = store.createSession('Sprint', 'Alice', hostPeer)
+    const { joinCode, participant: host, reconnectToken } = store.createSession('Sprint', 'Alice', hostPeer)
     const guestJoin = store.joinSession(joinCode, 'Bob', false, guestPeer)
 
     expect(guestJoin).not.toBeNull()
@@ -29,7 +29,7 @@ describe('SessionStore reconnect behavior', () => {
     expect(disconnectResult?.session).not.toBeNull()
     expect(disconnectResult?.session?.hostId).toBe(guestJoin!.participant.id)
 
-    const rejoinResult = store.joinSession(joinCode, 'Alice', false, rejoinPeer, host.id)
+    const rejoinResult = store.joinSession(joinCode, 'Alice', false, rejoinPeer, reconnectToken)
 
     expect(rejoinResult).not.toBeNull()
     expect(rejoinResult?.participant.id).toBe(host.id)
@@ -42,16 +42,37 @@ describe('SessionStore reconnect behavior', () => {
     const hostPeer = createPeer('solo-host-peer')
     const rejoinPeer = createPeer('solo-host-rejoin-peer')
 
-    const { joinCode, session, participant } = store.createSession('Solo Sprint', 'Alice', hostPeer)
+    const { joinCode, session, participant, reconnectToken } = store.createSession('Solo Sprint', 'Alice', hostPeer)
 
     const disconnectResult = store.disconnectPeer(hostPeer)
     expect(disconnectResult?.session?.participants).toHaveLength(0)
 
-    const rejoinResult = store.joinSession(joinCode, 'Alice', false, rejoinPeer, participant.id)
+    const rejoinResult = store.joinSession(joinCode, 'Alice', false, rejoinPeer, reconnectToken)
 
     expect(rejoinResult).not.toBeNull()
     expect(rejoinResult?.session.id).toBe(session.id)
     expect(rejoinResult?.session.hostId).toBe(participant.id)
     expect(rejoinResult?.session.participants).toHaveLength(1)
+  })
+
+  it('does not restore a disconnected host with an invalid reconnect token', () => {
+    const store = sessionStore
+    const hostPeer = createPeer('host-peer')
+    const guestPeer = createPeer('guest-peer')
+    const attackerPeer = createPeer('attacker-peer')
+
+    const { joinCode, participant: host } = store.createSession('Sprint', 'Alice', hostPeer)
+    const guestJoin = store.joinSession(joinCode, 'Bob', false, guestPeer)
+
+    expect(guestJoin).not.toBeNull()
+
+    store.disconnectPeer(hostPeer)
+
+    const attackerJoin = store.joinSession(joinCode, 'Mallory', false, attackerPeer, 'invalid-token')
+
+    expect(attackerJoin).not.toBeNull()
+    expect(attackerJoin?.participant.id).not.toBe(host.id)
+    expect(attackerJoin?.session.hostId).toBe(guestJoin!.participant.id)
+    expect(attackerJoin?.session.participants).toHaveLength(2)
   })
 })

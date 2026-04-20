@@ -69,7 +69,7 @@ export interface JoinSessionPayload {
   joinCode: string
   participantName: string
   asObserver: boolean
-  participantId?: string
+  reconnectToken?: string
 }
 
 export interface LeaveSessionPayload {
@@ -125,12 +125,14 @@ export interface SessionCreatedPayload {
   session: ISession
   joinCode: string
   participant: IParticipant
+  reconnectToken: string
 }
 
 export interface SessionJoinedPayload {
   session: ISession
   joinCode: string
   participant: IParticipant
+  reconnectToken: string
 }
 
 export interface SessionUpdatedPayload {
