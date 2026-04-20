@@ -74,8 +74,8 @@
     "resetVoting": "Återställ omröstning",
     "nextStory": "Nästa story",
     "hostOnly": "Endast värden kan styra sessionen",
-    "autoReveal": "Auto reveal cards",
-    "autoRevealHint": "Reveal the cards automatically once every voter has picked a card."
+    "autoReveal": "Avslöja kort automatiskt",
+    "autoRevealHint": "Avslöjar korten automatiskt så snart varje röstare har valt ett kort."
   },
   "cards": {
     "chooseEstimate": "Välj din uppskattning",

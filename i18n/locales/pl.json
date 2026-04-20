@@ -74,8 +74,8 @@
     "resetVoting": "Resetuj głosowanie",
     "nextStory": "Następna historyjka",
     "hostOnly": "Tylko host może sterować sesją",
-    "autoReveal": "Auto reveal cards",
-    "autoRevealHint": "Reveal the cards automatically once every voter has picked a card."
+    "autoReveal": "Automatycznie odkrywaj karty",
+    "autoRevealHint": "Automatycznie odkrywa karty, gdy każdy głosujący wybierze kartę."
   },
   "cards": {
     "chooseEstimate": "Wybierz swoją estymację",

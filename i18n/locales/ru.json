@@ -74,8 +74,8 @@
     "resetVoting": "Сбросить голосование",
     "nextStory": "Следующая история",
     "hostOnly": "Только ведущий может управлять сессией",
-    "autoReveal": "Auto reveal cards",
-    "autoRevealHint": "Reveal the cards automatically once every voter has picked a card."
+    "autoReveal": "Автоматически открывать карты",
+    "autoRevealHint": "Автоматически открывает карты, как только каждый голосующий выберет карту."
   },
   "cards": {
     "chooseEstimate": "Выберите вашу оценку",

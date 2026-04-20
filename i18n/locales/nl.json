@@ -74,8 +74,8 @@
     "resetVoting": "Stemming resetten",
     "nextStory": "Volgende story",
     "hostOnly": "Alleen de host kan de sessie bedienen",
-    "autoReveal": "Auto reveal cards",
-    "autoRevealHint": "Reveal the cards automatically once every voter has picked a card."
+    "autoReveal": "Kaarten automatisch onthullen",
+    "autoRevealHint": "Onthult de kaarten automatisch zodra iedere stemmer een kaart heeft gekozen."
   },
   "cards": {
     "chooseEstimate": "Kies je schatting",
