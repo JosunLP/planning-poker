@@ -46,6 +46,18 @@ function allVotesIn(session: ISession): boolean {
 }
 
 /**
+ * Reveals cards automatically when the session is ready
+ */
+function applyAutoRevealIfReady(session: ISession): void {
+  if (session.status !== 'voting' || !session.config.autoReveal || !allVotesIn(session)) {
+    return
+  }
+
+  session.cardsRevealed = true
+  session.status = 'revealed'
+}
+
+/**
  * SessionStore Class
  * Manages all sessions server-side
  */
@@ -61,6 +73,7 @@ class SessionStore {
   private constructor() {
     // Cleanup every 30 seconds
     this.cleanupInterval = setInterval(() => this.cleanup(), 30000)
+    this.cleanupInterval.unref?.()
   }
 
   /**
@@ -223,11 +236,7 @@ class SessionStore {
     if (!participant || participant.isObserver) return null
 
     participant.selectedValue = value
-
-    if (managed.session.status === 'voting' && managed.session.config.autoReveal && allVotesIn(managed.session)) {
-      managed.session.cardsRevealed = true
-      managed.session.status = 'revealed'
-    }
+    applyAutoRevealIfReady(managed.session)
 
     managed.session.updatedAt = new Date()
     managed.lastActivity = Date.now()
@@ -251,6 +260,7 @@ class SessionStore {
     if (managed.session.hostId !== participantId) return null
 
     managed.session.config.autoReveal = autoReveal
+    applyAutoRevealIfReady(managed.session)
     managed.session.updatedAt = new Date()
     managed.lastActivity = Date.now()
 

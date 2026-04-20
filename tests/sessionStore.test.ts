@@ -79,6 +79,26 @@ describe('SessionStore auto reveal', () => {
     expect(updatedSession?.session.status).toBe('voting')
   })
 
+  it('reveals immediately when auto reveal is enabled after all votes are already in', () => {
+    const hostPeer = createPeer('host-enable')
+    const voterPeer = createPeer('voter-enable')
+    peersToCleanup.push(hostPeer, voterPeer)
+
+    const { joinCode } = sessionStore.createSession('Sprint', 'Alice', hostPeer as never)
+    sessionStore.joinSession(joinCode, 'Bob', false, voterPeer as never)
+    sessionStore.updateAutoReveal(hostPeer as never, false)
+
+    sessionStore.startVoting(hostPeer as never, 'Story #4')
+    sessionStore.selectVote(hostPeer as never, '2')
+    sessionStore.selectVote(voterPeer as never, '3')
+
+    const updatedSession = sessionStore.updateAutoReveal(hostPeer as never, true)
+
+    expect(updatedSession?.config.autoReveal).toBe(true)
+    expect(updatedSession?.cardsRevealed).toBe(true)
+    expect(updatedSession?.status).toBe('revealed')
+  })
+
   it('only auto reveals while voting is active', () => {
     const hostPeer = createPeer('host-status')
     peersToCleanup.push(hostPeer)
