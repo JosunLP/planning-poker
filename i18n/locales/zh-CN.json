@@ -73,7 +73,9 @@
     "waitingForVotes": "等待投票... ({count}/{total})",
     "resetVoting": "重置投票",
     "nextStory": "下一个故事",
-    "hostOnly": "只有主持人可以控制会话"
+    "hostOnly": "只有主持人可以控制会话",
+    "autoReveal": "Auto reveal cards",
+    "autoRevealHint": "Reveal the cards automatically once every voter has picked a card."
   },
   "cards": {
     "chooseEstimate": "选择你的估算",

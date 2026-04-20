@@ -73,7 +73,9 @@
     "waitingForVotes": "投票を待っています... ({count}/{total})",
     "resetVoting": "投票をリセット",
     "nextStory": "次のストーリー",
-    "hostOnly": "セッションを操作できるのはホストのみです"
+    "hostOnly": "セッションを操作できるのはホストのみです",
+    "autoReveal": "Auto reveal cards",
+    "autoRevealHint": "Reveal the cards automatically once every voter has picked a card."
   },
   "cards": {
     "chooseEstimate": "見積もりを選択",

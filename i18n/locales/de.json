@@ -73,7 +73,9 @@
     "waitingForVotes": "Warte auf Stimmen... ({count}/{total})",
     "resetVoting": "Abstimmung zurücksetzen",
     "nextStory": "Nächste Story",
-    "hostOnly": "Nur der Host kann die Session steuern"
+    "hostOnly": "Nur der Host kann die Session steuern",
+    "autoReveal": "Karten automatisch aufdecken",
+    "autoRevealHint": "Decke die Karten automatisch auf, sobald alle Abstimmenden eine Karte gewählt haben."
   },
   "cards": {
     "chooseEstimate": "Wähle deine Schätzung",

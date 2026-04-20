@@ -73,7 +73,9 @@
     "waitingForVotes": "Väntar på röster... ({count}/{total})",
     "resetVoting": "Återställ omröstning",
     "nextStory": "Nästa story",
-    "hostOnly": "Endast värden kan styra sessionen"
+    "hostOnly": "Endast värden kan styra sessionen",
+    "autoReveal": "Auto reveal cards",
+    "autoRevealHint": "Reveal the cards automatically once every voter has picked a card."
   },
   "cards": {
     "chooseEstimate": "Välj din uppskattning",

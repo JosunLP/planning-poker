@@ -73,7 +73,9 @@
     "waitingForVotes": "Oczekiwanie na głosy... ({count}/{total})",
     "resetVoting": "Resetuj głosowanie",
     "nextStory": "Następna historyjka",
-    "hostOnly": "Tylko host może sterować sesją"
+    "hostOnly": "Tylko host może sterować sesją",
+    "autoReveal": "Auto reveal cards",
+    "autoRevealHint": "Reveal the cards automatically once every voter has picked a card."
   },
   "cards": {
     "chooseEstimate": "Wybierz swoją estymację",
