@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'bun:test'
 import type { Peer } from 'crossws'
-import { SessionStore } from '../server/utils/sessionStore'
+import { sessionStore } from '../server/utils/sessionStore'
 
 function createPeer(id: string): Peer {
   return {
@@ -11,11 +11,11 @@ function createPeer(id: string): Peer {
 
 describe('SessionStore reconnect behavior', () => {
   afterEach(() => {
-    SessionStore.resetInstance()
+    sessionStore.resetForTests()
   })
 
   it('restores host privileges when the disconnected host rejoins', () => {
-    const store = SessionStore.getInstance()
+    const store = sessionStore
     const hostPeer = createPeer('host-peer')
     const guestPeer = createPeer('guest-peer')
     const rejoinPeer = createPeer('host-rejoin-peer')
@@ -38,7 +38,7 @@ describe('SessionStore reconnect behavior', () => {
   })
 
   it('keeps a disconnected empty session available for rejoin', () => {
-    const store = SessionStore.getInstance()
+    const store = sessionStore
     const hostPeer = createPeer('solo-host-peer')
     const rejoinPeer = createPeer('solo-host-rejoin-peer')
 

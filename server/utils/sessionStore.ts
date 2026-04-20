@@ -42,8 +42,8 @@ function generateJoinCode(): string {
  * SessionStore Class
  * Manages all sessions server-side
  */
-export class SessionStore {
-  private static instance: SessionStore | null = null
+class SessionStore {
+  private static instance: SessionStore
   private sessions: Map<string, ManagedSession> = new Map()
   private joinCodeIndex: Map<string, string> = new Map() // joinCode -> sessionId
   private participantToSession: Map<string, string> = new Map() // participantId -> sessionId
@@ -64,16 +64,6 @@ export class SessionStore {
       SessionStore.instance = new SessionStore()
     }
     return SessionStore.instance
-  }
-
-  /**
-   * Resets the singleton instance (for tests)
-   */
-  static resetInstance(): void {
-    if (SessionStore.instance) {
-      SessionStore.instance.destroy()
-      SessionStore.instance = null
-    }
   }
 
   /**
@@ -579,6 +569,16 @@ export class SessionStore {
       clearInterval(this.cleanupInterval)
       this.cleanupInterval = null
     }
+  }
+
+  /**
+   * Resets in-memory state for tests
+   */
+  resetForTests(): void {
+    this.sessions.clear()
+    this.joinCodeIndex.clear()
+    this.participantToSession.clear()
+    this.peerToParticipant.clear()
   }
 }
 

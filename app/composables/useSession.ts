@@ -6,6 +6,7 @@
  */
 
 import type { ISession, ISessionState, PokerValue } from '~/types'
+import type { ConnectionStatus } from '~/composables/useWebSocket'
 import type {
   ParticipantJoinedPayload,
   ParticipantLeftPayload,
@@ -69,6 +70,39 @@ function clearStoredSessionRecovery(joinCode?: string | null): void {
   if (!joinCode || stored.joinCode === joinCode) {
     localStorage.removeItem(SESSION_RECOVERY_STORAGE_KEY)
   }
+}
+
+/**
+ * Returns a stored participant ID only when the rejoin request exactly matches
+ * the original session identity, preventing accidental or cross-user recovery.
+ */
+function getRecoveryParticipantId(
+  recovery: SessionRecoveryData | null,
+  joinCode: string,
+  participantName: string,
+  asObserver: boolean,
+): string | undefined {
+  if (
+    !recovery
+    || recovery.joinCode !== joinCode
+    || recovery.participantName !== participantName
+    || recovery.asObserver !== asObserver
+  ) {
+    return undefined
+  }
+
+  return recovery.participantId
+}
+
+function shouldAttemptReconnect(
+  status: ConnectionStatus,
+  previousStatus: ConnectionStatus | undefined,
+  sessionState: ExtendedSessionState,
+): boolean {
+  return status === 'connected'
+    && previousStatus === 'disconnected'
+    && !!sessionState.joinCode
+    && !!sessionState.currentParticipant
 }
 
 /**
@@ -255,20 +289,21 @@ export function useSession() {
   if (import.meta.client && !reconnectWatcherRegistered.value) {
     reconnectWatcherRegistered.value = true
     watch(connectionStatus, (status, previousStatus) => {
-      if (
-        status !== 'connected'
-        || previousStatus !== 'disconnected'
-        || !state.value.joinCode
-        || !state.value.currentParticipant
-      ) {
+      if (!shouldAttemptReconnect(status, previousStatus, state.value)) {
+        return
+      }
+
+      const currentParticipant = state.value.currentParticipant
+      const currentJoinCode = state.value.joinCode
+      if (!currentParticipant || !currentJoinCode) {
         return
       }
 
       send('session:join', {
-        joinCode: state.value.joinCode,
-        participantName: state.value.currentParticipant.name,
-        asObserver: state.value.currentParticipant.isObserver,
-        participantId: state.value.currentParticipant.id,
+        joinCode: currentJoinCode,
+        participantName: currentParticipant.name,
+        asObserver: currentParticipant.isObserver,
+        participantId: currentParticipant.id,
       })
     })
   }
@@ -405,12 +440,7 @@ export function useSession() {
     }
 
     const recovery = getStoredSessionRecovery()
-    const participantId = recovery
-      && recovery.joinCode === normalizedCode
-      && recovery.participantName === normalizedName
-      && recovery.asObserver === asObserver
-      ? recovery.participantId
-      : undefined
+    const participantId = getRecoveryParticipantId(recovery, normalizedCode, normalizedName, asObserver)
 
     send('session:join', {
       joinCode: normalizedCode,
