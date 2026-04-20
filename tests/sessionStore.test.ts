@@ -86,8 +86,9 @@ describe('SessionStore auto reveal', () => {
 
     const { joinCode } = sessionStore.createSession('Sprint', 'Alice', hostPeer as never)
     sessionStore.joinSession(joinCode, 'Bob', false, voterPeer as never)
-    sessionStore.updateAutoReveal(hostPeer as never, false)
+    const disabledSession = sessionStore.updateAutoReveal(hostPeer as never, false)
 
+    expect(disabledSession?.config.autoReveal).toBe(false)
     sessionStore.startVoting(hostPeer as never, 'Story #4')
     sessionStore.selectVote(hostPeer as never, '2')
     sessionStore.selectVote(voterPeer as never, '3')
