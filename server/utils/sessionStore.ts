@@ -73,7 +73,7 @@ class SessionStore {
   private constructor() {
     // Cleanup every 30 seconds
     this.cleanupInterval = setInterval(() => this.cleanup(), 30000)
-    this.cleanupInterval.unref?.()
+    this.cleanupInterval.unref()
   }
 
   /**
