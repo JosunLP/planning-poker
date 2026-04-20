@@ -6,18 +6,8 @@
  */
 
 import type { ISession, ISessionConfig, IStory, IVotingResult, PokerValue, SessionStatus } from '../types'
-import { POKER_VALUES } from '../types'
+import { DEFAULT_SESSION_CONFIG } from '../types'
 import { Participant } from './Participant'
-
-/**
- * Default configuration for a session
- */
-const DEFAULT_CONFIG: ISessionConfig = {
-  cardValues: POKER_VALUES,
-  autoReveal: true,
-  votingTimeout: 0,
-  allowObservers: true,
-}
 
 /**
  * Class for managing a Planning Poker session
@@ -43,7 +33,7 @@ export class Session implements ISession {
   public storyQueue: IStory[]
   public currentStoryIndex: number
 
-  private config: ISessionConfig
+  public config: ISessionConfig
   private votingHistory: IVotingResult[]
 
   /**
@@ -64,7 +54,7 @@ export class Session implements ISession {
     this.cardsRevealed = false
     this.createdAt = new Date()
     this.updatedAt = new Date()
-    this.config = { ...DEFAULT_CONFIG, ...config }
+    this.config = { ...DEFAULT_SESSION_CONFIG, ...config }
     this.votingHistory = []
     this.storyQueue = []
     this.currentStoryIndex = -1
@@ -146,6 +136,17 @@ export class Session implements ISession {
     this.touch()
 
     return result
+  }
+
+  /**
+   * Reveals cards automatically when configured and all votes are in
+   */
+  public revealCardsIfReady(): IVotingResult | null {
+    if (!this.config.autoReveal || !this.allVotesIn()) {
+      return null
+    }
+
+    return this.revealCards()
   }
 
   /**
@@ -306,6 +307,7 @@ export class Session implements ISession {
       updatedAt: this.updatedAt,
       storyQueue: this.storyQueue,
       currentStoryIndex: this.currentStoryIndex,
+      config: this.config,
     }
   }
 
@@ -324,6 +326,7 @@ export class Session implements ISession {
       updatedAt: new Date(data.updatedAt),
       storyQueue: data.storyQueue ?? [],
       currentStoryIndex: data.currentStoryIndex ?? -1,
+      config: { ...DEFAULT_SESSION_CONFIG, ...data.config, ...config },
     })
 
     session.participants = data.participants.map(p => Participant.fromJSON(p))

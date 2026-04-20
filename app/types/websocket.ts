@@ -14,6 +14,7 @@ export type ClientMessageType =
   | 'session:create'
   | 'session:join'
   | 'session:leave'
+  | 'session:update-config'
   | 'vote:select'
   | 'vote:reveal'
   | 'vote:reset'
@@ -73,6 +74,11 @@ export interface JoinSessionPayload {
 
 export interface LeaveSessionPayload {
   sessionId: string
+}
+
+export interface UpdateSessionConfigPayload {
+  sessionId: string
+  autoReveal: boolean
 }
 
 export interface SelectVotePayload {

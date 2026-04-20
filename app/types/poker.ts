@@ -118,6 +118,8 @@ export interface ISession {
   currentStoryIndex: number
   /** Queue with prepared stories */
   storyQueue: IStory[]
+  /** Session configuration */
+  config: ISessionConfig
 }
 
 /**
@@ -154,6 +156,16 @@ export interface ISessionConfig {
   votingTimeout: number
   /** Allow observers */
   allowObservers: boolean
+}
+
+/**
+ * Default configuration for a session
+ */
+export const DEFAULT_SESSION_CONFIG: ISessionConfig = {
+  cardValues: POKER_VALUES,
+  autoReveal: true,
+  votingTimeout: 0,
+  allowObservers: true,
 }
 
 /**
