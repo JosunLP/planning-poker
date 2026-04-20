@@ -82,10 +82,13 @@ function getRecoveryParticipantId(
   participantName: string,
   asObserver: boolean,
 ): string | undefined {
+  const normalizedParticipantName = participantName.trim()
+  const normalizedRecoveryName = recovery?.participantName.trim()
+
   if (
     !recovery
     || recovery.joinCode !== joinCode
-    || recovery.participantName !== participantName
+    || normalizedRecoveryName !== normalizedParticipantName
     || recovery.asObserver !== asObserver
   ) {
     return undefined

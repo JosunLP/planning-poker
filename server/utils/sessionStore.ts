@@ -147,6 +147,7 @@ class SessionStore {
     const participant: IParticipant = reconnectableParticipant
       ? {
           ...reconnectableParticipant.participant,
+          joinedAt: new Date(reconnectableParticipant.participant.joinedAt),
           name: participantName,
           isObserver: asObserver,
         }
@@ -216,7 +217,10 @@ class SessionStore {
 
     if (preserveParticipant) {
       managed.reconnectableParticipants.set(participantId, {
-        participant: { ...participant },
+        participant: {
+          ...participant,
+          joinedAt: new Date(participant.joinedAt),
+        },
         wasHost: managed.session.hostId === participantId,
       })
     }
