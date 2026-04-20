@@ -182,9 +182,7 @@ class SessionStore {
     managed.connections.set(participant.id, peer)
     managed.lastActivity = Date.now()
 
-    const participantReconnectToken = reconnectableParticipant
-      ? reconnectToken!
-      : generateReconnectToken()
+    const participantReconnectToken = generateReconnectToken()
     managed.reconnectTokens.set(participant.id, participantReconnectToken)
 
     if (reconnectableParticipant?.wasHost) {

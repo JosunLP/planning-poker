@@ -33,17 +33,46 @@ interface SessionRecoveryData {
 
 const SESSION_RECOVERY_STORAGE_KEY = 'planning-poker:session-recovery'
 
+function isSessionRecoveryData(value: unknown): value is SessionRecoveryData {
+  if (!value || typeof value !== 'object') return false
+
+  const recovery = value as Record<string, unknown>
+
+  return typeof recovery.joinCode === 'string'
+    && typeof recovery.reconnectToken === 'string'
+    && typeof recovery.participantName === 'string'
+    && typeof recovery.asObserver === 'boolean'
+}
+
+function removeStoredSessionRecovery(): void {
+  if (!import.meta.client) return
+
+  try {
+    localStorage.removeItem(SESSION_RECOVERY_STORAGE_KEY)
+  }
+  catch (error) {
+    console.error('[useSession] Failed to clear recovery data from storage:', error)
+  }
+}
+
 function getStoredSessionRecovery(): SessionRecoveryData | null {
   if (!import.meta.client) return null
 
-  const stored = localStorage.getItem(SESSION_RECOVERY_STORAGE_KEY)
-  if (!stored) return null
-
   try {
-    return JSON.parse(stored) as SessionRecoveryData
+    const stored = localStorage.getItem(SESSION_RECOVERY_STORAGE_KEY)
+    if (!stored) return null
+
+    const parsed = JSON.parse(stored)
+    if (!isSessionRecoveryData(parsed)) {
+      removeStoredSessionRecovery()
+      return null
+    }
+
+    return parsed
   }
-  catch {
-    localStorage.removeItem(SESSION_RECOVERY_STORAGE_KEY)
+  catch (error) {
+    console.error('[useSession] Failed to load recovery data from storage:', error)
+    removeStoredSessionRecovery()
     return null
   }
 }
@@ -51,7 +80,12 @@ function getStoredSessionRecovery(): SessionRecoveryData | null {
 function storeSessionRecoveryData(recoveryData: SessionRecoveryData): void {
   if (!import.meta.client) return
 
-  localStorage.setItem(SESSION_RECOVERY_STORAGE_KEY, JSON.stringify(recoveryData))
+  try {
+    localStorage.setItem(SESSION_RECOVERY_STORAGE_KEY, JSON.stringify(recoveryData))
+  }
+  catch (error) {
+    console.error('[useSession] Failed to save recovery data to storage:', error)
+  }
 }
 
 function clearStoredSessionRecovery(joinCode?: string | null): void {
@@ -61,7 +95,7 @@ function clearStoredSessionRecovery(joinCode?: string | null): void {
   if (!stored) return
 
   if (!joinCode || stored.joinCode === joinCode) {
-    localStorage.removeItem(SESSION_RECOVERY_STORAGE_KEY)
+    removeStoredSessionRecovery()
   }
 }
 
@@ -76,11 +110,14 @@ function getRecoveryReconnectToken(
   asObserver: boolean,
 ): string | undefined {
   const normalizedParticipantName = participantName.trim()
-  const normalizedRecoveryName = recovery?.participantName.trim()
+  if (!recovery) {
+    return undefined
+  }
+
+  const normalizedRecoveryName = recovery.participantName.trim()
 
   if (
-    !recovery
-    || recovery.joinCode !== joinCode
+    recovery.joinCode !== joinCode
     || normalizedRecoveryName !== normalizedParticipantName
     || recovery.asObserver !== asObserver
   ) {
