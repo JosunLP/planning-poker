@@ -160,6 +160,14 @@ export class Session implements ISession {
   }
 
   /**
+   * Updates the session configuration
+   */
+  public updateConfig(config: Partial<ISessionConfig>): void {
+    this.config = { ...this.config, ...config }
+    this.touch()
+  }
+
+  /**
    * Checks if all participants have voted
    */
   public allVotesIn(): boolean {

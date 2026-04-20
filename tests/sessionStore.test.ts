@@ -60,4 +60,33 @@ describe('SessionStore auto reveal', () => {
     expect(updatedSession?.session.cardsRevealed).toBe(false)
     expect(updatedSession?.session.status).toBe('voting')
   })
+
+  it('does not auto reveal if the host disables it during voting', () => {
+    const hostPeer = createPeer('host-toggle')
+    const voterPeer = createPeer('voter-toggle')
+    peersToCleanup.push(hostPeer, voterPeer)
+
+    const { joinCode } = sessionStore.createSession('Sprint', 'Alice', hostPeer as never)
+    sessionStore.joinSession(joinCode, 'Bob', false, voterPeer as never)
+
+    sessionStore.startVoting(hostPeer as never, 'Story #3')
+    sessionStore.selectVote(hostPeer as never, '2')
+    sessionStore.updateAutoReveal(hostPeer as never, false)
+    const updatedSession = sessionStore.selectVote(voterPeer as never, '3')
+
+    expect(updatedSession?.session.config.autoReveal).toBe(false)
+    expect(updatedSession?.session.cardsRevealed).toBe(false)
+    expect(updatedSession?.session.status).toBe('voting')
+  })
+
+  it('only auto reveals while voting is active', () => {
+    const hostPeer = createPeer('host-status')
+    peersToCleanup.push(hostPeer)
+
+    const { session } = sessionStore.createSession('Sprint', 'Alice', hostPeer as never)
+    const updatedSession = sessionStore.selectVote(hostPeer as never, '2')
+
+    expect(updatedSession?.session.cardsRevealed).toBe(false)
+    expect(updatedSession?.session.status).toBe(session.status)
+  })
 })

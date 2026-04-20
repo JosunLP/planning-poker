@@ -81,6 +81,18 @@ function handleStorySubmit(title: string, description?: string): void {
     emit('addStory', title, description)
   }
 }
+
+/**
+ * Handle automatic reveal toggle changes
+ */
+function handleAutoRevealChange(event: Event): void {
+  const target = event.target
+  if (!(target instanceof HTMLInputElement)) {
+    return
+  }
+
+  emit('updateAutoReveal', target.checked)
+}
 </script>
 
 <template>
@@ -173,7 +185,7 @@ function handleStorySubmit(title: string, description?: string): void {
           :checked="autoReveal"
           type="checkbox"
           class="mt-1 h-4 w-4 rounded border-secondary-300 text-primary-600 focus:ring-primary-500"
-          @change="emit('updateAutoReveal', ($event.target as HTMLInputElement).checked)"
+          @change="handleAutoRevealChange"
         >
         <div class="min-w-0">
           <div class="text-sm font-medium text-secondary-800">
