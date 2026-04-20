@@ -33,7 +33,7 @@ export class Session implements ISession {
   public storyQueue: IStory[]
   public currentStoryIndex: number
 
-  private _config: ISessionConfig
+  private configState: ISessionConfig
   private votingHistory: IVotingResult[]
 
   /**
@@ -54,7 +54,7 @@ export class Session implements ISession {
     this.cardsRevealed = false
     this.createdAt = new Date()
     this.updatedAt = new Date()
-    this._config = { ...DEFAULT_SESSION_CONFIG, ...config }
+    this.configState = { ...DEFAULT_SESSION_CONFIG, ...config }
     this.votingHistory = []
     this.storyQueue = []
     this.currentStoryIndex = -1
@@ -71,7 +71,7 @@ export class Session implements ISession {
       return false
     }
 
-    if (participant.isObserver && !this._config.allowObservers) {
+    if (participant.isObserver && !this.configState.allowObservers) {
       return false
     }
 
@@ -142,7 +142,7 @@ export class Session implements ISession {
    * Reveals cards automatically when configured and all votes are in
    */
   public revealCardsIfReady(): IVotingResult | null {
-    if (!this._config.autoReveal || !this.allVotesIn()) {
+    if (!this.configState.autoReveal || !this.allVotesIn()) {
       return null
     }
 
@@ -163,7 +163,7 @@ export class Session implements ISession {
    * Updates the session configuration
    */
   public updateConfig(config: Partial<ISessionConfig>): void {
-    this._config = { ...this._config, ...config }
+    this.configState = { ...this.configState, ...config }
     this.touch()
   }
 
@@ -288,14 +288,14 @@ export class Session implements ISession {
    * Returns the available card values
    */
   public getCardValues(): readonly PokerValue[] {
-    return this._config.cardValues
+    return this.configState.cardValues
   }
 
   /**
    * Returns the session configuration
    */
   public get config(): ISessionConfig {
-    return { ...this._config }
+    return { ...this.configState }
   }
 
   /**
@@ -343,7 +343,7 @@ export class Session implements ISession {
       currentStoryIndex: data.currentStoryIndex ?? -1,
     })
 
-    session._config = { ...DEFAULT_SESSION_CONFIG, ...data.config, ...config }
+    session.configState = { ...DEFAULT_SESSION_CONFIG, ...data.config, ...config }
     session.participants = data.participants.map(p => Participant.fromJSON(p))
     return session
   }

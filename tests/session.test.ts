@@ -135,8 +135,20 @@ describe('Session voting flow', () => {
     expect(session.status).toBe('voting')
   })
 
+  it('updates config partially and refreshes updatedAt', async () => {
+    const session = new Session('Configurable', 'host-9', { autoReveal: true })
+    const previousUpdatedAt = session.updatedAt
+
+    await Bun.sleep(5)
+    session.updateConfig({ autoReveal: false })
+
+    expect(session.config.autoReveal).toBe(false)
+    expect(session.config.allowObservers).toBe(true)
+    expect(session.updatedAt.getTime()).toBeGreaterThan(previousUpdatedAt.getTime())
+  })
+
   it('serializes and hydrates via JSON', () => {
-    const session = new Session('Serializable', 'host-9', { autoReveal: false })
+    const session = new Session('Serializable', 'host-10', { autoReveal: false })
     const voter = new Participant('Voter')
     session.addParticipant(voter)
     session.startVoting('Story #8', 'Desc')
