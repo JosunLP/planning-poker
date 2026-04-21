@@ -6,6 +6,7 @@
  */
 
 import type { ISession, ISessionState, PokerValue } from '~/types'
+import type { ConnectionStatus } from '~/composables/useWebSocket'
 import type {
   ParticipantJoinedPayload,
   ParticipantLeftPayload,
@@ -21,6 +22,136 @@ import type {
  */
 interface ExtendedSessionState extends ISessionState {
   joinCode: string | null
+}
+
+interface SessionRecoveryData {
+  joinCode: string
+  reconnectToken: string
+  participantName: string
+  asObserver: boolean
+  expiresAt: number
+}
+
+const SESSION_RECOVERY_STORAGE_KEY = 'planning-poker:session-recovery'
+const SESSION_RECOVERY_TTL_MS = 30 * 60 * 1000
+
+function isSessionRecoveryData(value: unknown): value is SessionRecoveryData {
+  if (!value || typeof value !== 'object') return false
+
+  const recovery = value as Record<string, unknown>
+
+  return typeof recovery.joinCode === 'string'
+    && typeof recovery.reconnectToken === 'string'
+    && typeof recovery.participantName === 'string'
+    && typeof recovery.asObserver === 'boolean'
+    && typeof recovery.expiresAt === 'number'
+}
+
+function removeStoredSessionRecovery(): void {
+  if (!import.meta.client) return
+
+  try {
+    sessionStorage.removeItem(SESSION_RECOVERY_STORAGE_KEY)
+    localStorage.removeItem(SESSION_RECOVERY_STORAGE_KEY)
+  }
+  catch (error) {
+    console.error('[useSession] Failed to clear recovery data from storage:', error)
+  }
+}
+
+function getStoredSessionRecovery(): SessionRecoveryData | null {
+  if (!import.meta.client) return null
+
+  try {
+    const stored = sessionStorage.getItem(SESSION_RECOVERY_STORAGE_KEY)
+    if (!stored) {
+      localStorage.removeItem(SESSION_RECOVERY_STORAGE_KEY)
+      return null
+    }
+
+    const parsed = JSON.parse(stored)
+    if (!isSessionRecoveryData(parsed)) {
+      removeStoredSessionRecovery()
+      return null
+    }
+
+    if (parsed.expiresAt <= Date.now()) {
+      removeStoredSessionRecovery()
+      return null
+    }
+
+    return parsed
+  }
+  catch (error) {
+    console.error('[useSession] Failed to load recovery data from storage:', error)
+    removeStoredSessionRecovery()
+    return null
+  }
+}
+
+function storeSessionRecoveryData(recoveryData: Omit<SessionRecoveryData, 'expiresAt'>): void {
+  if (!import.meta.client) return
+
+  try {
+    sessionStorage.setItem(SESSION_RECOVERY_STORAGE_KEY, JSON.stringify({
+      ...recoveryData,
+      expiresAt: Date.now() + SESSION_RECOVERY_TTL_MS,
+    }))
+    localStorage.removeItem(SESSION_RECOVERY_STORAGE_KEY)
+  }
+  catch (error) {
+    console.error('[useSession] Failed to save recovery data to storage:', error)
+  }
+}
+
+function clearStoredSessionRecovery(joinCode?: string | null): void {
+  if (!import.meta.client) return
+
+  const stored = getStoredSessionRecovery()
+  if (!stored) return
+
+  if (!joinCode || stored.joinCode === joinCode) {
+    removeStoredSessionRecovery()
+  }
+}
+
+/**
+ * Returns a stored reconnect token only when the rejoin request exactly matches
+ * the original session identity, helping prevent accidental recovery mismatches.
+ */
+function getRecoveryReconnectToken(
+  recovery: SessionRecoveryData | null,
+  joinCode: string,
+  participantName: string,
+  asObserver: boolean,
+): string | undefined {
+  const normalizedParticipantName = participantName.trim()
+  if (!recovery) {
+    return undefined
+  }
+
+  const normalizedRecoveryName = recovery.participantName.trim()
+
+  if (
+    recovery.joinCode !== joinCode
+    || normalizedRecoveryName !== normalizedParticipantName
+    || recovery.asObserver !== asObserver
+  ) {
+    return undefined
+  }
+
+  return recovery.reconnectToken
+}
+
+function shouldAttemptReconnect(
+  status: ConnectionStatus,
+  previousStatus: ConnectionStatus | undefined,
+  sessionState: ExtendedSessionState,
+): boolean {
+  return status === 'connected'
+    && previousStatus === 'disconnected'
+    && !!sessionState.joinCode
+    && !!sessionState.currentParticipant
 }
 
 /**
@@ -69,6 +200,7 @@ export function useSession() {
    * Flag to ensure WebSocket handlers are registered only once per browser tab
    */
   const handlersRegistered = useState<boolean>('session-handlers-registered', () => false)
+  const reconnectWatcherRegistered = useState<boolean>('session-reconnect-watcher-registered', () => false)
 
   /**
    * Wait for connection if not yet connected
@@ -102,6 +234,12 @@ export function useSession() {
     handlersRegistered.value = true
     // Session created
     on<SessionCreatedPayload>('session:created', (payload) => {
+      storeSessionRecoveryData({
+        joinCode: payload.joinCode,
+        reconnectToken: payload.reconnectToken,
+        participantName: payload.participant.name,
+        asObserver: payload.participant.isObserver,
+      })
       state.value = {
         session: payload.session,
         currentParticipant: payload.participant,
@@ -114,6 +252,12 @@ export function useSession() {
 
     // Session joined
     on<SessionJoinedPayload>('session:joined', (payload) => {
+      storeSessionRecoveryData({
+        joinCode: payload.joinCode,
+        reconnectToken: payload.reconnectToken,
+        participantName: payload.participant.name,
+        asObserver: payload.participant.isObserver,
+      })
       state.value = {
         session: payload.session,
         currentParticipant: payload.participant,
@@ -181,6 +325,7 @@ export function useSession() {
 
     // Session left confirmed
     on<SessionLeftPayload>('session:left', (_payload) => {
+      clearStoredSessionRecovery(state.value.joinCode)
       state.value = {
         session: null,
         currentParticipant: null,
@@ -197,6 +342,38 @@ export function useSession() {
         ...state.value,
         error: payload.message,
       }
+    })
+  }
+
+  if (import.meta.client && !reconnectWatcherRegistered.value) {
+    reconnectWatcherRegistered.value = true
+    watch(connectionStatus, (status, previousStatus) => {
+      if (!shouldAttemptReconnect(status, previousStatus, state.value)) {
+        return
+      }
+
+      const currentParticipant = state.value.currentParticipant
+      const currentJoinCode = state.value.joinCode
+      if (!currentParticipant || !currentJoinCode) {
+        return
+      }
+
+      const reconnectToken = getRecoveryReconnectToken(
+        getStoredSessionRecovery(),
+        currentJoinCode,
+        currentParticipant.name,
+        currentParticipant.isObserver,
+      )
+      if (!reconnectToken) {
+        return
+      }
+
+      send('session:join', {
+        joinCode: currentJoinCode,
+        participantName: currentParticipant.name,
+        asObserver: currentParticipant.isObserver,
+        reconnectToken,
+      })
     })
   }
 
@@ -304,6 +481,7 @@ export function useSession() {
   async function joinSession(code: string, participantName: string, asObserver = false): Promise<void> {
     // Validation
     const normalizedCode = code.toUpperCase().trim()
+    const normalizedName = participantName.trim()
     if (normalizedCode.length !== 6) {
       state.value = {
         ...state.value,
@@ -312,7 +490,7 @@ export function useSession() {
       return
     }
 
-    if (!participantName.trim()) {
+    if (!normalizedName) {
       state.value = {
         ...state.value,
         error: 'Please enter your name.',
@@ -330,10 +508,14 @@ export function useSession() {
       return
     }
 
+    const recovery = getStoredSessionRecovery()
+    const reconnectToken = getRecoveryReconnectToken(recovery, normalizedCode, normalizedName, asObserver)
+
     send('session:join', {
       joinCode: normalizedCode,
-      participantName: participantName.trim(),
+      participantName: normalizedName,
       asObserver,
+      reconnectToken,
     })
   }
 
@@ -459,6 +641,7 @@ export function useSession() {
   function leaveSession(): void {
     if (!state.value.session) return
 
+    clearStoredSessionRecovery(state.value.joinCode)
     send('session:leave', {
       sessionId: state.value.session.id,
     })
