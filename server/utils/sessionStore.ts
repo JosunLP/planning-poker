@@ -82,7 +82,7 @@ class SessionStore {
   private constructor() {
     // Cleanup every 30 seconds
     this.cleanupInterval = setInterval(() => this.cleanup(), 30000)
-    // Don't keep the process alive solely because of the background cleanup timer.
+    // Prevent cleanup timer from blocking process exit.
     this.cleanupInterval.unref()
   }
 
