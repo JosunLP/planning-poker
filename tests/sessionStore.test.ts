@@ -1,16 +1,12 @@
 import { afterEach, describe, expect, it } from 'bun:test'
+import type { Peer } from 'crossws'
 import { sessionStore } from '../server/utils/sessionStore'
 
-interface MockPeer {
-  id: string
-  send: (message: string) => void
-}
-
-function createPeer(id: string): MockPeer {
+function createPeer(id: string): Peer {
   return {
     id,
     send: () => {},
-  }
+  } as unknown as Peer
 }
 
 describe('SessionStore reconnect behavior', () => {
@@ -24,16 +20,16 @@ describe('SessionStore reconnect behavior', () => {
     const guestPeer = createPeer('guest-peer')
     const rejoinPeer = createPeer('host-rejoin-peer')
 
-    const { joinCode, participant: host, reconnectToken } = store.createSession('Sprint', 'Alice', hostPeer as never)
-    const guestJoin = store.joinSession(joinCode, 'Bob', false, guestPeer as never)
+    const { joinCode, participant: host, reconnectToken } = store.createSession('Sprint', 'Alice', hostPeer)
+    const guestJoin = store.joinSession(joinCode, 'Bob', false, guestPeer)
 
     expect(guestJoin).not.toBeNull()
 
-    const disconnectResult = store.disconnectPeer(hostPeer as never)
+    const disconnectResult = store.disconnectPeer(hostPeer)
     expect(disconnectResult?.session).not.toBeNull()
     expect(disconnectResult?.session?.hostId).toBe(guestJoin!.participant.id)
 
-    const rejoinResult = store.joinSession(joinCode, 'Alice', false, rejoinPeer as never, reconnectToken)
+    const rejoinResult = store.joinSession(joinCode, 'Alice', false, rejoinPeer, reconnectToken)
 
     expect(rejoinResult).not.toBeNull()
     expect(rejoinResult?.participant.id).toBe(host.id)
@@ -47,12 +43,12 @@ describe('SessionStore reconnect behavior', () => {
     const hostPeer = createPeer('solo-host-peer')
     const rejoinPeer = createPeer('solo-host-rejoin-peer')
 
-    const { joinCode, session, participant, reconnectToken } = store.createSession('Solo Sprint', 'Alice', hostPeer as never)
+    const { joinCode, session, participant, reconnectToken } = store.createSession('Solo Sprint', 'Alice', hostPeer)
 
-    const disconnectResult = store.disconnectPeer(hostPeer as never)
+    const disconnectResult = store.disconnectPeer(hostPeer)
     expect(disconnectResult?.session?.participants).toHaveLength(0)
 
-    const rejoinResult = store.joinSession(joinCode, 'Alice', false, rejoinPeer as never, reconnectToken)
+    const rejoinResult = store.joinSession(joinCode, 'Alice', false, rejoinPeer, reconnectToken)
 
     expect(rejoinResult).not.toBeNull()
     expect(rejoinResult?.session.id).toBe(session.id)
@@ -66,16 +62,16 @@ describe('SessionStore reconnect behavior', () => {
     const freshJoinPeer = createPeer('fresh-join-peer')
     const hostRejoinPeer = createPeer('solo-host-rejoin-peer')
 
-    const { joinCode, participant: originalHost, reconnectToken } = store.createSession('Solo Sprint', 'Alice', hostPeer as never)
+    const { joinCode, participant: originalHost, reconnectToken } = store.createSession('Solo Sprint', 'Alice', hostPeer)
 
-    store.disconnectPeer(hostPeer as never)
+    store.disconnectPeer(hostPeer)
 
-    const freshJoin = store.joinSession(joinCode, 'Bob', false, freshJoinPeer as never)
+    const freshJoin = store.joinSession(joinCode, 'Bob', false, freshJoinPeer)
     expect(freshJoin).not.toBeNull()
     expect(freshJoin?.session.hostId).toBe(freshJoin?.participant.id)
     expect(freshJoin?.session.participants).toHaveLength(1)
 
-    const hostRejoin = store.joinSession(joinCode, 'Alice', false, hostRejoinPeer as never, reconnectToken)
+    const hostRejoin = store.joinSession(joinCode, 'Alice', false, hostRejoinPeer, reconnectToken)
     expect(hostRejoin).not.toBeNull()
     expect(hostRejoin?.participant.id).toBe(originalHost.id)
     expect(hostRejoin?.session.hostId).toBe(originalHost.id)
@@ -87,14 +83,14 @@ describe('SessionStore reconnect behavior', () => {
     const guestPeer = createPeer('guest-peer')
     const attackerPeer = createPeer('attacker-peer')
 
-    const { joinCode, participant: host } = store.createSession('Sprint', 'Alice', hostPeer as never)
-    const guestJoin = store.joinSession(joinCode, 'Bob', false, guestPeer as never)
+    const { joinCode, participant: host } = store.createSession('Sprint', 'Alice', hostPeer)
+    const guestJoin = store.joinSession(joinCode, 'Bob', false, guestPeer)
 
     expect(guestJoin).not.toBeNull()
 
-    store.disconnectPeer(hostPeer as never)
+    store.disconnectPeer(hostPeer)
 
-    const attackerJoin = store.joinSession(joinCode, 'Mallory', false, attackerPeer as never, 'invalid-token')
+    const attackerJoin = store.joinSession(joinCode, 'Mallory', false, attackerPeer, 'invalid-token')
 
     expect(attackerJoin).not.toBeNull()
     expect(attackerJoin?.participant.id).not.toBe(host.id)
@@ -108,35 +104,35 @@ describe('SessionStore reconnect behavior', () => {
     const firstRejoinPeer = createPeer('first-rejoin-peer')
     const secondRejoinPeer = createPeer('second-rejoin-peer')
 
-    const { joinCode, participant, reconnectToken } = store.createSession('Sprint', 'Alice', hostPeer as never)
+    const { joinCode, participant, reconnectToken } = store.createSession('Sprint', 'Alice', hostPeer)
 
-    store.disconnectPeer(hostPeer as never)
+    store.disconnectPeer(hostPeer)
 
-    const firstRejoin = store.joinSession(joinCode, 'Alice', false, firstRejoinPeer as never, reconnectToken)
+    const firstRejoin = store.joinSession(joinCode, 'Alice', false, firstRejoinPeer, reconnectToken)
 
     expect(firstRejoin).not.toBeNull()
     expect(firstRejoin?.participant.id).toBe(participant.id)
     expect(firstRejoin?.reconnectToken).not.toBe(reconnectToken)
 
-    store.disconnectPeer(firstRejoinPeer as never)
+    store.disconnectPeer(firstRejoinPeer)
 
-    const staleTokenRejoin = store.joinSession(joinCode, 'Alice', false, createPeer('stale-token-peer') as never, reconnectToken)
+    const staleTokenRejoin = store.joinSession(joinCode, 'Alice', false, createPeer('stale-token-peer'), reconnectToken)
     expect(staleTokenRejoin?.participant.id).not.toBe(participant.id)
 
-    const secondRejoin = store.joinSession(joinCode, 'Alice', false, secondRejoinPeer as never, firstRejoin!.reconnectToken)
+    const secondRejoin = store.joinSession(joinCode, 'Alice', false, secondRejoinPeer, firstRejoin!.reconnectToken)
     expect(secondRejoin).not.toBeNull()
     expect(secondRejoin?.participant.id).toBe(participant.id)
   })
 })
 
 describe('SessionStore auto reveal', () => {
-  const peersToCleanup: MockPeer[] = []
+  const peersToCleanup: Peer[] = []
 
   afterEach(() => {
     while (peersToCleanup.length > 0) {
       const peer = peersToCleanup.pop()
       if (peer) {
-        sessionStore.leaveSession(peer as never)
+        sessionStore.leaveSession(peer)
       }
     }
   })
@@ -146,14 +142,14 @@ describe('SessionStore auto reveal', () => {
     const voterPeer = createPeer('voter-auto')
     peersToCleanup.push(hostPeer, voterPeer)
 
-    const { joinCode } = sessionStore.createSession('Sprint', 'Alice', hostPeer as never)
-    sessionStore.joinSession(joinCode, 'Bob', false, voterPeer as never)
+    const { joinCode } = sessionStore.createSession('Sprint', 'Alice', hostPeer)
+    sessionStore.joinSession(joinCode, 'Bob', false, voterPeer)
 
-    const startedSession = sessionStore.startVoting(hostPeer as never, 'Story #1')
+    const startedSession = sessionStore.startVoting(hostPeer, 'Story #1')
     expect(startedSession?.config.autoReveal).toBe(true)
 
-    sessionStore.selectVote(hostPeer as never, '2')
-    const updatedSession = sessionStore.selectVote(voterPeer as never, '3')
+    sessionStore.selectVote(hostPeer, '2')
+    const updatedSession = sessionStore.selectVote(voterPeer, '3')
 
     expect(updatedSession?.session.cardsRevealed).toBe(true)
     expect(updatedSession?.session.status).toBe('revealed')
@@ -164,13 +160,13 @@ describe('SessionStore auto reveal', () => {
     const voterPeer = createPeer('voter-manual')
     peersToCleanup.push(hostPeer, voterPeer)
 
-    const { joinCode } = sessionStore.createSession('Sprint', 'Alice', hostPeer as never)
-    sessionStore.joinSession(joinCode, 'Bob', false, voterPeer as never)
-    sessionStore.updateAutoReveal(hostPeer as never, false)
+    const { joinCode } = sessionStore.createSession('Sprint', 'Alice', hostPeer)
+    sessionStore.joinSession(joinCode, 'Bob', false, voterPeer)
+    sessionStore.updateAutoReveal(hostPeer, false)
 
-    sessionStore.startVoting(hostPeer as never, 'Story #2')
-    sessionStore.selectVote(hostPeer as never, '2')
-    const updatedSession = sessionStore.selectVote(voterPeer as never, '3')
+    sessionStore.startVoting(hostPeer, 'Story #2')
+    sessionStore.selectVote(hostPeer, '2')
+    const updatedSession = sessionStore.selectVote(voterPeer, '3')
 
     expect(updatedSession?.session.config.autoReveal).toBe(false)
     expect(updatedSession?.session.cardsRevealed).toBe(false)
@@ -182,13 +178,13 @@ describe('SessionStore auto reveal', () => {
     const voterPeer = createPeer('voter-toggle')
     peersToCleanup.push(hostPeer, voterPeer)
 
-    const { joinCode } = sessionStore.createSession('Sprint', 'Alice', hostPeer as never)
-    sessionStore.joinSession(joinCode, 'Bob', false, voterPeer as never)
+    const { joinCode } = sessionStore.createSession('Sprint', 'Alice', hostPeer)
+    sessionStore.joinSession(joinCode, 'Bob', false, voterPeer)
 
-    sessionStore.startVoting(hostPeer as never, 'Story #3')
-    sessionStore.selectVote(hostPeer as never, '2')
-    sessionStore.updateAutoReveal(hostPeer as never, false)
-    const updatedSession = sessionStore.selectVote(voterPeer as never, '3')
+    sessionStore.startVoting(hostPeer, 'Story #3')
+    sessionStore.selectVote(hostPeer, '2')
+    sessionStore.updateAutoReveal(hostPeer, false)
+    const updatedSession = sessionStore.selectVote(voterPeer, '3')
 
     expect(updatedSession?.session.config.autoReveal).toBe(false)
     expect(updatedSession?.session.cardsRevealed).toBe(false)
@@ -200,16 +196,16 @@ describe('SessionStore auto reveal', () => {
     const voterPeer = createPeer('voter-enable')
     peersToCleanup.push(hostPeer, voterPeer)
 
-    const { joinCode } = sessionStore.createSession('Sprint', 'Alice', hostPeer as never)
-    sessionStore.joinSession(joinCode, 'Bob', false, voterPeer as never)
-    const disabledSession = sessionStore.updateAutoReveal(hostPeer as never, false)
+    const { joinCode } = sessionStore.createSession('Sprint', 'Alice', hostPeer)
+    sessionStore.joinSession(joinCode, 'Bob', false, voterPeer)
+    const disabledSession = sessionStore.updateAutoReveal(hostPeer, false)
 
     expect(disabledSession?.config.autoReveal).toBe(false)
-    sessionStore.startVoting(hostPeer as never, 'Story #4')
-    sessionStore.selectVote(hostPeer as never, '2')
-    sessionStore.selectVote(voterPeer as never, '3')
+    sessionStore.startVoting(hostPeer, 'Story #4')
+    sessionStore.selectVote(hostPeer, '2')
+    sessionStore.selectVote(voterPeer, '3')
 
-    const updatedSession = sessionStore.updateAutoReveal(hostPeer as never, true)
+    const updatedSession = sessionStore.updateAutoReveal(hostPeer, true)
 
     expect(updatedSession?.config.autoReveal).toBe(true)
     expect(updatedSession?.cardsRevealed).toBe(true)
@@ -220,8 +216,8 @@ describe('SessionStore auto reveal', () => {
     const hostPeer = createPeer('host-status')
     peersToCleanup.push(hostPeer)
 
-    const { session } = sessionStore.createSession('Sprint', 'Alice', hostPeer as never)
-    const updatedSession = sessionStore.selectVote(hostPeer as never, '2')
+    const { session } = sessionStore.createSession('Sprint', 'Alice', hostPeer)
+    const updatedSession = sessionStore.selectVote(hostPeer, '2')
 
     expect(updatedSession?.session.cardsRevealed).toBe(false)
     expect(updatedSession?.session.status).toBe(session.status)
