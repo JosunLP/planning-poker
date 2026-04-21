@@ -5,7 +5,7 @@ import { sessionStore } from '../server/utils/sessionStore'
 function createPeer(id: string): Peer {
   return {
     id,
-    send(_message: string) {},
+    send(_: string) {},
   } as unknown as Peer
 }
 
