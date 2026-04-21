@@ -20,6 +20,8 @@ interface Props {
   status: 'waiting' | 'voting' | 'revealed' | 'completed'
   /** Are all votes in? */
   allVotesIn: boolean
+  /** Reveal cards automatically once everyone voted */
+  autoReveal: boolean
   /** Current story */
   currentStory?: string | null
   /** Story queue */
@@ -38,6 +40,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   startVoting: [story: string, description?: string]
   reveal: []
+  updateAutoReveal: [value: boolean]
   reset: []
   nextStory: []
   addStory: [title: string, description?: string]
@@ -77,6 +80,18 @@ function handleStorySubmit(title: string, description?: string): void {
   } else {
     emit('addStory', title, description)
   }
+}
+
+/**
+ * Handle automatic reveal toggle changes
+ */
+function handleAutoRevealChange(event: Event): void {
+  const target = event.target
+  if (!(target instanceof HTMLInputElement)) {
+    return
+  }
+
+  emit('updateAutoReveal', target.checked)
 }
 </script>
 
@@ -165,6 +180,23 @@ function handleStorySubmit(title: string, description?: string): void {
 
     <!-- Current Status & Actions -->
     <div class="p-4 space-y-3">
+      <label class="flex items-start gap-3 rounded-lg border border-secondary-200 bg-secondary-50 p-3 cursor-pointer">
+        <input
+          :checked="autoReveal"
+          type="checkbox"
+          class="mt-1 h-4 w-4 rounded border-secondary-300 text-primary-600 focus:ring-primary-500"
+          @change="handleAutoRevealChange"
+        >
+        <div class="min-w-0">
+          <div class="text-sm font-medium text-secondary-800">
+            {{ t('controls.autoReveal') }}
+          </div>
+          <p class="text-xs text-secondary-500">
+            {{ t('controls.autoRevealHint') }}
+          </p>
+        </div>
+      </label>
+
       <!-- Voting Active -->
       <template v-if="status === 'voting'">
         <div class="p-3 bg-primary-50 rounded-lg border border-primary-100">

@@ -98,11 +98,60 @@ describe('Session voting flow', () => {
     expect(session.revealCards()).toBeNull()
   })
 
+  it('reveals automatically when enabled and everyone has voted', () => {
+    const session = new Session('Automatic', 'host-7', { autoReveal: true })
+    const alice = new Participant('Alice')
+    const bob = new Participant('Bob')
+
+    session.addParticipant(alice)
+    session.addParticipant(bob)
+    session.startVoting('Story #6')
+
+    alice.selectCard('2')
+    expect(session.revealCardsIfReady()).toBeNull()
+
+    bob.selectCard('3')
+
+    const result = session.revealCardsIfReady()
+
+    expect(result).not.toBeNull()
+    expect(session.cardsRevealed).toBe(true)
+    expect(session.status).toBe('revealed')
+  })
+
+  it('does not reveal automatically when disabled', () => {
+    const session = new Session('Manual', 'host-8', { autoReveal: false })
+    const alice = new Participant('Alice')
+    const bob = new Participant('Bob')
+
+    session.addParticipant(alice)
+    session.addParticipant(bob)
+    session.startVoting('Story #7')
+    alice.selectCard('2')
+    bob.selectCard('3')
+
+    expect(session.revealCardsIfReady()).toBeNull()
+    expect(session.cardsRevealed).toBe(false)
+    expect(session.status).toBe('voting')
+  })
+
+  it('updates config partially and refreshes updatedAt', async () => {
+    const session = new Session('Configurable', 'host-9', { autoReveal: true })
+    const previousUpdatedAt = session.updatedAt
+
+    await Bun.sleep(5)
+    session.updateConfig({ autoReveal: false })
+
+    expect(session.config.autoReveal).toBe(false)
+    expect(session.config.allowObservers).toBe(true)
+    expect(session.updatedAt.getTime()).toBeGreaterThan(previousUpdatedAt.getTime())
+  })
+
   it('serializes and hydrates via JSON', () => {
-    const session = new Session('Serializable', 'host-7')
+    const session = new Session('Serializable', 'host-10', { autoReveal: false })
     const voter = new Participant('Voter')
     session.addParticipant(voter)
-    session.startVoting('Story #6', 'Desc')
+    session.startVoting('Story #8', 'Desc')
     voter.selectCard('2')
     session.revealCards()
 
@@ -113,7 +162,8 @@ describe('Session voting flow', () => {
     expect(restored.hostId).toBe(session.hostId)
     expect(restored.status).toBe('revealed')
     expect(restored.cardsRevealed).toBe(true)
-    expect(restored.currentStory).toBe('Story #6')
+    expect(restored.currentStory).toBe('Story #8')
     expect(restored.getParticipantById(voter.id)?.name).toBe('Voter')
+    expect(restored.config.autoReveal).toBe(false)
   })
 })

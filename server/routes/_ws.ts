@@ -16,6 +16,7 @@ import type {
     SelectVotePayload,
     ServerMessage,
     StartVotingPayload,
+    UpdateSessionConfigPayload,
     UpdateStoryPayload,
 } from '../../app/types/websocket'
 import { sessionStore } from '../utils/sessionStore'
@@ -71,6 +72,10 @@ function handleMessage(peer: Peer, data: string): void {
 
       case 'session:leave':
         handleLeaveSession(peer)
+        break
+
+      case 'session:update-config':
+        handleUpdateSessionConfig(peer, message.payload as UpdateSessionConfigPayload)
         break
 
       case 'vote:select':
@@ -193,6 +198,25 @@ function handleLeaveSession(peer: Peer): void {
       session: result.session,
     })
   }
+}
+
+/**
+ * Updates the session configuration
+ */
+function handleUpdateSessionConfig(peer: Peer, payload: UpdateSessionConfigPayload): void {
+  const session = sessionStore.updateAutoReveal(peer, payload.autoReveal)
+
+  if (!session) {
+    sendMessage(peer, 'session:error', {
+      message: 'Only the host can update the session settings.',
+      code: 'NOT_AUTHORIZED',
+    })
+    return
+  }
+
+  broadcastToSession(session.id, 'session:updated', {
+    session,
+  })
 }
 
 /**

@@ -7,7 +7,7 @@
 
 import type { Peer } from 'crossws'
 import type { IParticipant, ISession, IStory, PokerValue } from '../../app/types/poker'
-import { JOIN_CODE_CHARS, JOIN_CODE_LENGTH } from '../../app/types/poker'
+import { DEFAULT_SESSION_CONFIG, JOIN_CODE_CHARS, JOIN_CODE_LENGTH } from '../../app/types/poker'
 
 /**
  * Session with associated WebSocket connections
@@ -38,6 +38,26 @@ function generateJoinCode(): string {
 }
 
 /**
+ * Checks whether all voters in a session have selected a card
+ */
+function allVotesIn(session: ISession): boolean {
+  const voters = session.participants.filter(p => !p.isObserver)
+  return voters.length > 0 && voters.every(p => p.selectedValue !== null)
+}
+
+/**
+ * Reveals cards automatically when the session is ready
+ */
+function applyAutoRevealIfReady(session: ISession): void {
+  if (session.status !== 'voting' || !session.config.autoReveal || !allVotesIn(session)) {
+    return
+  }
+
+  session.cardsRevealed = true
+  session.status = 'revealed'
+}
+
+/**
  * SessionStore Class
  * Manages all sessions server-side
  */
@@ -53,6 +73,7 @@ class SessionStore {
   private constructor() {
     // Cleanup every 30 seconds
     this.cleanupInterval = setInterval(() => this.cleanup(), 30000)
+    this.cleanupInterval.unref()
   }
 
   /**
@@ -94,6 +115,7 @@ class SessionStore {
       updatedAt: new Date(),
       currentStoryIndex: -1,
       storyQueue: [],
+      config: { ...DEFAULT_SESSION_CONFIG },
     }
 
     const managedSession: ManagedSession = {
@@ -214,10 +236,35 @@ class SessionStore {
     if (!participant || participant.isObserver) return null
 
     participant.selectedValue = value
+    applyAutoRevealIfReady(managed.session)
+
     managed.session.updatedAt = new Date()
     managed.lastActivity = Date.now()
 
     return { session: managed.session, participantId }
+  }
+
+  /**
+   * Updates the automatic reveal mode
+   */
+  updateAutoReveal(peer: Peer, autoReveal: boolean): ISession | null {
+    const participantId = this.peerToParticipant.get(peer)
+    if (!participantId) return null
+
+    const sessionId = this.participantToSession.get(participantId)
+    if (!sessionId) return null
+
+    const managed = this.sessions.get(sessionId)
+    if (!managed) return null
+
+    if (managed.session.hostId !== participantId) return null
+
+    managed.session.config.autoReveal = autoReveal
+    applyAutoRevealIfReady(managed.session)
+    managed.session.updatedAt = new Date()
+    managed.lastActivity = Date.now()
+
+    return managed.session
   }
 
   /**

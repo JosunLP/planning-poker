@@ -73,7 +73,9 @@
     "waitingForVotes": "Wachten op stemmen... ({count}/{total})",
     "resetVoting": "Stemming resetten",
     "nextStory": "Volgende story",
-    "hostOnly": "Alleen de host kan de sessie bedienen"
+    "hostOnly": "Alleen de host kan de sessie bedienen",
+    "autoReveal": "Kaarten automatisch onthullen",
+    "autoRevealHint": "Onthult de kaarten automatisch zodra iedere stemmer een kaart heeft gekozen."
   },
   "cards": {
     "chooseEstimate": "Kies je schatting",

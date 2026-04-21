@@ -27,6 +27,7 @@ const {
   joinSession,
   selectCard,
   revealCards,
+  updateSessionConfig,
   startVoting,
   addStory,
   removeStory,
@@ -293,11 +294,13 @@ function switchMode(newMode: 'create' | 'join'): void {
             :is-host="isHost"
             :status="session.status"
             :all-votes-in="allVotesIn"
+            :auto-reveal="session.config.autoReveal"
             :current-story="session.currentStory"
             :story-queue="session.storyQueue"
             :current-story-index="session.currentStoryIndex"
             @start-voting="startVoting"
             @reveal="revealCards"
+            @update-auto-reveal="updateSessionConfig"
             @reset="resetVoting"
             @next-story="nextStory"
             @add-story="addStory"

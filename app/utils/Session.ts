@@ -6,18 +6,8 @@
  */
 
 import type { ISession, ISessionConfig, IStory, IVotingResult, PokerValue, SessionStatus } from '../types'
-import { POKER_VALUES } from '../types'
+import { DEFAULT_SESSION_CONFIG } from '../types'
 import { Participant } from './Participant'
-
-/**
- * Default configuration for a session
- */
-const DEFAULT_CONFIG: ISessionConfig = {
-  cardValues: POKER_VALUES,
-  autoReveal: true,
-  votingTimeout: 0,
-  allowObservers: true,
-}
 
 /**
  * Class for managing a Planning Poker session
@@ -43,7 +33,7 @@ export class Session implements ISession {
   public storyQueue: IStory[]
   public currentStoryIndex: number
 
-  private config: ISessionConfig
+  private configState: ISessionConfig
   private votingHistory: IVotingResult[]
 
   /**
@@ -64,7 +54,7 @@ export class Session implements ISession {
     this.cardsRevealed = false
     this.createdAt = new Date()
     this.updatedAt = new Date()
-    this.config = { ...DEFAULT_CONFIG, ...config }
+    this.configState = { ...DEFAULT_SESSION_CONFIG, ...config }
     this.votingHistory = []
     this.storyQueue = []
     this.currentStoryIndex = -1
@@ -81,7 +71,7 @@ export class Session implements ISession {
       return false
     }
 
-    if (participant.isObserver && !this.config.allowObservers) {
+    if (participant.isObserver && !this.configState.allowObservers) {
       return false
     }
 
@@ -149,12 +139,31 @@ export class Session implements ISession {
   }
 
   /**
+   * Reveals cards automatically when configured and all votes are in
+   */
+  public revealCardsIfReady(): IVotingResult | null {
+    if (!this.configState.autoReveal || !this.allVotesIn()) {
+      return null
+    }
+
+    return this.revealCards()
+  }
+
+  /**
    * Resets the round for a new vote
    */
   public resetVoting(): void {
     this.cardsRevealed = false
     this.status = 'voting'
     this.participants.forEach(p => p.resetSelection())
+    this.touch()
+  }
+
+  /**
+   * Updates the session configuration
+   */
+  public updateConfig(config: Partial<ISessionConfig>): void {
+    this.configState = { ...this.configState, ...config }
     this.touch()
   }
 
@@ -279,7 +288,14 @@ export class Session implements ISession {
    * Returns the available card values
    */
   public getCardValues(): readonly PokerValue[] {
-    return this.config.cardValues
+    return this.configState.cardValues
+  }
+
+  /**
+   * Returns the session configuration
+   */
+  public get config(): ISessionConfig {
+    return { ...this.configState }
   }
 
   /**
@@ -306,6 +322,7 @@ export class Session implements ISession {
       updatedAt: this.updatedAt,
       storyQueue: this.storyQueue,
       currentStoryIndex: this.currentStoryIndex,
+      config: this.config,
     }
   }
 
@@ -326,6 +343,7 @@ export class Session implements ISession {
       currentStoryIndex: data.currentStoryIndex ?? -1,
     })
 
+    session.configState = { ...DEFAULT_SESSION_CONFIG, ...data.config, ...config }
     session.participants = data.participants.map(p => Participant.fromJSON(p))
     return session
   }

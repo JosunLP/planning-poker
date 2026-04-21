@@ -73,7 +73,9 @@
     "waitingForVotes": "Waiting for votes... ({count}/{total})",
     "resetVoting": "Reset Voting",
     "nextStory": "Next Story",
-    "hostOnly": "Only the host can control the session"
+    "hostOnly": "Only the host can control the session",
+    "autoReveal": "Auto reveal cards",
+    "autoRevealHint": "Reveal the cards automatically once every voter has picked a card."
   },
   "cards": {
     "chooseEstimate": "Choose your estimate",
