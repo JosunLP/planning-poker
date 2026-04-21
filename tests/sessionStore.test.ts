@@ -56,6 +56,27 @@ describe('SessionStore reconnect behavior', () => {
     expect(rejoinResult?.session.participants).toHaveLength(1)
   })
 
+  it('assigns a new host when a preserved empty session gets a fresh join', () => {
+    const store = sessionStore
+    const hostPeer = createPeer('solo-host-peer')
+    const freshJoinPeer = createPeer('fresh-join-peer')
+    const hostRejoinPeer = createPeer('solo-host-rejoin-peer')
+
+    const { joinCode, participant: originalHost, reconnectToken } = store.createSession('Solo Sprint', 'Alice', hostPeer)
+
+    store.disconnectPeer(hostPeer)
+
+    const freshJoin = store.joinSession(joinCode, 'Bob', false, freshJoinPeer)
+    expect(freshJoin).not.toBeNull()
+    expect(freshJoin?.session.hostId).toBe(freshJoin?.participant.id)
+    expect(freshJoin?.session.participants).toHaveLength(1)
+
+    const hostRejoin = store.joinSession(joinCode, 'Alice', false, hostRejoinPeer, reconnectToken)
+    expect(hostRejoin).not.toBeNull()
+    expect(hostRejoin?.participant.id).toBe(originalHost.id)
+    expect(hostRejoin?.session.hostId).toBe(originalHost.id)
+  })
+
   it('does not restore a disconnected host with an invalid reconnect token', () => {
     const store = sessionStore
     const hostPeer = createPeer('host-peer')

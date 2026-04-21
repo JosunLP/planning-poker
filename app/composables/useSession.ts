@@ -101,7 +101,7 @@ function clearStoredSessionRecovery(joinCode?: string | null): void {
 
 /**
  * Returns a stored reconnect token only when the rejoin request exactly matches
- * the original session identity, preventing accidental or cross-user recovery.
+ * the original session identity, helping prevent accidental recovery mismatches.
  */
 function getRecoveryReconnectToken(
   recovery: SessionRecoveryData | null,

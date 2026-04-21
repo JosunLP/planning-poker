@@ -188,6 +188,9 @@ class SessionStore {
     if (reconnectableParticipant?.wasHost) {
       managed.session.hostId = participant.id
     }
+    else if (!managed.session.participants.some(currentParticipant => currentParticipant.id === managed.session.hostId)) {
+      managed.session.hostId = participant.id
+    }
 
     if (reconnectToken) {
       managed.reconnectableParticipants.delete(reconnectToken)
