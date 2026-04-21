@@ -17,9 +17,13 @@ interface ManagedSession {
   joinCode: string
   connections: Map<string, Peer>
   reconnectTokens: Map<string, string>
-  reconnectableParticipants: Map<string, { participant: IParticipant; wasHost: boolean }>
+  reconnectableParticipants: Map<string, { participant: IParticipant; wasHost: boolean; disconnectedAt: number }>
   lastActivity: number
 }
+
+const SESSION_CLEANUP_INTERVAL_MS = 30000
+const SESSION_MAX_INACTIVITY_MS = 60 * 60 * 1000
+const RECONNECT_TOKEN_TTL_MS = 30 * 60 * 1000
 
 /**
  * Generates a unique ID
@@ -80,10 +84,7 @@ class SessionStore {
   private cleanupInterval: ReturnType<typeof setInterval> | null = null
 
   private constructor() {
-    // Cleanup every 30 seconds
-    this.cleanupInterval = setInterval(() => this.cleanup(), 30000)
-    // Prevent cleanup timer from blocking process exit.
-    this.cleanupInterval.unref()
+    this.startCleanupInterval()
   }
 
   /**
@@ -165,6 +166,23 @@ class SessionStore {
     return code
   }
 
+  private startCleanupInterval(): void {
+    if (this.cleanupInterval) {
+      return
+    }
+
+    this.cleanupInterval = setInterval(() => this.cleanup(), SESSION_CLEANUP_INTERVAL_MS)
+    this.cleanupInterval.unref()
+  }
+
+  private pruneReconnectableParticipants(managed: ManagedSession, now = Date.now()): void {
+    for (const [token, reconnectableParticipant] of managed.reconnectableParticipants.entries()) {
+      if (now - reconnectableParticipant.disconnectedAt > RECONNECT_TOKEN_TTL_MS) {
+        managed.reconnectableParticipants.delete(token)
+      }
+    }
+  }
+
   /**
    * Joins a session
    */
@@ -180,6 +198,8 @@ class SessionStore {
 
     const managed = this.sessions.get(sessionId)
     if (!managed) return null
+
+    this.pruneReconnectableParticipants(managed)
 
     const reconnectableParticipant = reconnectToken
       ? managed.reconnectableParticipants.get(reconnectToken)
@@ -268,6 +288,8 @@ class SessionStore {
     managed.reconnectTokens.delete(participantId)
     managed.lastActivity = Date.now()
 
+    this.pruneReconnectableParticipants(managed, managed.lastActivity)
+
     this.participantToSession.delete(participantId)
     this.peerToParticipant.delete(peer)
 
@@ -278,6 +300,7 @@ class SessionStore {
           joinedAt: new Date(participant.joinedAt),
         },
         wasHost: managed.session.hostId === participantId,
+        disconnectedAt: managed.lastActivity,
       })
     }
 
@@ -631,10 +654,11 @@ class SessionStore {
    */
   private cleanup(): void {
     const now = Date.now()
-    const maxInactivity = 60 * 60 * 1000 // 1 hour
 
     for (const [sessionId, managed] of this.sessions.entries()) {
-      if (now - managed.lastActivity > maxInactivity) {
+      this.pruneReconnectableParticipants(managed, now)
+
+      if (now - managed.lastActivity > SESSION_MAX_INACTIVITY_MS) {
         // Delete session
         this.joinCodeIndex.delete(managed.joinCode)
         for (const participantId of managed.connections.keys()) {
@@ -665,6 +689,7 @@ class SessionStore {
     this.joinCodeIndex.clear()
     this.participantToSession.clear()
     this.peerToParticipant.clear()
+    this.startCleanupInterval()
   }
 }
 

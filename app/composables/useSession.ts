@@ -29,9 +29,11 @@ interface SessionRecoveryData {
   reconnectToken: string
   participantName: string
   asObserver: boolean
+  expiresAt: number
 }
 
 const SESSION_RECOVERY_STORAGE_KEY = 'planning-poker:session-recovery'
+const SESSION_RECOVERY_TTL_MS = 30 * 60 * 1000
 
 function isSessionRecoveryData(value: unknown): value is SessionRecoveryData {
   if (!value || typeof value !== 'object') return false
@@ -42,12 +44,14 @@ function isSessionRecoveryData(value: unknown): value is SessionRecoveryData {
     && typeof recovery.reconnectToken === 'string'
     && typeof recovery.participantName === 'string'
     && typeof recovery.asObserver === 'boolean'
+    && typeof recovery.expiresAt === 'number'
 }
 
 function removeStoredSessionRecovery(): void {
   if (!import.meta.client) return
 
   try {
+    sessionStorage.removeItem(SESSION_RECOVERY_STORAGE_KEY)
     localStorage.removeItem(SESSION_RECOVERY_STORAGE_KEY)
   }
   catch (error) {
@@ -59,11 +63,19 @@ function getStoredSessionRecovery(): SessionRecoveryData | null {
   if (!import.meta.client) return null
 
   try {
-    const stored = localStorage.getItem(SESSION_RECOVERY_STORAGE_KEY)
-    if (!stored) return null
+    const stored = sessionStorage.getItem(SESSION_RECOVERY_STORAGE_KEY)
+    if (!stored) {
+      localStorage.removeItem(SESSION_RECOVERY_STORAGE_KEY)
+      return null
+    }
 
     const parsed = JSON.parse(stored)
     if (!isSessionRecoveryData(parsed)) {
+      removeStoredSessionRecovery()
+      return null
+    }
+
+    if (parsed.expiresAt <= Date.now()) {
       removeStoredSessionRecovery()
       return null
     }
@@ -77,11 +89,15 @@ function getStoredSessionRecovery(): SessionRecoveryData | null {
   }
 }
 
-function storeSessionRecoveryData(recoveryData: SessionRecoveryData): void {
+function storeSessionRecoveryData(recoveryData: Omit<SessionRecoveryData, 'expiresAt'>): void {
   if (!import.meta.client) return
 
   try {
-    localStorage.setItem(SESSION_RECOVERY_STORAGE_KEY, JSON.stringify(recoveryData))
+    sessionStorage.setItem(SESSION_RECOVERY_STORAGE_KEY, JSON.stringify({
+      ...recoveryData,
+      expiresAt: Date.now() + SESSION_RECOVERY_TTL_MS,
+    }))
+    localStorage.removeItem(SESSION_RECOVERY_STORAGE_KEY)
   }
   catch (error) {
     console.error('[useSession] Failed to save recovery data to storage:', error)

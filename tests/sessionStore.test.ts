@@ -123,6 +123,52 @@ describe('SessionStore reconnect behavior', () => {
     expect(secondRejoin).not.toBeNull()
     expect(secondRejoin?.participant.id).toBe(participant.id)
   })
+
+  it('expires stale reconnect tokens for active sessions', () => {
+    const store = sessionStore
+    const hostPeer = createPeer('expiring-host-peer')
+    const guestPeer = createPeer('expiring-guest-peer')
+    const staleRejoinPeer = createPeer('stale-rejoin-peer')
+    const originalDateNow = Date.now
+    const baseTime = originalDateNow()
+
+    Date.now = () => baseTime
+
+    try {
+      const { joinCode, participant: host, reconnectToken } = store.createSession('Sprint', 'Alice', hostPeer)
+      store.joinSession(joinCode, 'Bob', false, guestPeer)
+      store.disconnectPeer(hostPeer)
+
+      Date.now = () => baseTime + (31 * 60 * 1000)
+
+      const staleTokenJoin = store.joinSession(joinCode, 'Alice', false, staleRejoinPeer, reconnectToken)
+      expect(staleTokenJoin).not.toBeNull()
+      expect(staleTokenJoin?.participant.id).not.toBe(host.id)
+    }
+    finally {
+      Date.now = originalDateNow
+    }
+  })
+
+  it('restarts cleanup scheduling when resetForTests is used after destroy', () => {
+    const originalSetInterval = globalThis.setInterval
+    let scheduledIntervals = 0
+
+    globalThis.setInterval = ((handler: TimerHandler, timeout?: number, ...args: unknown[]) => {
+      scheduledIntervals++
+      return originalSetInterval(handler, timeout, ...args)
+    }) as typeof setInterval
+
+    try {
+      sessionStore.destroy()
+      sessionStore.resetForTests()
+
+      expect(scheduledIntervals).toBe(1)
+    }
+    finally {
+      globalThis.setInterval = originalSetInterval
+    }
+  })
 })
 
 describe('SessionStore auto reveal', () => {
