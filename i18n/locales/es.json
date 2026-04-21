@@ -73,7 +73,9 @@
     "waitingForVotes": "Esperando votos... ({count}/{total})",
     "resetVoting": "Reiniciar votación",
     "nextStory": "Siguiente historia",
-    "hostOnly": "Solo el anfitrión puede controlar la sesión"
+    "hostOnly": "Solo el anfitrión puede controlar la sesión",
+    "autoReveal": "Revelar cartas automáticamente",
+    "autoRevealHint": "Revela las cartas automáticamente en cuanto cada votante haya elegido una carta."
   },
   "cards": {
     "chooseEstimate": "Elige tu estimación",

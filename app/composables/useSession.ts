@@ -530,6 +530,18 @@ export function useSession() {
   }
 
   /**
+   * Updates the session configuration (host only)
+   */
+  function updateSessionConfig(autoReveal: boolean): void {
+    if (!state.value.session || !state.value.isHost) return
+
+    send('session:update-config', {
+      sessionId: state.value.session.id,
+      autoReveal,
+    })
+  }
+
+  /**
    * Starts a new voting round (host only)
    *
    * @param story - The story to estimate
@@ -647,6 +659,7 @@ export function useSession() {
     joinSession,
     selectCard,
     revealCards,
+    updateSessionConfig,
     startVoting,
     addStory,
     removeStory,
