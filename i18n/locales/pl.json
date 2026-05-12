@@ -96,7 +96,7 @@
     "addToQueue": "Dodaj do kolejki",
     "storyTitlePlaceholder": "Tytuł historyjki",
     "descriptionPlaceholder": "Opis (opcjonalny, obsługa Markdown)",
-    "markdownSupported": "Markdown jest obsługiwany",
+    "markdownSupported": "Markdown jest obsługiwany. Tekst sformatowany wklejony (z Jiry, MS Word itp.) jest automatycznie konwertowany do Markdown.",
     "optional": "opcjonalne",
     "remaining": "Pozostała {count} historyjka | Pozostało {count} historyjek",
     "estimated": "Oszacowana",

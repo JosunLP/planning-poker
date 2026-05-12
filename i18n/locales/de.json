@@ -96,7 +96,7 @@
     "addToQueue": "Zur Warteschlange hinzufügen",
     "storyTitlePlaceholder": "Story-Titel",
     "descriptionPlaceholder": "Beschreibung (optional, Markdown unterstützt)",
-    "markdownSupported": "Markdown wird unterstützt",
+    "markdownSupported": "Markdown wird unterstützt. Eingefügter Rich-Text (aus Jira, MS Word usw.) wird automatisch in Markdown konvertiert.",
     "optional": "optional",
     "remaining": "{count} Story verbleibend | {count} Storys verbleibend",
     "estimated": "Geschätzt",

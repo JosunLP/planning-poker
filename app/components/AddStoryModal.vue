@@ -3,9 +3,31 @@
  * AddStoryModal Component
  *
  * Modal for adding a new story to the queue or starting a vote directly.
+ * Supports pasting rich-text content (from Jira, MS Word, etc.) which is
+ * automatically converted to Markdown via Turndown.
  */
 
+import type TurndownService from 'turndown'
+
 const { t } = useI18n()
+
+/**
+ * Lazy Turndown instance promise for HTML → Markdown conversion
+ */
+const turndownServicePromise = shallowRef<Promise<TurndownService> | null>(null)
+
+async function getTurndownService(): Promise<TurndownService> {
+  turndownServicePromise.value ||= import('turndown')
+    .then(({ default: TurndownService }) =>
+      new TurndownService({ headingStyle: 'atx', bulletListMarker: '-' }),
+    )
+    .catch((error) => {
+      turndownServicePromise.value = null
+      throw error
+    })
+
+  return turndownServicePromise.value
+}
 
 /**
  * Props Definition
@@ -44,6 +66,58 @@ watch(() => props.visible, (isVisible) => {
     description.value = ''
   }
 })
+
+/**
+ * Handle paste into description field.
+ * If the clipboard contains HTML (e.g. from Jira, MS Word), convert it to
+ * Markdown using Turndown and replace the selection instead of inserting raw HTML.
+ */
+function insertDescriptionText(target: HTMLTextAreaElement, text: string): void {
+  const insertPos = target.selectionStart ?? description.value.length
+  const end = target.selectionEnd ?? insertPos
+  description.value = description.value.slice(0, insertPos) + text + description.value.slice(end)
+
+  nextTick(() => {
+    target.selectionStart = insertPos + text.length
+    target.selectionEnd = insertPos + text.length
+  })
+}
+
+function getSafePlainTextFallback(clipboardData: DataTransfer, html: string): string {
+  const plainText = clipboardData.getData('text/plain')
+  if (plainText) return plainText
+
+  return new DOMParser().parseFromString(html, 'text/html').body.textContent ?? ''
+}
+
+async function handleDescriptionPaste(event: ClipboardEvent): Promise<void> {
+  const html = event.clipboardData?.getData('text/html')
+  const clipboardData = event.clipboardData
+  if (!html || !clipboardData) return
+
+  const plainTextFallback = getSafePlainTextFallback(clipboardData, html)
+  event.preventDefault()
+  const target = event.target as HTMLTextAreaElement
+
+  let turndownService: TurndownService
+  try {
+    turndownService = await getTurndownService()
+  }
+  catch (error) {
+    console.error('Failed to load Turndown for rich-text paste conversion. Falling back to plain text.', error)
+    insertDescriptionText(target, plainTextFallback)
+    return
+  }
+
+  try {
+    const markdown = turndownService.turndown(html)
+    insertDescriptionText(target, markdown)
+  }
+  catch (error) {
+    console.error('Failed to convert pasted rich text to Markdown. Falling back to plain text.', error)
+    insertDescriptionText(target, plainTextFallback)
+  }
+}
 
 /**
  * Handle form submission
@@ -132,6 +206,7 @@ onUnmounted(() => {
                 v-model="description"
                 class="input min-h-[120px] resize-y"
                 :placeholder="t('controls.descriptionPlaceholder')"
+                @paste="handleDescriptionPaste"
               />
               <p class="mt-1 text-xs text-secondary-500">
                 {{ t('storyQueue.markdownSupported') }}

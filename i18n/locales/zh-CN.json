@@ -96,7 +96,7 @@
     "addToQueue": "加入队列",
     "storyTitlePlaceholder": "故事标题",
     "descriptionPlaceholder": "描述（可选，支持 Markdown）",
-    "markdownSupported": "支持 Markdown",
+    "markdownSupported": "支持 Markdown。从 Jira、MS Word 等粘贴的富文本内容将自动转换为 Markdown。",
     "optional": "可选",
     "remaining": "剩余 {count} 个故事",
     "estimated": "已估算",

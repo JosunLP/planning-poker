@@ -96,7 +96,7 @@
     "addToQueue": "Toevoegen aan queue",
     "storyTitlePlaceholder": "Titel van de story",
     "descriptionPlaceholder": "Beschrijving (optioneel, Markdown ondersteund)",
-    "markdownSupported": "Markdown wordt ondersteund",
+    "markdownSupported": "Markdown wordt ondersteund. Rich-text geplakt vanuit Jira, MS Word enz. wordt automatisch omgezet naar Markdown.",
     "optional": "optioneel",
     "remaining": "{count} story resterend | {count} stories resterend",
     "estimated": "Ingeschat",
