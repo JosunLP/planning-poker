@@ -7,14 +7,24 @@
  * automatically converted to Markdown via Turndown.
  */
 
-import TurndownService from 'turndown'
+import type TurndownService from 'turndown'
 
 const { t } = useI18n()
 
 /**
- * Turndown instance for HTML → Markdown conversion
+ * Lazy Turndown instance promise for HTML → Markdown conversion
  */
-const turndownService = new TurndownService({ headingStyle: 'atx', bulletListMarker: '-' })
+let turndownServicePromise: Promise<TurndownService> | null = null
+
+async function getTurndownService(): Promise<TurndownService> {
+  if (!turndownServicePromise) {
+    turndownServicePromise = import('turndown').then(({ default: TurndownService }) =>
+      new TurndownService({ headingStyle: 'atx', bulletListMarker: '-' }),
+    )
+  }
+
+  return turndownServicePromise
+}
 
 /**
  * Props Definition
@@ -59,23 +69,32 @@ watch(() => props.visible, (isVisible) => {
  * If the clipboard contains HTML (e.g. from Jira, MS Word), convert it to
  * Markdown using Turndown and replace the selection instead of inserting raw HTML.
  */
-function handleDescriptionPaste(event: ClipboardEvent): void {
+function insertDescriptionText(target: HTMLTextAreaElement, text: string): void {
+  const insertPos = target.selectionStart ?? description.value.length
+  const end = target.selectionEnd ?? insertPos
+  description.value = description.value.slice(0, insertPos) + text + description.value.slice(end)
+
+  nextTick(() => {
+    target.selectionStart = insertPos + text.length
+    target.selectionEnd = insertPos + text.length
+  })
+}
+
+async function handleDescriptionPaste(event: ClipboardEvent): Promise<void> {
   const html = event.clipboardData?.getData('text/html')
   if (!html) return
 
   event.preventDefault()
-  const markdown = turndownService.turndown(html)
-
   const target = event.target as HTMLTextAreaElement
-  const insertPos = target.selectionStart ?? description.value.length
-  const end = target.selectionEnd ?? insertPos
-  description.value = description.value.slice(0, insertPos) + markdown + description.value.slice(end)
+  const plainText = event.clipboardData?.getData('text/plain') ?? html
 
-  // Restore cursor position after inserted markdown
-  nextTick(() => {
-    target.selectionStart = insertPos + markdown.length
-    target.selectionEnd = insertPos + markdown.length
-  })
+  try {
+    const markdown = (await getTurndownService()).turndown(html)
+    insertDescriptionText(target, markdown)
+  }
+  catch {
+    insertDescriptionText(target, plainText)
+  }
 }
 
 /**
