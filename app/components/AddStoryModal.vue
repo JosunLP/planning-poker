@@ -17,15 +17,11 @@ const { t } = useI18n()
 const turndownService = shallowRef<Promise<TurndownService> | null>(null)
 
 async function getTurndownService(): Promise<TurndownService> {
-  if (turndownService.value) {
-    return turndownService.value
-  }
-
-  const servicePromise = import('turndown').then(({ default: TurndownService }) =>
+  turndownService.value ||= import('turndown').then(({ default: TurndownService }) =>
     new TurndownService({ headingStyle: 'atx', bulletListMarker: '-' }),
   )
-  turndownService.value = servicePromise
-  return servicePromise
+
+  return turndownService.value
 }
 
 /**
@@ -94,7 +90,8 @@ async function handleDescriptionPaste(event: ClipboardEvent): Promise<void> {
     const markdown = (await getTurndownService()).turndown(html)
     insertDescriptionText(target, markdown)
   }
-  catch {
+  catch (error) {
+    console.error('Failed to load Turndown for rich-text paste conversion.', error)
     insertDescriptionText(target, plainText)
   }
 }
