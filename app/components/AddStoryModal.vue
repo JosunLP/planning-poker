@@ -67,14 +67,14 @@ function handleDescriptionPaste(event: ClipboardEvent): void {
   const markdown = turndownService.turndown(html)
 
   const target = event.target as HTMLTextAreaElement
-  const start = target.selectionStart ?? description.value.length
-  const end = target.selectionEnd ?? description.value.length
-  description.value = description.value.slice(0, start) + markdown + description.value.slice(end)
+  const insertPos = target.selectionStart ?? description.value.length
+  const end = target.selectionEnd ?? insertPos
+  description.value = description.value.slice(0, insertPos) + markdown + description.value.slice(end)
 
   // Restore cursor position after inserted markdown
   nextTick(() => {
-    target.selectionStart = start + markdown.length
-    target.selectionEnd = start + markdown.length
+    target.selectionStart = insertPos + markdown.length
+    target.selectionEnd = insertPos + markdown.length
   })
 }
 

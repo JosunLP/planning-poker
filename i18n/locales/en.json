@@ -96,7 +96,7 @@
     "addToQueue": "Add to Queue",
     "storyTitlePlaceholder": "Story title",
     "descriptionPlaceholder": "Description (optional, Markdown supported)",
-    "markdownSupported": "Markdown is supported. Pasting rich-text (from Jira, MS Word, etc.) is automatically converted to Markdown.",
+    "markdownSupported": "Markdown is supported. Pasted rich-text (from Jira, MS Word, etc.) is automatically converted to Markdown.",
     "optional": "optional",
     "remaining": "{count} story remaining | {count} stories remaining",
     "estimated": "Estimated",
