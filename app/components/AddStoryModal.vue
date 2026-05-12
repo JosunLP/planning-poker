@@ -12,15 +12,16 @@ import type TurndownService from 'turndown'
 const { t } = useI18n()
 
 /**
- * Lazy Turndown instance promise for HTML → Markdown conversion
+ * Lazy Turndown instance promise for HTML → Markdown conversion.
+ *
+ * The Turndown service and its plugins are loaded on demand so that the
+ * additional JS payload is only paid once a user actually pastes rich text.
  */
 const turndownServicePromise = shallowRef<Promise<TurndownService> | null>(null)
 
 async function getTurndownService(): Promise<TurndownService> {
-  turndownServicePromise.value ||= import('turndown')
-    .then(({ default: TurndownService }) =>
-      new TurndownService({ headingStyle: 'atx', bulletListMarker: '-' }),
-    )
+  turndownServicePromise.value ||= import('~/utils/htmlToMarkdown')
+    .then(({ createRichTextTurndownService }) => createRichTextTurndownService())
     .catch((error) => {
       turndownServicePromise.value = null
       throw error
