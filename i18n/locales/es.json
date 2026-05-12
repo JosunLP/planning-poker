@@ -96,7 +96,7 @@
     "addToQueue": "Añadir a la cola",
     "storyTitlePlaceholder": "Título de la historia",
     "descriptionPlaceholder": "Descripción (opcional, se admite Markdown)",
-    "markdownSupported": "Markdown es compatible",
+    "markdownSupported": "Markdown es compatible. El texto enriquecido pegado (desde Jira, MS Word, etc.) se convierte automáticamente a Markdown.",
     "optional": "opcional",
     "remaining": "{count} historia restante | {count} historias restantes",
     "estimated": "Estimado",

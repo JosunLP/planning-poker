@@ -96,7 +96,7 @@
     "addToQueue": "Ajouter à la file",
     "storyTitlePlaceholder": "Titre de l'histoire",
     "descriptionPlaceholder": "Description (optionnelle, Markdown pris en charge)",
-    "markdownSupported": "Markdown est pris en charge",
+    "markdownSupported": "Markdown est pris en charge. Le texte enrichi collé (depuis Jira, MS Word, etc.) est automatiquement converti en Markdown.",
     "optional": "optionnel",
     "remaining": "{count} histoire restante | {count} histoires restantes",
     "estimated": "Estimée",

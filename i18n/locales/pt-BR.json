@@ -96,7 +96,7 @@
     "addToQueue": "Adicionar à fila",
     "storyTitlePlaceholder": "Título da história",
     "descriptionPlaceholder": "Descrição (opcional, Markdown suportado)",
-    "markdownSupported": "Markdown é suportado",
+    "markdownSupported": "Markdown é suportado. Textos formatados colados (do Jira, MS Word, etc.) são convertidos automaticamente para Markdown.",
     "optional": "opcional",
     "remaining": "{count} história restante | {count} histórias restantes",
     "estimated": "Estimado",

@@ -96,7 +96,7 @@
     "addToQueue": "Lägg till i kön",
     "storyTitlePlaceholder": "Titel på story",
     "descriptionPlaceholder": "Beskrivning (valfritt, Markdown stöds)",
-    "markdownSupported": "Markdown stöds",
+    "markdownSupported": "Markdown stöds. Rich-text som klistras in (från Jira, MS Word m.fl.) konverteras automatiskt till Markdown.",
     "optional": "valfritt",
     "remaining": "{count} story kvar | {count} stories kvar",
     "estimated": "Uppskattad",

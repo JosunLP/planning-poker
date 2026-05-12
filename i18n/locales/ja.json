@@ -96,7 +96,7 @@
     "addToQueue": "キューに追加",
     "storyTitlePlaceholder": "ストーリータイトル",
     "descriptionPlaceholder": "説明（任意、Markdown 対応）",
-    "markdownSupported": "Markdown に対応",
+    "markdownSupported": "Markdown に対応しています。Jira や MS Word などからの書式付きテキストを貼り付けると、自動的に Markdown に変換されます。",
     "optional": "任意",
     "remaining": "残り {count} 件のストーリー",
     "estimated": "見積もり済み",

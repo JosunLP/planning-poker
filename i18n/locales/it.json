@@ -96,7 +96,7 @@
     "addToQueue": "Aggiungi alla coda",
     "storyTitlePlaceholder": "Titolo della storia",
     "descriptionPlaceholder": "Descrizione (opzionale, supporto Markdown)",
-    "markdownSupported": "Markdown è supportato",
+    "markdownSupported": "Markdown è supportato. Il testo formattato incollato (da Jira, MS Word, ecc.) viene convertito automaticamente in Markdown.",
     "optional": "opzionale",
     "remaining": "{count} storia rimanente | {count} storie rimanenti",
     "estimated": "Stimata",

@@ -96,7 +96,7 @@
     "addToQueue": "Добавить в очередь",
     "storyTitlePlaceholder": "Название истории",
     "descriptionPlaceholder": "Описание (необязательно, поддерживается Markdown)",
-    "markdownSupported": "Поддерживается Markdown",
+    "markdownSupported": "Поддерживается Markdown. Форматированный текст, вставленный из Jira, MS Word и т. д., автоматически конвертируется в Markdown.",
     "optional": "необязательно",
     "remaining": "Осталась {count} история | Осталось {count} историй",
     "estimated": "Оценена",

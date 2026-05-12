@@ -3,9 +3,18 @@
  * AddStoryModal Component
  *
  * Modal for adding a new story to the queue or starting a vote directly.
+ * Supports pasting rich-text content (from Jira, MS Word, etc.) which is
+ * automatically converted to Markdown via Turndown.
  */
 
+import TurndownService from 'turndown'
+
 const { t } = useI18n()
+
+/**
+ * Turndown instance for HTML → Markdown conversion
+ */
+const turndownService = new TurndownService({ headingStyle: 'atx', bulletListMarker: '-' })
 
 /**
  * Props Definition
@@ -44,6 +53,30 @@ watch(() => props.visible, (isVisible) => {
     description.value = ''
   }
 })
+
+/**
+ * Handle paste into description field.
+ * If the clipboard contains HTML (e.g. from Jira, MS Word), convert it to
+ * Markdown using Turndown and replace the selection instead of inserting raw HTML.
+ */
+function handleDescriptionPaste(event: ClipboardEvent): void {
+  const html = event.clipboardData?.getData('text/html')
+  if (!html) return
+
+  event.preventDefault()
+  const markdown = turndownService.turndown(html)
+
+  const target = event.target as HTMLTextAreaElement
+  const start = target.selectionStart ?? description.value.length
+  const end = target.selectionEnd ?? description.value.length
+  description.value = description.value.slice(0, start) + markdown + description.value.slice(end)
+
+  // Restore cursor position after inserted markdown
+  nextTick(() => {
+    target.selectionStart = start + markdown.length
+    target.selectionEnd = start + markdown.length
+  })
+}
 
 /**
  * Handle form submission
@@ -132,6 +165,7 @@ onUnmounted(() => {
                 v-model="description"
                 class="input min-h-[120px] resize-y"
                 :placeholder="t('controls.descriptionPlaceholder')"
+                @paste="handleDescriptionPaste"
               />
               <p class="mt-1 text-xs text-secondary-500">
                 {{ t('storyQueue.markdownSupported') }}
