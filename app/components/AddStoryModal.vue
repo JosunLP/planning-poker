@@ -83,21 +83,39 @@ function insertDescriptionText(target: HTMLTextAreaElement, text: string): void 
   })
 }
 
+function getSafePlainTextFallback(clipboardData: DataTransfer, html: string): string {
+  const plainText = clipboardData.getData('text/plain')
+  if (plainText) return plainText
+
+  return new DOMParser().parseFromString(html, 'text/html').body.textContent ?? ''
+}
+
 async function handleDescriptionPaste(event: ClipboardEvent): Promise<void> {
   const html = event.clipboardData?.getData('text/html')
-  if (!html) return
+  const clipboardData = event.clipboardData
+  if (!html || !clipboardData) return
 
+  const plainTextFallback = getSafePlainTextFallback(clipboardData, html)
   event.preventDefault()
   const target = event.target as HTMLTextAreaElement
-  const plainText = event.clipboardData?.getData('text/plain') ?? html
+
+  let turndownService: TurndownService
+  try {
+    turndownService = await getTurndownService()
+  }
+  catch (error) {
+    console.error('Failed to load Turndown for rich-text paste conversion. Falling back to plain text.', error)
+    insertDescriptionText(target, plainTextFallback)
+    return
+  }
 
   try {
-    const markdown = (await getTurndownService()).turndown(html)
+    const markdown = turndownService.turndown(html)
     insertDescriptionText(target, markdown)
   }
   catch (error) {
-    console.error('Failed to load Turndown for rich-text paste conversion.', error)
-    insertDescriptionText(target, plainText)
+    console.error('Failed to convert pasted rich text to Markdown. Falling back to plain text.', error)
+    insertDescriptionText(target, plainTextFallback)
   }
 }
 
