@@ -14,14 +14,19 @@ const { t } = useI18n()
 /**
  * Lazy Turndown instance promise for HTML → Markdown conversion
  */
-const turndownService = shallowRef<Promise<TurndownService> | null>(null)
+const turndownServicePromise = shallowRef<Promise<TurndownService> | null>(null)
 
 async function getTurndownService(): Promise<TurndownService> {
-  turndownService.value ||= import('turndown').then(({ default: TurndownService }) =>
-    new TurndownService({ headingStyle: 'atx', bulletListMarker: '-' }),
-  )
+  turndownServicePromise.value ||= import('turndown')
+    .then(({ default: TurndownService }) =>
+      new TurndownService({ headingStyle: 'atx', bulletListMarker: '-' }),
+    )
+    .catch((error) => {
+      turndownServicePromise.value = null
+      throw error
+    })
 
-  return turndownService.value
+  return turndownServicePromise.value
 }
 
 /**
